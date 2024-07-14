@@ -1,1 +1,1 @@
-# javourney
+# jenie = java + genie 

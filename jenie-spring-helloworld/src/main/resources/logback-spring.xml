@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+    <include resource="base.xml" />
+
+    <springProfile name="local">
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.springframework.data.mongodb" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ASYNC_CONSOLE" />
+        </root>
+    </springProfile>
+</configuration>
