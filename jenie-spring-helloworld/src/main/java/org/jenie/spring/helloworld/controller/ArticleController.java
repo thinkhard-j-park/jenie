@@ -23,7 +23,7 @@ public class ArticleController {
 		return this.articleService.getArticleHeaderById(service, id);
 	}
 	/**
-	 * TODO Rest Web App 게시글 목록 보기 스키마 설계 article-header article-content
+	 * TODO ArticleHeaderList,
 	 *
 	 ** Problem Detail 정적 테스트
 	 *
