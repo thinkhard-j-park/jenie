@@ -1,17 +1,19 @@
-package org.jenie.spring.helloworld.entity;
+package org.jenie.spring.helloworld.entity.article;
 
-import org.jenie.spring.helloworld.entity.common.ActionDateTime;
-import org.jenie.spring.helloworld.entity.common.Reaction;
-import org.jenie.spring.helloworld.entity.common.Writer;
+import org.jenie.spring.helloworld.pojo.ActionDateTime;
+import org.jenie.spring.helloworld.pojo.Reaction;
+import org.jenie.spring.helloworld.pojo.Writer;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "article-header")
-public class ArticleHeader {
+public class ArticleHeaderEntity {
 
 	@Id
 	private String id;
+
+	private String boardRef;
 
 	private String title;
 
@@ -20,6 +22,14 @@ public class ArticleHeader {
 	private Writer writer;
 
 	private ActionDateTime actionDateTime;
+
+	public String getBoardRef() {
+		return this.boardRef;
+	}
+
+	public void setBoardRef(String boardRef) {
+		this.boardRef = boardRef;
+	}
 
 	public String getId() {
 		return this.id;
@@ -64,8 +74,9 @@ public class ArticleHeader {
 	@Override
 	public String toString() {
 		//@formatter:off
-		return "ArticleHeader{" +
+		return "ArticleHeaderEntity{" +
 				"id='" + this.id + '\'' +
+				", boardRef='" + this.boardRef + '\'' +
 				", title='" + this.title + '\'' +
 				", reaction=" + this.reaction +
 				", writer=" + this.writer +

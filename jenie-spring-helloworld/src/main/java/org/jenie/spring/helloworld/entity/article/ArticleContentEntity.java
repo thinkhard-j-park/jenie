@@ -1,10 +1,10 @@
-package org.jenie.spring.helloworld.entity;
+package org.jenie.spring.helloworld.entity.article;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "article-content")
-public class ArticleContent {
+public class ArticleContentEntity {
 
 	@Id
 	private String id;
@@ -30,7 +30,7 @@ public class ArticleContent {
 	@Override
 	public String toString() {
 		//@formatter:off
-		return "ArticleContent{" +
+		return "ArticleContentEntity{" +
 				"id='" + this.id + '\'' +
 				", content='" + this.content + '\'' +
 				'}';

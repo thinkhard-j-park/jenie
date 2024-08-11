@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.entity.common;
+package org.jenie.spring.helloworld.pojo;
 
 import java.time.ZonedDateTime;
 
