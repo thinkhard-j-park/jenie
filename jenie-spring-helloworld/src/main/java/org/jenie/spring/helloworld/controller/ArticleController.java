@@ -1,14 +1,21 @@
 package org.jenie.spring.helloworld.controller;
 
+import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
+import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.service.ArticleService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,15 +29,37 @@ public class ArticleController {
 	}
 
 	@GetMapping("/{id}")
+	public Article viewArticle(@PathVariable String service, @PathVariable String id,
+			@RequestParam boolean incViewCount) {
+		return null;
+	}
+
+	@GetMapping("/{id}/header")
 	public ArticleHeader getArticleHeaderById(@PathVariable String service, @PathVariable String id) {
 		return this.articleService.getArticleHeaderById(service, id);
 	}
 
 	@GetMapping("/list")
-	public ArticleHeaderList listArticleHeaders(@PathVariable String service,
+	public ArticleHeaderList listArticleHeader(@PathVariable String service,
 			@ModelAttribute ListArticleHeaderRequestParam param) {
-
 		return this.articleService.listArticleHeader(service, param);
+	}
+
+	@PostMapping
+	public Article writeArticle(@PathVariable String service, @RequestBody ArticleRequest articleRequest) {
+		return this.articleService.writeArticle(service, articleRequest);
+	}
+
+	@PutMapping("/{id}")
+	public Article modifyArticle(@PathVariable String service, @PathVariable String id,
+			@RequestBody ArticleRequest articleRequest) {
+		// 권한 체크, 작성자만 수정할 수 있게.
+		return null;
+	}
+
+	@DeleteMapping("/{id}")
+	public String deleteArticle(@PathVariable String service, @PathVariable String id) {
+		return null;
 	}
 
 	/**

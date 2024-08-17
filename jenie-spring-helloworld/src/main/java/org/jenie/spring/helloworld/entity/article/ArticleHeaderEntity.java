@@ -13,7 +13,7 @@ public class ArticleHeaderEntity {
 	@Id
 	private String id;
 
-	private String boardRef;
+	private String boardId;
 
 	private String title;
 
@@ -23,12 +23,12 @@ public class ArticleHeaderEntity {
 
 	private ActionDateTime actionDateTime;
 
-	public String getBoardRef() {
-		return this.boardRef;
+	public String getBoardId() {
+		return this.boardId;
 	}
 
-	public void setBoardRef(String boardRef) {
-		this.boardRef = boardRef;
+	public void setBoardId(String boardId) {
+		this.boardId = boardId;
 	}
 
 	public String getId() {
@@ -76,7 +76,7 @@ public class ArticleHeaderEntity {
 		//@formatter:off
 		return "ArticleHeaderEntity{" +
 				"id='" + this.id + '\'' +
-				", boardRef='" + this.boardRef + '\'' +
+				", boardId='" + this.boardId + '\'' +
 				", title='" + this.title + '\'' +
 				", reaction=" + this.reaction +
 				", writer=" + this.writer +
