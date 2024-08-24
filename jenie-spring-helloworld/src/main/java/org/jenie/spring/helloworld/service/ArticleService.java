@@ -1,5 +1,6 @@
 package org.jenie.spring.helloworld.service;
 
+import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
@@ -12,16 +13,20 @@ import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class ArticleService {
+
+	private final MongoTemplateRouter mongoTemplateRouter;
 
 	private final ArticleHeaderRepository articleHeaderRepository;
 
 	private final ArticleContentRepository articleContentRepository;
 
-	public ArticleService(ArticleHeaderRepository articleHeaderRepository,
+	public ArticleService(MongoTemplateRouter mongoTemplateRouter, ArticleHeaderRepository articleHeaderRepository,
 			ArticleContentRepository articleContentRepository) {
+		this.mongoTemplateRouter = mongoTemplateRouter;
 		this.articleHeaderRepository = articleHeaderRepository;
 		this.articleContentRepository = articleContentRepository;
 	}
@@ -39,19 +44,41 @@ public class ArticleService {
 		return ArticleHeaderList.from(list, param.size());
 	}
 
+	// TODO aop 로 만들 것.
+	public Article txWriteArticle(String service, ArticleRequest articleRequest) {
+		var txManager = this.mongoTemplateRouter.transactionManager(service);
+		var txTemplate = new TransactionTemplate(txManager);
+		final var self = this;
+		return txTemplate.execute((status) -> {
+			try {
+				return self.writeArticle(service, articleRequest);
+			}
+			catch (RuntimeException ex) {
+				status.setRollbackOnly();
+				throw ex;
+			}
+		});
+	}
+
+	// TODO 트랙잰션 처리
 	public Article writeArticle(String service, ArticleRequest articleRequest) {
 		// TODO boardId 가 올바른지 체크
-		// TODO 트랙잰션 처리
-		var header = new ArticleHeaderEntity();
-		header.setBoardId(articleRequest.boardId());
-		header.setTitle(articleRequest.title());
-		header.setWriter(articleRequest.writer());
+		final var template = this.mongoTemplateRouter.txMongoTemplate(service);
 
-		var content = new ArticleContentEntity();
-		content.setContent(articleRequest.content());
+		var headerEntity = new ArticleHeaderEntity();
+		headerEntity.setBoardId(articleRequest.boardId());
+		headerEntity.setTitle(articleRequest.title());
+		headerEntity.setWriter(articleRequest.writer());
 
-		this.articleHeaderRepository.create(header);
-		this.articleContentRepository.upsert(content);
+		var contentEntity = new ArticleContentEntity();
+		contentEntity.setContent(articleRequest.content());
+
+		var savedHeaderEntity = this.articleHeaderRepository.insert(template, headerEntity);
+		var savedContentEntity = this.articleContentRepository.insert(template, contentEntity);
+		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity);
+		var content = savedContentEntity.getContent();
+
+		return new Article(header, content);
 	}
 
 }
