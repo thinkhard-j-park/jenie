@@ -1,0 +1,3 @@
+rootProject.name = 'jenie-spring-test'
+
+includeBuild('../jenie-spring-helloworld-common')
