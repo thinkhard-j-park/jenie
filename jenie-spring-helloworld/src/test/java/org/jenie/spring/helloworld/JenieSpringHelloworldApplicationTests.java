@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld;
+package org.jenie.spring.helloworld;
 
 import org.junit.jupiter.api.Test;
 

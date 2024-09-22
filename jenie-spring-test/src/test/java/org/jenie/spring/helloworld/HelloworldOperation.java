@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld;
+package org.jenie.spring.helloworld;
 
 import java.util.Map;
 
