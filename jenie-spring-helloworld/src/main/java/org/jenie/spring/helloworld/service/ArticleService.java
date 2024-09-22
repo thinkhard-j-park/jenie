@@ -1,12 +1,13 @@
 package org.jenie.spring.helloworld.service;
 
+import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
+import org.jenie.spring.data.mongodb.transaction.DBKey;
+import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
-
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
@@ -14,7 +15,6 @@ import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class ArticleService {
@@ -45,23 +45,8 @@ public class ArticleService {
 		return ArticleHeaderList.from(list, param.size());
 	}
 
-	// TODO aop 로 만들 것.
-	public Article txWriteArticle(String service, ArticleRequest articleRequest) {
-		var txManager = this.mongoTemplateRouter.transactionManager(service);
-		var txTemplate = new TransactionTemplate(txManager);
-		final var self = this;
-		return txTemplate.execute((status) -> {
-			try {
-				return self.writeArticle(service, articleRequest);
-			}
-			catch (RuntimeException ex) {
-				status.setRollbackOnly();
-				throw ex;
-			}
-		});
-	}
-
-	public Article writeArticle(String service, ArticleRequest articleRequest) {
+	@MongoKeyBasedTransactional
+	public Article writeArticle(@DBKey String service, ArticleRequest articleRequest) {
 		// TODO boardId 가 올바른지 체크
 		final var template = this.mongoTemplateRouter.txMongoTemplate(service);
 
@@ -74,6 +59,7 @@ public class ArticleService {
 		contentEntity.setContent(articleRequest.content());
 
 		var savedHeaderEntity = this.articleHeaderRepository.insert(template, headerEntity);
+
 		var savedContentEntity = this.articleContentRepository.insert(template, contentEntity);
 		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity);
 		var content = savedContentEntity.getContent();

@@ -17,7 +17,7 @@ public class JenieSpringHelloworldTests {
 	@Test
 	void listArticleHeader() {
 		var boardId = "test-board-id";
-		var param = new ListArticleHeaderRequestParam("test-board-id", "", 10, SortCode.TIME_DESC.getCode());
+		var param = new ListArticleHeaderRequestParam(boardId, "", 10, SortCode.TIME_DESC.getCode());
 		var articleHeaderList = this.helloOperation.listArticleHeader("jenie-test", param);
 		assertThat(articleHeaderList).isNotNull();
 		assertThat(articleHeaderList.list()).isNotEmpty();
