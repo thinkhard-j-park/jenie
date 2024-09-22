@@ -2,7 +2,6 @@ package org.jenie.spring.test.data.mongodb.config;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.context.annotation.Bean;
@@ -33,14 +32,11 @@ public abstract class MongoDBConfig extends MongoConfigurationSupport {
 		return router;
 	}
 
-	@Bean
-	public MongoCustomConversions mongoCustomConversions() {
-		var converters = new ArrayList<Converter<?, ?>>();
-		converters.add(new ZonedDateTimeReadConverter());
-		converters.add(new ZonedDateTimeWriteConverter());
-
-		return new MongoCustomConversions(converters);
-
+	@Override
+	protected void configureConverters(
+			MongoCustomConversions.MongoConverterConfigurationAdapter converterConfigurationAdapter) {
+		converterConfigurationAdapter.registerConverter(new ZonedDateTimeReadConverter());
+		converterConfigurationAdapter.registerConverter(new ZonedDateTimeWriteConverter());
 	}
 
 	static class ZonedDateTimeReadConverter implements Converter<Date, ZonedDateTime> {
