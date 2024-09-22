@@ -45,7 +45,9 @@ public class ArticleController {
 
 	@PostMapping
 	public Article writeArticle(@PathVariable String service, @RequestBody ArticleRequest articleRequest) {
-		return this.articleService.writeArticle(service, articleRequest);
+//		return this.articleService.writeArticle(service, articleRequest);
+
+		return this.articleService.txWriteArticle(service, articleRequest);
 	}
 
 	@PutMapping("/{id}")

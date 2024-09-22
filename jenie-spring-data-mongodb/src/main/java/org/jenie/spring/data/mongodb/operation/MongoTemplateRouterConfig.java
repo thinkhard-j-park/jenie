@@ -1,7 +1,7 @@
-package org.jenie.spring.test.data.mongodb.operation;
+package org.jenie.spring.data.mongodb.operation;
 
-import org.jenie.spring.test.data.mongodb.config.MongoDBConfig;
-import org.jenie.spring.test.data.mongodb.config.MongoDBConnectorRegistry;
+import org.jenie.spring.data.mongodb.config.MongoDBConfig;
+import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -1,13 +1,13 @@
-package org.jenie.spring.test.data.mongodb.operation;
+package org.jenie.spring.data.mongodb.operation;
 
 import java.util.List;
 
 import com.mongodb.ReadPreference;
 import com.mongodb.client.MongoClient;
-import org.jenie.spring.test.data.mongodb.config.MongoDBCluster;
-import org.jenie.spring.test.data.mongodb.config.MongoDBConnector;
-import org.jenie.spring.test.data.mongodb.config.MongoDBConnectorRegistry;
-import org.jenie.spring.test.data.mongodb.domain.DBConn;
+import org.jenie.spring.data.mongodb.config.MongoDBCluster;
+import org.jenie.spring.data.mongodb.config.MongoDBConnector;
+import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
+import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
