@@ -5,7 +5,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.test.data.mongodb.operation.MongoTemplateRouter;
+import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
@@ -61,7 +61,6 @@ public class ArticleService {
 		});
 	}
 
-	// TODO 트랙잰션 처리
 	public Article writeArticle(String service, ArticleRequest articleRequest) {
 		// TODO boardId 가 올바른지 체크
 		final var template = this.mongoTemplateRouter.txMongoTemplate(service);

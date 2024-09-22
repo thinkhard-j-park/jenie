@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.config;
 
-import org.jenie.spring.test.data.mongodb.config.MongoDBAutoConfig;
+import org.jenie.spring.data.mongodb.config.MongoDBAutoConfig;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

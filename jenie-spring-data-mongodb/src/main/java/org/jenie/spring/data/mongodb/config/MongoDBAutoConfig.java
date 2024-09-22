@@ -1,6 +1,6 @@
-package org.jenie.spring.test.data.mongodb.config;
+package org.jenie.spring.data.mongodb.config;
 
-import org.jenie.spring.test.data.mongodb.operation.MongoTemplateRouterConfig;
+import org.jenie.spring.data.mongodb.operation.MongoTemplateRouterConfig;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

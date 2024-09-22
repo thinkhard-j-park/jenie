@@ -1,4 +1,4 @@
-package org.jenie.spring.test.data.mongodb.domain;
+package org.jenie.spring.data.mongodb.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,4 +1,4 @@
-package org.jenie.spring.test.data.mongodb.operation;
+package org.jenie.spring.data.mongodb.operation;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;

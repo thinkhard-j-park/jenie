@@ -1,4 +1,4 @@
-package org.jenie.spring.test.data.mongodb.config;
+package org.jenie.spring.data.mongodb.config;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

@@ -1,4 +1,4 @@
-package org.jenie.spring.test.data.mongodb.operation;
+package org.jenie.spring.data.mongodb.operation;
 
 import java.util.ArrayList;
 
@@ -9,9 +9,9 @@ import com.mongodb.ReadPreference;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jenie.spring.test.data.mongodb.config.MongoDBCluster;
-import org.jenie.spring.test.data.mongodb.config.MongoDBConnectorRegistry;
-import org.jenie.spring.test.data.mongodb.domain.DBConn;
+import org.jenie.spring.data.mongodb.config.MongoDBCluster;
+import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
+import org.jenie.spring.data.mongodb.domain.DBConn;
 
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;

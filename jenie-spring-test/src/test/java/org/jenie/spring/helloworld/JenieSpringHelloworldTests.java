@@ -21,9 +21,9 @@ public class JenieSpringHelloworldTests {
 		var articleHeaderList = this.helloOperation.listArticleHeader("jenie-test", param);
 		assertThat(articleHeaderList).isNotNull();
 		assertThat(articleHeaderList.list()).isNotEmpty();
-		assertThat(articleHeaderList.list()).allSatisfy((articleHeader -> {
+		assertThat(articleHeaderList.list()).allSatisfy((articleHeader) -> {
 			assertThat(articleHeader.id()).isNotEmpty();
-		}));
+		});
 	}
 
 	@Test
@@ -34,6 +34,11 @@ public class JenieSpringHelloworldTests {
 		assertThat(articleCreated).isNotNull();
 		assertThat(articleCreated.header()).isNotNull();
 		assertThat(articleCreated.header().id()).isNotEmpty();
+	}
+
+	@Test
+	void writeArticleWithInvalidBoard() {
+		//TODO 트랜잭션 실패시 제대로 동작하는지를 테스트 한다.
 	}
 
 }
