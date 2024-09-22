@@ -6,6 +6,9 @@ public class Writer {
 
 	private String name;
 
+	public Writer() {
+	}
+
 	public Writer(String wid, String name) {
 		this.wid = wid;
 		this.name = name;
