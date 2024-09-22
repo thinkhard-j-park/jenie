@@ -74,7 +74,7 @@ public abstract class Operation {
 	}
 
 	public <T> LinkedMultiValueMap<String, String> toQueryParam(T obj) {
-		return this.objectMapper.convertValue(obj, new TypeReference<LinkedMultiValueMap<String, String>>() {
+		return this.objectMapper.convertValue(obj, new TypeReference<>() {
 		});
 	}
 

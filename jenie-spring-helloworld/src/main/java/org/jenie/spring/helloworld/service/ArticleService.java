@@ -59,7 +59,6 @@ public class ArticleService {
 		contentEntity.setContent(articleRequest.content());
 
 		var savedHeaderEntity = this.articleHeaderRepository.insert(template, headerEntity);
-
 		var savedContentEntity = this.articleContentRepository.insert(template, contentEntity);
 		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity);
 		var content = savedContentEntity.getContent();
