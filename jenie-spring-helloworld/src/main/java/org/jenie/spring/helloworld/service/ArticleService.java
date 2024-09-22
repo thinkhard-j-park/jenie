@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.service;
+package org.jenie.spring.helloworld.service;
 
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
@@ -7,11 +7,11 @@ import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.test.data.mongodb.operation.MongoTemplateRouter;
 
-import org.jenie.spring.test.helloworld.entity.article.ArticleContentEntity;
-import org.jenie.spring.test.helloworld.entity.article.ArticleHeaderEntity;
-import org.jenie.spring.test.helloworld.mapper.ArticleHeaderMapper;
-import org.jenie.spring.test.helloworld.repository.ArticleContentRepository;
-import org.jenie.spring.test.helloworld.repository.ArticleHeaderRepository;
+import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
+import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
+import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
+import org.jenie.spring.helloworld.repository.ArticleContentRepository;
+import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;

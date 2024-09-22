@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.entity.board;
+package org.jenie.spring.helloworld.entity.board;
 
 
 import org.springframework.data.annotation.Id;

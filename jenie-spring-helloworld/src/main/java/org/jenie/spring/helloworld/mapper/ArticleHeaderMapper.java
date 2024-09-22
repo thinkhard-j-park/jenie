@@ -1,7 +1,7 @@
-package org.jenie.spring.test.helloworld.mapper;
+package org.jenie.spring.helloworld.mapper;
 
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
-import org.jenie.spring.test.helloworld.entity.article.ArticleHeaderEntity;
+import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

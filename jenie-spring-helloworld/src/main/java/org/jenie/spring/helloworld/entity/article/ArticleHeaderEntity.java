@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.entity.article;
+package org.jenie.spring.helloworld.entity.article;
 
 import org.jenie.spring.helloworld.pojo.ActionDateTime;
 import org.jenie.spring.helloworld.pojo.Reaction;

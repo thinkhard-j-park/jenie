@@ -1,11 +1,11 @@
-package org.jenie.spring.test.helloworld.controller;
+package org.jenie.spring.helloworld.controller;
 
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.test.helloworld.service.ArticleService;
+import org.jenie.spring.helloworld.service.ArticleService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

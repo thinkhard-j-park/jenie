@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.entity.article;
+package org.jenie.spring.helloworld.entity.article;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

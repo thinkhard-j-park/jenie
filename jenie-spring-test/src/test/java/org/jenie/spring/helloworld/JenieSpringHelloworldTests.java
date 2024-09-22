@@ -1,6 +1,5 @@
-package org.jenie.spring.test.helloworld;
+package org.jenie.spring.helloworld;
 
-import org.jenie.spring.helloworld.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
@@ -17,10 +16,14 @@ public class JenieSpringHelloworldTests {
 
 	@Test
 	void listArticleHeader() {
+		var boardId = "test-board-id";
 		var param = new ListArticleHeaderRequestParam("test-board-id", "", 10, SortCode.TIME_DESC.getCode());
 		var articleHeaderList = this.helloOperation.listArticleHeader("jenie-test", param);
 		assertThat(articleHeaderList).isNotNull();
 		assertThat(articleHeaderList.list()).isNotEmpty();
+		assertThat(articleHeaderList.list()).allSatisfy((articleHeader -> {
+			assertThat(articleHeader.id()).isNotEmpty();
+		}));
 	}
 
 	@Test

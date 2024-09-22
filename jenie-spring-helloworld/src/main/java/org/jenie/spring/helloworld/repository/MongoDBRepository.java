@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.repository;
+package org.jenie.spring.helloworld.repository;
 
 import org.jenie.spring.test.data.mongodb.operation.MongoTemplateRouter;
 

@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.entity;
+package org.jenie.spring.helloworld.entity;
 
 import org.jenie.spring.helloworld.SortCode;
 

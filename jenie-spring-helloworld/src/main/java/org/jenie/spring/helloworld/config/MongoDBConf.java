@@ -1,4 +1,4 @@
-package org.jenie.spring.test.helloworld.config;
+package org.jenie.spring.helloworld.config;
 
 import org.jenie.spring.test.data.mongodb.config.MongoDBAutoConfig;
 
