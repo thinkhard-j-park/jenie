@@ -1,6 +1,7 @@
 package org.jenie.spring.data.mongodb.config;
 
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouterConfig;
+import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactionalConfig;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,7 +14,7 @@ public class MongoDBAutoConfig {
 
 	@ConditionalOnProperty(prefix = "mongodb.setting", name = "enabled", havingValue = "true")
 	@Configuration
-	@Import({ MongoDBConfig.class, MongoTemplateRouterConfig.class })
+	@Import({ MongoDBConfig.class, MongoTemplateRouterConfig.class, MongoKeyBasedTransactionalConfig.class })
 	static class MongoDBAutoConfigEnabler {
 
 	}

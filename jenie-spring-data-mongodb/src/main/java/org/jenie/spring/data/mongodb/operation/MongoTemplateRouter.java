@@ -68,7 +68,7 @@ public class MongoTemplateRouter {
 
 		var connector = this.connectorRegistry.getConnector(dbConn.getClusterKey());
 
-		//TODO 이것도 캐시를 통해서 관리되게 개선할 것. (Session Sync 옵션 key에 추가 필요)
+		// TODO 이것도 캐시를 통해서 관리되게 개선할 것. (Session Sync 옵션 key에 추가 필요)
 		var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 		template.setSessionSynchronization(sessionSynchronization);
 		return template;

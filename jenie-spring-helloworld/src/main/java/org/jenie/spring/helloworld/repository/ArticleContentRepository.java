@@ -1,7 +1,7 @@
 package org.jenie.spring.helloworld.repository;
 
-import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
+import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
