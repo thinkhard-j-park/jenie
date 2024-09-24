@@ -23,7 +23,7 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		super(mongoTemplateRouter);
 	}
 
-	public ArticleHeaderEntity findById(String dbKey, String id) {
+	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id) {
 		return this.mongoTemplateRouter.mongoTemplate(dbKey)
 			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleHeaderEntity.class);
 	}

@@ -13,27 +13,32 @@ import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
+import org.jenie.spring.helloworld.repository.BoardRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class ArticleService {
 
 	private final MongoTemplateRouter mongoTemplateRouter;
 
+	private final BoardRepository boardRepository;
+
 	private final ArticleHeaderRepository articleHeaderRepository;
 
 	private final ArticleContentRepository articleContentRepository;
 
-	public ArticleService(MongoTemplateRouter mongoTemplateRouter, ArticleHeaderRepository articleHeaderRepository,
-			ArticleContentRepository articleContentRepository) {
+	public ArticleService(MongoTemplateRouter mongoTemplateRouter, BoardRepository boardRepository,
+			ArticleHeaderRepository articleHeaderRepository, ArticleContentRepository articleContentRepository) {
 		this.mongoTemplateRouter = mongoTemplateRouter;
+		this.boardRepository = boardRepository;
 		this.articleHeaderRepository = articleHeaderRepository;
 		this.articleContentRepository = articleContentRepository;
 	}
 
 	public ArticleHeader getArticleHeaderById(String service, String id) {
-		return ArticleHeaderMapper.INSTANCE.toDto(this.articleHeaderRepository.findById(service, id));
+		return ArticleHeaderMapper.INSTANCE.toDto(this.articleHeaderRepository.findArticleHeaderById(service, id));
 	}
 
 	public ArticleHeaderList listArticleHeader(String service, ListArticleHeaderRequestParam param) {
@@ -48,6 +53,9 @@ public class ArticleService {
 	@MongoKeyBasedTransactional
 	public Article writeArticle(@DBKey String service, ArticleRequest articleRequest) {
 		// TODO boardId 가 올바른지 체크
+		var board = this.boardRepository.findBoardById(service, articleRequest.boardId());
+		Assert.notNull(board, "Board not found: " + service + "/" + articleRequest.boardId());
+
 		final var template = this.mongoTemplateRouter.txMongoTemplate(service);
 
 		var headerEntity = new ArticleHeaderEntity();
@@ -60,7 +68,7 @@ public class ArticleService {
 
 		var savedHeaderEntity = this.articleHeaderRepository.insert(template, headerEntity);
 		var savedContentEntity = this.articleContentRepository.insert(template, contentEntity);
-		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity);
+		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity, board);
 		var content = savedContentEntity.getContent();
 
 		return new Article(header, content);
