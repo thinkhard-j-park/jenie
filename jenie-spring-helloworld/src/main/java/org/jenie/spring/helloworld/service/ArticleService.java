@@ -13,7 +13,6 @@ import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
-import org.jenie.spring.helloworld.repository.BoardRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,30 +20,31 @@ import org.springframework.util.Assert;
 @Service
 public class ArticleService {
 
-	private final MongoTemplateRouter mongoTemplateRouter;
+	private final BoardService boardService;
 
-	private final BoardRepository boardRepository;
+	private final MongoTemplateRouter mongoTemplateRouter;
 
 	private final ArticleHeaderRepository articleHeaderRepository;
 
 	private final ArticleContentRepository articleContentRepository;
 
-	public ArticleService(MongoTemplateRouter mongoTemplateRouter, BoardRepository boardRepository,
+	public ArticleService(BoardService boardService, MongoTemplateRouter mongoTemplateRouter,
 			ArticleHeaderRepository articleHeaderRepository, ArticleContentRepository articleContentRepository) {
+		this.boardService = boardService;
 		this.mongoTemplateRouter = mongoTemplateRouter;
-		this.boardRepository = boardRepository;
 		this.articleHeaderRepository = articleHeaderRepository;
 		this.articleContentRepository = articleContentRepository;
 	}
 
 	public ArticleHeader getArticleHeaderById(String service, String id) {
-		return ArticleHeaderMapper.INSTANCE.toDto(this.articleHeaderRepository.findArticleHeaderById(service, id));
+		return ArticleHeaderMapper.toDto(this.articleHeaderRepository.findArticleHeaderById(service, id));
 	}
 
 	public ArticleHeaderList listArticleHeader(String service, ListArticleHeaderRequestParam param) {
 		var list = this.articleHeaderRepository.listArticleHeader(service, param)
 			.stream()
-			.map(ArticleHeaderMapper.INSTANCE::toDto)
+			.map((articleEntity) -> ArticleHeaderMapper.toDto(articleEntity,
+					this.boardService.findBoardEntityById(service, articleEntity.getBoardId())))
 			.toList();
 
 		return ArticleHeaderList.from(list, param.size());
@@ -52,8 +52,7 @@ public class ArticleService {
 
 	@MongoKeyBasedTransactional
 	public Article writeArticle(@DBKey String service, ArticleRequest articleRequest) {
-		// TODO boardId 가 올바른지 체크
-		var board = this.boardRepository.findBoardById(service, articleRequest.boardId());
+		var board = this.boardService.findBoardEntityById(service, articleRequest.boardId());
 		Assert.notNull(board, "Board not found: " + service + "/" + articleRequest.boardId());
 
 		final var template = this.mongoTemplateRouter.txMongoTemplate(service);
@@ -68,7 +67,7 @@ public class ArticleService {
 
 		var savedHeaderEntity = this.articleHeaderRepository.insert(template, headerEntity);
 		var savedContentEntity = this.articleContentRepository.insert(template, contentEntity);
-		var header = ArticleHeaderMapper.INSTANCE.toDto(savedHeaderEntity, board);
+		var header = ArticleHeaderMapper.toDto(savedHeaderEntity, board);
 		var content = savedContentEntity.getContent();
 
 		return new Article(header, content);

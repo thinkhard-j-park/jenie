@@ -7,4 +7,58 @@ import org.jenie.spring.helloworld.pojo.Writer;
 
 public record ArticleHeader(String id, Board board, String title, Reaction reaction, Writer writer,
 		ActionDateTime actionDateTime) {
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		private String id;
+
+		private Board board;
+
+		private String title;
+
+		private Reaction reaction;
+
+		private Writer writer;
+
+		private ActionDateTime actionDateTime;
+
+		public Builder id(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder board(Board board) {
+			this.board = board;
+			return this;
+		}
+
+		public Builder title(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public Builder reaction(Reaction reaction) {
+			this.reaction = reaction;
+			return this;
+		}
+
+		public Builder writer(Writer writer) {
+			this.writer = writer;
+			return this;
+		}
+
+		public Builder actionDateTime(ActionDateTime actionDateTime) {
+			this.actionDateTime = actionDateTime;
+			return this;
+		}
+
+		public ArticleHeader build() {
+			return new ArticleHeader(this.id, this.board, this.title, this.reaction, this.writer, this.actionDateTime);
+		}
+
+	}
 }

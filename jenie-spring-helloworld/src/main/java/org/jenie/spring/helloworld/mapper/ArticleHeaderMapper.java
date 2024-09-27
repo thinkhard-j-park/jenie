@@ -3,21 +3,35 @@ package org.jenie.spring.helloworld.mapper;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface ArticleHeaderMapper {
+public final class ArticleHeaderMapper {
 
-	ArticleHeaderMapper INSTANCE = Mappers.getMapper(ArticleHeaderMapper.class);
+	private ArticleHeaderMapper() {
+	}
 
-	ArticleHeader toDto(ArticleHeaderEntity entity);
+	public static ArticleHeader toDto(ArticleHeaderEntity entity) {
+		if (entity == null) {
+			return null;
+		}
 
-	@Mapping(target = "board", source = "board")
-	@Mapping(target = ".", source = "articleHeader")
-	ArticleHeader toDto(ArticleHeaderEntity articleHeader, BoardEntity board);
+		return ArticleHeader.builder()
+			.id(entity.getId())
+			.title(entity.getTitle())
+			.reaction(entity.getReaction())
+			.writer(entity.getWriter())
+			.actionDateTime(entity.getActionDateTime())
+			.build();
+	}
 
-	ArticleHeaderEntity toEntity(ArticleHeader dto);
+	public static ArticleHeader toDto(ArticleHeaderEntity article, BoardEntity board) {
+		return ArticleHeader.builder()
+			.id(article.getId())
+			.board(BoardMapper.toDto(board))
+			.title(article.getTitle())
+			.reaction(article.getReaction())
+			.writer(article.getWriter())
+			.actionDateTime(article.getActionDateTime())
+			.build();
+	}
 
 }
