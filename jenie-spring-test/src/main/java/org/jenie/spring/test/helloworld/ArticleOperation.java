@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld;
+package org.jenie.spring.test.helloworld;
 
 import java.util.Map;
 
@@ -11,9 +11,9 @@ import org.jenie.spring.test.client.Operation;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
 
-public class HelloworldOperation extends Operation {
+public class ArticleOperation extends Operation {
 
-	public HelloworldOperation(RestClient restClient) {
+	public ArticleOperation(RestClient restClient) {
 		super(restClient);
 	}
 
