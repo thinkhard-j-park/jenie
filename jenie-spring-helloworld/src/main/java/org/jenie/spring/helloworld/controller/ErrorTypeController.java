@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorTypeController {
 
 	@GetMapping("/{errorCode}")
-	public ErrorType problemDetail(@PathVariable int errorCode) {
+	public ErrorType getErrorType(@PathVariable int errorCode) {
 		return ErrorCode.fromCode(errorCode).toErrorType();
 
 	}
