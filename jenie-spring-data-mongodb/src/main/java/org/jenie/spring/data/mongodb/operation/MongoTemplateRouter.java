@@ -24,27 +24,20 @@ import org.springframework.util.StringUtils;
 
 public class MongoTemplateRouter {
 
-	private final MongoDBConnectorRegistry connectorRegistry;
-
-	private final LoadingCache<String, DBConn> dbConnCache;
-
-	private final LoadingCache<String, MongoDatabaseFactory> databaseFactoryCache;
-
 	private final LoadingCache<String, MongoTransactionManager> transactionManagerCache;
 
 	private final LoadingCache<MongoTemplateKey, MongoTemplate> mongoTemplateCache;
 
 	public MongoTemplateRouter(MongoDBConnectorRegistry connectorRegistry) {
-		this.connectorRegistry = connectorRegistry;
-		this.dbConnCache = Caffeine.newBuilder().build(new DBConnLoader(this.connectorRegistry));
-		this.databaseFactoryCache = Caffeine.newBuilder()
-			.build(new MongoDatabaseFactoryLoader(this.connectorRegistry, this.dbConnCache));
+		LoadingCache<String, DBConn> dbConnCache = Caffeine.newBuilder().build(new DBConnLoader(connectorRegistry));
+		LoadingCache<String, MongoDatabaseFactory> databaseFactoryCache = Caffeine.newBuilder()
+			.build(new MongoDatabaseFactoryLoader(connectorRegistry, dbConnCache));
 
 		this.transactionManagerCache = Caffeine.newBuilder()
-			.build(new MongoTransactionManagerLoader(this.databaseFactoryCache));
+			.build(new MongoTransactionManagerLoader(databaseFactoryCache));
 
 		this.mongoTemplateCache = Caffeine.newBuilder()
-			.build(new MongoTemplateLoader(this.connectorRegistry, this.dbConnCache, this.databaseFactoryCache));
+			.build(new MongoTemplateLoader(connectorRegistry, dbConnCache, databaseFactoryCache));
 	}
 
 	public MongoTemplate mongoTemplate(String dbKey, ReadPreference readPreference, WriteConcern writeConcern) {
