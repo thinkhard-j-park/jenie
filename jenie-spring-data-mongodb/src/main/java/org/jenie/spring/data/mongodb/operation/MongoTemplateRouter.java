@@ -15,7 +15,6 @@ import org.jenie.spring.data.mongodb.domain.DBConn;
 
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
-import org.springframework.data.mongodb.SessionSynchronization;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -56,26 +55,6 @@ public class MongoTemplateRouter {
 
 	public MongoTemplate mongoTemplate(String dbKey) {
 		return this.mongoTemplate(dbKey, null, null);
-	}
-
-	public MongoTemplate txMongoTemplate(String dbKey, SessionSynchronization sessionSynchronization) {
-
-		var dbConn = this.dbConnCache.get(dbKey);
-		Assert.notNull(dbConn, "DBConn must not be null");
-
-		var factory = this.databaseFactoryCache.get(dbKey);
-		Assert.notNull(factory, "MongoDatabaseFactory must not be null");
-
-		var connector = this.connectorRegistry.getConnector(dbConn.getClusterKey());
-
-		// TODO 이것도 캐시를 통해서 관리되게 개선할 것. (Session Sync 옵션 key에 추가 필요)
-		var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
-		template.setSessionSynchronization(sessionSynchronization);
-		return template;
-	}
-
-	public MongoTemplate txMongoTemplate(String dbKey) {
-		return this.txMongoTemplate(dbKey, SessionSynchronization.ALWAYS);
 	}
 
 	public MongoTransactionManager transactionManager(String dbKey) {
@@ -134,8 +113,8 @@ public class MongoTemplateRouter {
 
 		private final LoadingCache<String, MongoDatabaseFactory> databaseFactoryCache;
 
-		MongoTransactionManagerLoader(LoadingCache<String, MongoDatabaseFactory> databaseFactoryLCache) {
-			this.databaseFactoryCache = databaseFactoryLCache;
+		MongoTransactionManagerLoader(LoadingCache<String, MongoDatabaseFactory> databaseFactoryCache) {
+			this.databaseFactoryCache = databaseFactoryCache;
 		}
 
 		@Override

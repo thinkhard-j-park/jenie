@@ -28,7 +28,7 @@ public record MongoTemplateKey(String dbKey, ReadPreference readPreference, Writ
 		sb.append("|");
 		if (this.writeConcern != null) {
 			sb.append("_")
-				.append(this.writeConcern.getWObject())
+				.append(this.writeConcern.getW())
 				.append("_")
 				.append(this.writeConcern.getWTimeout(TimeUnit.MILLISECONDS));
 		}
