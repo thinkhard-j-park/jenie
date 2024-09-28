@@ -52,7 +52,8 @@ public class ArticleService {
 		var board = this.boardService.findBoardEntityById(service, articleRequest.boardId());
 		if (board == null) {
 			throw new BoardException.BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND,
-					"Board not found: " + service + ", " + articleRequest.boardId());
+					"Failed to write article because board was not found: " + service + ", "
+							+ articleRequest.boardId());
 		}
 
 		var headerEntity = new ArticleHeaderEntity();

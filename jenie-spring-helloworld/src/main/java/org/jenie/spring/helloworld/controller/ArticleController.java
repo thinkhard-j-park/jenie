@@ -62,11 +62,6 @@ public class ArticleController {
 
 	/**
 	 * TODO crud article,
-	 *
-	 ** Problem Detail 정적 테스트
-	 *
-	 ** 통합 테스트
-	 *
 	 */
 
 }
