@@ -1,31 +1,36 @@
-package org.jenie.spring.helloworld;
+package org.jenie.spring.helloworld.test;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 
+import org.assertj.core.api.Assertions;
+import org.jenie.spring.helloworld.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.pojo.Writer;
-import org.jenie.spring.test.client.HttpClient;
-import org.jenie.spring.test.helloworld.ArticleOperation;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ArticleTests {
+@ActiveProfiles("local")
+class ArticleLocalTests extends HelloworldTests {
 
-	private static final Logger logger = LoggerFactory.getLogger(ArticleTests.class);
+	private static final Logger logger = LoggerFactory.getLogger(ArticleLocalTests.class);
 
-	// TODO profile 별로 baseurl 설정 가능하게 할 것.
-	protected final ArticleOperation articleOperation = new ArticleOperation(
-			HttpClient.restClient("helloworld", "http://localhost:30000"));
+	@Test
+	void checkProperties() {
+		assertThat(this.testProperties).isNotNull();
+		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
+		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://localhost:30000");
+	}
 
 	@Test
 	void listArticleHeader() {
@@ -37,20 +42,20 @@ public class ArticleTests {
 		var articleHeaderList = this.articleOperation.listArticleHeader("jenie-test", param);
 
 		// then
-		assertThat(articleHeaderList).isNotNull();
-		assertThat(articleHeaderList.list()).isNotEmpty();
-		assertThat(articleHeaderList.list()).allSatisfy((articleHeader) -> {
-			assertThat(articleHeader.id()).isNotEmpty();
-			assertThat(articleHeader.board()).isNotNull();
-			assertThat(articleHeader.board().id()).isNotEmpty();
-			assertThat(articleHeader.title()).isNotEmpty();
-			assertThat(articleHeader.writer()).isNotNull();
-			assertThat(articleHeader.writer().getWid()).isNotEmpty();
-			assertThat(articleHeader.actionDateTime()).isNotNull();
-			assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
+		Assertions.assertThat(articleHeaderList).isNotNull();
+		Assertions.assertThat(articleHeaderList.list()).isNotEmpty();
+		Assertions.assertThat(articleHeaderList.list()).allSatisfy((articleHeader) -> {
+			Assertions.assertThat(articleHeader.id()).isNotEmpty();
+			Assertions.assertThat(articleHeader.board()).isNotNull();
+			Assertions.assertThat(articleHeader.board().id()).isNotEmpty();
+			Assertions.assertThat(articleHeader.title()).isNotEmpty();
+			Assertions.assertThat(articleHeader.writer()).isNotNull();
+			Assertions.assertThat(articleHeader.writer().getWid()).isNotEmpty();
+			Assertions.assertThat(articleHeader.actionDateTime()).isNotNull();
+			Assertions.assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
 			logger.info(articleHeader.toString());
 		});
-		assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
+		Assertions.assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
 	@Test

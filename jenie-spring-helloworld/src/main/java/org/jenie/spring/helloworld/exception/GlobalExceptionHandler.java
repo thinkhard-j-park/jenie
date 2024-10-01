@@ -28,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		var errorCode = ex.getErrorCode();
 		var errorUrl = scheme + "://" + host + ":" + port + "/error/" + errorCode.getCode();
 
-		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(errorCode.getHttpStatus(), ex.getMessage());
+		var problemDetail = ProblemDetail.forStatusAndDetail(errorCode.getHttpStatus(), ex.getMessage());
 		problemDetail.setTitle(errorCode.getTitle());
 		problemDetail.setType(URI.create(errorUrl));
 		problemDetail.setInstance(URI.create(fullUrl));
