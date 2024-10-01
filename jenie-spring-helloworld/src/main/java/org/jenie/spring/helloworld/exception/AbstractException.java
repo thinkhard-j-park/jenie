@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.exception;
 
-public class AbstractException extends RuntimeException {
+public abstract class AbstractException extends RuntimeException {
 
 	private final ErrorCode errorCode;
 
