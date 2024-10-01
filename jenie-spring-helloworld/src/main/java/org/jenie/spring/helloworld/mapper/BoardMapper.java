@@ -9,6 +9,9 @@ public final class BoardMapper {
 	}
 
 	public static Board toDto(BoardEntity board) {
+		if (board == null) {
+			return null;
+		}
 		return Board.builder()
 			.id(board.getId())
 			.rootId(board.getRootId())
