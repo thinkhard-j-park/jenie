@@ -51,8 +51,7 @@ public class ArticleController {
 	@PutMapping("/{id}")
 	public Article modifyArticle(@PathVariable String service, @PathVariable String id,
 			@RequestBody ArticleRequest articleRequest) {
-		// 권한 체크, 작성자만 수정할 수 있게.
-		return null;
+		return this.articleService.modifyArticle(service, id, articleRequest);
 	}
 
 	@DeleteMapping("/{id}")

@@ -73,6 +73,24 @@ public abstract class Operation {
 			.body(responseType);
 	}
 
+	protected <T> T doPut(String path, Map<String, Object> uriVariables,
+			LinkedMultiValueMap<String, String> queryParams, Object requestBody,
+			ParameterizedTypeReference<T> responseType) {
+
+		var uri = UriComponentsBuilder.fromPath(path)
+			.uriVariables(Optional.ofNullable(uriVariables).orElse(Collections.emptyMap()))
+			.queryParams(queryParams)
+			.build()
+			.toUriString();
+
+		return this.restClient.put()
+			.uri(uri)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(requestBody)
+			.retrieve()
+			.body(responseType);
+	}
+
 	public <T> LinkedMultiValueMap<String, String> toQueryParam(T obj) {
 		return this.objectMapper.convertValue(obj, new TypeReference<>() {
 		});
