@@ -47,7 +47,7 @@ public class MongoTemplateRouter {
 	}
 
 	public MongoTemplate mongoTemplate(String dbKey) {
-		return this.mongoTemplate(dbKey, null, null);
+		return this.mongoTemplate(dbKey, ReadPreference.primaryPreferred(), null);
 	}
 
 	public MongoTransactionManager transactionManager(String dbKey) {
