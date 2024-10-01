@@ -11,7 +11,7 @@ public enum ErrorCode {
 	ARTICLE_NOT_FOUND("Invalid article", 200, HttpStatus.BAD_REQUEST,
 			"Error when the requested article is not found. Invalid article ID is used"),
 
-	ARTICLE_MODIFY_NOT_ALLOWED("Not allowed modify article", 201, HttpStatus.BAD_REQUEST,
+	ARTICLE_MODIFY_NOT_ALLOWED("Not allowed modify article", 201, HttpStatus.METHOD_NOT_ALLOWED,
 			"Error when modifying a article is not allowed. It may happen if an invalid writer is used to modify article"),
 
 	UNKNOWN("Unknown error", -1, HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
