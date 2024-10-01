@@ -9,7 +9,9 @@ import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
-import org.jenie.spring.helloworld.exception.BoardException;
+import org.jenie.spring.helloworld.entity.board.BoardEntity;
+import org.jenie.spring.helloworld.exception.ArticleErrors;
+import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.exception.ErrorCode;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
@@ -49,12 +51,7 @@ public class ArticleService {
 
 	@MongoKeyBasedTransactional
 	public Article writeArticle(@DBKey String service, ArticleRequest articleRequest) {
-		var board = this.boardService.findBoardEntityById(service, articleRequest.boardId());
-		if (board == null) {
-			throw new BoardException.BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND,
-					"Failed to write article because board was not found: " + service + ", "
-							+ articleRequest.boardId());
-		}
+		var board = this.getBoardEntity(service, articleRequest.boardId());
 
 		var headerEntity = new ArticleHeaderEntity();
 		headerEntity.setBoardId(articleRequest.boardId());
@@ -64,9 +61,48 @@ public class ArticleService {
 		contentEntity.setContent(articleRequest.content());
 
 		var savedHeaderEntity = this.articleHeaderRepository.insert(service, headerEntity);
+
+		contentEntity.setId(savedHeaderEntity.getId());
 		var savedContentEntity = this.articleContentRepository.insert(service, contentEntity);
+
 		var header = ArticleHeaderMapper.toDto(savedHeaderEntity, board);
 		var content = savedContentEntity.getContent();
+
+		return new Article(header, content);
+	}
+
+	private BoardEntity getBoardEntity(String service, String boardId) {
+		var board = this.boardService.findBoardEntityById(service, boardId);
+		if (board == null) {
+			throw new BoardErrors.BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND,
+					"Failed to write article because board was not found: " + service + ", " + boardId);
+		}
+
+		return board;
+
+	}
+
+	@MongoKeyBasedTransactional
+	public Article modifyArticle(@DBKey String service, String articleId, ArticleRequest modifyRequest) {
+		var board = this.getBoardEntity(service, modifyRequest.boardId());
+		var writer = this.articleHeaderRepository.findArticleWriterById(service, articleId);
+		if (writer == null) {
+			throw new ArticleErrors.ArticleNotFoundException(ErrorCode.ARTICLE_NOT_FOUND,
+					"Failed to get article writer: " + service + ", " + articleId);
+		}
+
+		if (!writer.getWid().equals(modifyRequest.writer().getWid())) {
+			throw new ArticleErrors.ArticleModifyException(ErrorCode.ARTICLE_MODIFY_NOT_ALLOWED,
+					"This user is not allowed to modify this article: " + service + ", " + articleId + ", "
+							+ writer.getWid());
+		}
+
+		var modifiedArticleHeader = this.articleHeaderRepository.modifyArticleHeader(service, articleId,
+				modifyRequest.title());
+		var modifiedArticleContent = this.articleContentRepository.modifyArticleContent(service, articleId,
+				modifyRequest.content());
+		var header = ArticleHeaderMapper.toDto(modifiedArticleHeader, board);
+		var content = modifiedArticleContent.getContent();
 
 		return new Article(header, content);
 	}

@@ -1,6 +1,5 @@
 package org.jenie.spring.helloworld.test;
 
-import java.time.ZonedDateTime;
 import java.util.Comparator;
 
 import org.assertj.core.api.Assertions;
@@ -10,6 +9,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.pojo.Writer;
+import org.jenie.spring.test.util.ZdtUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +24,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ArticleLocalTests extends HelloworldTests {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleLocalTests.class);
+
+	private Writer testWriter() {
+		return new Writer("uid", "name");
+	}
 
 	@Test
 	void checkProperties() {
@@ -55,42 +59,72 @@ class ArticleLocalTests extends HelloworldTests {
 			Assertions.assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
 			logger.info(articleHeader.toString());
 		});
-		Assertions.assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
+		Assertions.assertThat(articleHeaderList.list())
+			.isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
-	@Test
-	void writeArticle() {
+	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
 		// given
-		var writer = new Writer("uid", "name");
-		var epochSecond = ZonedDateTime.now().toEpochSecond();
-		var articleRequest = new ArticleRequest("test-board-id", "title-" + epochSecond, "content-" + epochSecond,
-				writer);
+		var articleRequest = new ArticleRequest(boardId, title, content, writer);
 
 		// when
-		Article articleCreated = this.articleOperation.writeArticle("jenie-test", articleRequest);
+		Article articleCreated = this.articleOperation.writeArticle(service, articleRequest);
 
 		// then
 		assertThat(articleCreated).isNotNull();
 		assertThat(articleCreated.header()).isNotNull();
 		assertThat(articleCreated.header().id()).isNotEmpty();
+		assertThat(articleCreated.header().board()).isNotNull();
+		assertThat(articleCreated.header().board().id()).isEqualTo(boardId);
+		assertThat(articleCreated.header().writer()).isNotNull();
+		assertThat(articleCreated.header().writer().getWid()).isEqualTo(writer.getWid());
+		assertThat(articleCreated.header().title()).isEqualTo(title);
+		assertThat(articleCreated.content()).isEqualTo(content);
+
+		return articleCreated;
+	}
+
+	@Test
+	void writeArticle() {
+		var zdtNow = ZdtUtil.zdtNowString();
+		this.writeArticleAndVerify("jenie-test", "test-board-id", "title-" + zdtNow, "content-" + zdtNow, testWriter());
 	}
 
 	@Test
 	void writeArticleWithInvalidBoard() {
-		// given
-		var writer = new Writer("uid", "name");
-		var epochSecond = ZonedDateTime.now().toEpochSecond();
-		var articleRequest = new ArticleRequest("unknown-board-id", "title-" + epochSecond, "content-" + epochSecond,
-				writer);
-
-		// when, then
-		assertThatThrownBy(() -> this.articleOperation.writeArticle("jenie-test", articleRequest))
+		var zdtNow = ZdtUtil.zdtNowString();
+		assertThatThrownBy(() -> this.writeArticleAndVerify("jenie-test", "unknown-board-id", "title-" + zdtNow,
+				"content-" + zdtNow, testWriter()))
 			.isInstanceOf(HttpClientErrorException.BadRequest.class);
 	}
 
 	@Test
 	void modifyArticle() {
+		// given
+		var createdAt = ZdtUtil.zdtNowString();
+		var service = "jenie-test";
+		var writer = testWriter();
+		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", "title-" + createdAt,
+				"content-" + createdAt, writer);
+		var articleHeader = createdArticle.header();
 
+		var modifiedAt = ZdtUtil.zdtNowString();
+		var boardId = articleHeader.board().id();
+		var articleId = articleHeader.id();
+		var title = "title-modified-" + modifiedAt;
+		var content = "content-modified-" + modifiedAt;
+		var modifyRequest = new ArticleRequest(boardId, title, content, writer);
+
+		// when
+		Article modifiedArticle = this.articleOperation.modifyArticle(service, articleId, modifyRequest);
+
+		// then
+		assertThat(modifiedArticle).isNotNull();
+		assertThat(modifiedArticle.header()).isNotNull();
+		assertThat(modifiedArticle.header().id()).isNotEmpty();
+		assertThat(modifiedArticle.header().title()).isEqualTo(title);
+		assertThat(modifiedArticle.header().board().id()).isEqualTo(boardId);
+		assertThat(modifiedArticle.content()).isEqualTo(content);
 	}
 
 	@Test

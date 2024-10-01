@@ -30,4 +30,10 @@ public class ArticleOperation extends Operation {
 				});
 	}
 
+	public Article modifyArticle(String service, String articleId, ArticleRequest modifyRequest) {
+		return this.doPut("/{service}/article/{id}", Map.of("service", service, "id", articleId), null, modifyRequest,
+				new ParameterizedTypeReference<>() {
+				});
+	}
+
 }
