@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.exception;
 
-public class BoardException {
+public class BoardErrors {
 
 	public static class BoardNotFoundException extends AbstractException {
 
