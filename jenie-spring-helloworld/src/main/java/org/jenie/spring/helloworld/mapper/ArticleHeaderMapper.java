@@ -1,8 +1,10 @@
 package org.jenie.spring.helloworld.mapper;
 
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
+import org.jenie.spring.helloworld.dto.board.Board;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
+import org.jenie.spring.helloworld.pojo.ArticleState;
 
 public final class ArticleHeaderMapper {
 
@@ -16,6 +18,8 @@ public final class ArticleHeaderMapper {
 
 		return ArticleHeader.builder()
 			.id(entity.getId())
+			.board(Board.builder().id(entity.getBoardId()).build())
+			.state(ArticleState.fromCode(entity.getState()))
 			.title(entity.getTitle())
 			.reaction(entity.getReaction())
 			.writer(entity.getWriter())
@@ -27,6 +31,7 @@ public final class ArticleHeaderMapper {
 		return ArticleHeader.builder()
 			.id(article.getId())
 			.board(BoardMapper.toDto(board))
+			.state(ArticleState.fromCode(article.getState()))
 			.title(article.getTitle())
 			.reaction(article.getReaction())
 			.writer(article.getWriter())
