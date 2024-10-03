@@ -27,15 +27,16 @@ public class ArticleController {
 		this.articleService = articleService;
 	}
 
+	@GetMapping("/{id}/header")
+	public ArticleHeader getArticleHeaderById(@PathVariable String service, @PathVariable String id,
+			@RequestParam(defaultValue = "false") boolean latest) {
+		return this.articleService.getArticleHeaderById(service, id, latest);
+	}
+
 	@GetMapping("/{id}")
 	public Article viewArticle(@PathVariable String service, @PathVariable String id,
 			@RequestParam boolean incViewCount) {
 		return null;
-	}
-
-	@GetMapping("/{id}/header")
-	public ArticleHeader getArticleHeaderById(@PathVariable String service, @PathVariable String id) {
-		return this.articleService.getArticleHeaderById(service, id);
 	}
 
 	@GetMapping("/list")

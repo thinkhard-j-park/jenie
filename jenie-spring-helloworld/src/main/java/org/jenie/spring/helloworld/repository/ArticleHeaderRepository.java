@@ -29,8 +29,17 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		super(mongoTemplateRouter);
 	}
 
-	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id) {
-		return this.mongoTemplateRouter.mongoTemplate(dbKey)
+	/**
+	 * ArticleHeader 을 조회한다.
+	 * @param dbKey '클러스터-데이터베이스' 을 찾는 키
+	 * @param id 게시글 아이디
+	 * @param latest true 로 지정된 경우 Primary 에서 데이터를 읽는다. 그렇지 않는 경우는 SecondaryPreferred 을
+	 * 사용한다. SecondaryPreferred 을 사용하는 경우 ReplicaSet 동기화 시간 동안 최신 데이터가 아닐 수 있다.
+	 * @return db 에서 읽어온 ArticleHeader 데이터 .
+	 */
+	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id, boolean latest) {
+		var readPreference = latest ? ReadPreference.primary() : ReadPreference.secondaryPreferred();
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, readPreference, null)
 			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleHeaderEntity.class);
 	}
 
@@ -80,14 +89,14 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		AssertHelper.hasText(header.getWriter().getName(), "writerName is required");
 	}
 
-	public ArticleHeaderEntity modifyArticleHeader(String service, String articleId, String title) {
+	public ArticleHeaderEntity modifyArticleHeader(String service, String id, String title) {
 		AssertHelper.hasText(title, "title is required");
 
 		var update = new Update();
 		update.set("title", title);
 		update.set("actionDateTime.updatedAt", ZonedDateTime.now());
 		return this.mongoTemplateRouter.mongoTemplate(service, ReadPreference.primary(), WriteConcern.MAJORITY)
-			.findAndModify(Query.query(Criteria.where("_id").is(articleId)), update,
+			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 
