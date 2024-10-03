@@ -14,6 +14,7 @@ import org.jenie.spring.helloworld.exception.ArticleErrors;
 import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.exception.ErrorCode;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
+import org.jenie.spring.helloworld.pojo.ArticleState;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
@@ -35,8 +36,8 @@ public class ArticleService {
 		this.articleContentRepository = articleContentRepository;
 	}
 
-	public ArticleHeader getArticleHeaderById(String service, String id) {
-		return ArticleHeaderMapper.toDto(this.articleHeaderRepository.findArticleHeaderById(service, id));
+	public ArticleHeader getArticleHeaderById(String service, String id, boolean latest) {
+		return ArticleHeaderMapper.toDto(this.articleHeaderRepository.findArticleHeaderById(service, id, latest));
 	}
 
 	public ArticleHeaderList listArticleHeader(String service, ListArticleHeaderRequestParam param) {
@@ -57,6 +58,7 @@ public class ArticleService {
 		headerEntity.setBoardId(articleRequest.boardId());
 		headerEntity.setTitle(articleRequest.title());
 		headerEntity.setWriter(articleRequest.writer());
+
 		var contentEntity = new ArticleContentEntity();
 		contentEntity.setContent(articleRequest.content());
 
