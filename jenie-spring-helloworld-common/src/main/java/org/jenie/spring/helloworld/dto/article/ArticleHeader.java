@@ -2,10 +2,11 @@ package org.jenie.spring.helloworld.dto.article;
 
 import org.jenie.spring.helloworld.dto.board.Board;
 import org.jenie.spring.helloworld.pojo.ActionDateTime;
+import org.jenie.spring.helloworld.pojo.ArticleState;
 import org.jenie.spring.helloworld.pojo.Reaction;
 import org.jenie.spring.helloworld.pojo.Writer;
 
-public record ArticleHeader(String id, Board board, String title, Reaction reaction, Writer writer,
+public record ArticleHeader(String id, Board board, int state, String title, Reaction reaction, Writer writer,
 		ActionDateTime actionDateTime) {
 
 	public static Builder builder() {
@@ -17,6 +18,8 @@ public record ArticleHeader(String id, Board board, String title, Reaction react
 		private String id;
 
 		private Board board;
+
+		private ArticleState state = ArticleState.Normal;
 
 		private String title;
 
@@ -33,6 +36,11 @@ public record ArticleHeader(String id, Board board, String title, Reaction react
 
 		public Builder board(Board board) {
 			this.board = board;
+			return this;
+		}
+
+		public Builder state(ArticleState state) {
+			this.state = state;
 			return this;
 		}
 
@@ -57,7 +65,8 @@ public record ArticleHeader(String id, Board board, String title, Reaction react
 		}
 
 		public ArticleHeader build() {
-			return new ArticleHeader(this.id, this.board, this.title, this.reaction, this.writer, this.actionDateTime);
+			return new ArticleHeader(this.id, this.board, this.state.getCode(), this.title, this.reaction, this.writer,
+					this.actionDateTime);
 		}
 
 	}

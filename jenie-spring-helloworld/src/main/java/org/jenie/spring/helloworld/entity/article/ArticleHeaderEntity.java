@@ -15,6 +15,8 @@ public class ArticleHeaderEntity {
 
 	private String boardId;
 
+	private int state;
+
 	private String title;
 
 	private Reaction reaction;
@@ -22,6 +24,14 @@ public class ArticleHeaderEntity {
 	private Writer writer;
 
 	private ActionDateTime actionDateTime;
+
+	public String getId() {
+		return this.id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getBoardId() {
 		return this.boardId;
@@ -31,12 +41,12 @@ public class ArticleHeaderEntity {
 		this.boardId = boardId;
 	}
 
-	public String getId() {
-		return this.id;
+	public int getState() {
+		return this.state;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	public String getTitle() {
@@ -77,6 +87,7 @@ public class ArticleHeaderEntity {
 		return "ArticleHeaderEntity{" +
 				"id='" + this.id + '\'' +
 				", boardId='" + this.boardId + '\'' +
+				", state=" + this.state +
 				", title='" + this.title + '\'' +
 				", reaction=" + this.reaction +
 				", writer=" + this.writer +
