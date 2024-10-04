@@ -2,7 +2,6 @@ package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
 
-import org.assertj.core.api.Assertions;
 import org.jenie.spring.helloworld.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
@@ -37,6 +36,28 @@ class ArticleLocalTests extends HelloworldTests {
 	@BeforeEach
 	void init(TestInfo testInfo) {
 		this.testInfo = testInfo;
+	}
+
+	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
+		// given
+		var articleRequest = new ArticleRequest(boardId, title, content, writer);
+
+		// when
+		Article createdArticle = this.articleOperation.writeArticle(service, articleRequest);
+
+		// then
+		assertThat(createdArticle).isNotNull();
+		assertThat(createdArticle.header()).isNotNull();
+		assertThat(createdArticle.header().id()).isNotEmpty();
+		assertThat(createdArticle.header().board()).isNotNull();
+		assertThat(createdArticle.header().state()).isEqualTo(ArticleState.Normal.getCode());
+		assertThat(createdArticle.header().board().id()).isEqualTo(boardId);
+		assertThat(createdArticle.header().writer()).isNotNull();
+		assertThat(createdArticle.header().writer().getWid()).isEqualTo(writer.getWid());
+		assertThat(createdArticle.header().title()).isEqualTo(title);
+		assertThat(createdArticle.content()).isEqualTo(content);
+
+		return createdArticle;
 	}
 
 	@Test
@@ -118,30 +139,12 @@ class ArticleLocalTests extends HelloworldTests {
 			assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
 			logger.info(articleHeader.toString());
 		});
-		Assertions.assertThat(articleHeaderList.list())
-			.isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
+		assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
-	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
-		// given
-		var articleRequest = new ArticleRequest(boardId, title, content, writer);
+	@Test
+	void listMoreArticleHeader() {
 
-		// when
-		Article articleCreated = this.articleOperation.writeArticle(service, articleRequest);
-
-		// then
-		assertThat(articleCreated).isNotNull();
-		assertThat(articleCreated.header()).isNotNull();
-		assertThat(articleCreated.header().id()).isNotEmpty();
-		assertThat(articleCreated.header().board()).isNotNull();
-		assertThat(articleCreated.header().state()).isEqualTo(ArticleState.Normal.getCode());
-		assertThat(articleCreated.header().board().id()).isEqualTo(boardId);
-		assertThat(articleCreated.header().writer()).isNotNull();
-		assertThat(articleCreated.header().writer().getWid()).isEqualTo(writer.getWid());
-		assertThat(articleCreated.header().title()).isEqualTo(title);
-		assertThat(articleCreated.content()).isEqualTo(content);
-
-		return articleCreated;
 	}
 
 	@Test
