@@ -2,7 +2,6 @@ package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
 
-import org.assertj.core.api.Assertions;
 import org.jenie.spring.helloworld.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
@@ -118,8 +117,7 @@ class ArticleLocalTests extends HelloworldTests {
 			assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
 			logger.info(articleHeader.toString());
 		});
-		Assertions.assertThat(articleHeaderList.list())
-			.isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
+		assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
 	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
