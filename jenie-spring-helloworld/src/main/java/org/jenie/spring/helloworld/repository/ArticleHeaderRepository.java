@@ -11,6 +11,7 @@ import org.jenie.spring.helloworld.entity.SortOrder;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.exception.AssertHelper;
 import org.jenie.spring.helloworld.pojo.ActionDateTime;
+import org.jenie.spring.helloworld.pojo.ArticleState;
 import org.jenie.spring.helloworld.pojo.Writer;
 
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -38,12 +40,16 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	 * @return db 에서 읽어온 ArticleHeader 데이터 .
 	 */
 	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id, boolean latest) {
+		AssertHelper.hasText(id, "id is required");
+
 		var readPreference = latest ? ReadPreference.primary() : ReadPreference.secondaryPreferred();
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, readPreference, null)
 			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleHeaderEntity.class);
 	}
 
 	public Writer findArticleWriterById(String dbKey, String id) {
+		AssertHelper.hasText(id, "id is required");
+
 		var query = Query.query(Criteria.where("_id").is(id));
 		query.fields().include("writer");
 		var articleHeader = this.mongoTemplateRouter.mongoTemplate(dbKey).findOne(query, ArticleHeaderEntity.class);
@@ -54,7 +60,7 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	}
 
 	public List<ArticleHeaderEntity> listArticleHeader(String dbKey, ListArticleHeaderRequestParam param) {
-		var criteria = new Criteria();
+		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode());
 		if (StringUtils.hasText(param.boardId())) {
 			criteria.and("boardId").is(param.boardId());
 		}
@@ -90,12 +96,30 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	}
 
 	public ArticleHeaderEntity modifyArticleHeader(String service, String id, String title) {
+		AssertHelper.hasText(id, "id is required");
 		AssertHelper.hasText(title, "title is required");
 
 		var update = new Update();
 		update.set("title", title);
 		update.set("actionDateTime.updatedAt", ZonedDateTime.now());
 		return this.mongoTemplateRouter.mongoTemplate(service, ReadPreference.primary(), WriteConcern.MAJORITY)
+			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
+	}
+
+	@Async
+	public void incViewCountAsync(String service, String id, Number number) {
+		AssertHelper.hasText(id, "id is required");
+
+		this.incViewCount(service, id, number);
+	}
+
+	public ArticleHeaderEntity incViewCount(String service, String id, Number number) {
+		AssertHelper.hasText(id, "id is required");
+		var update = new Update();
+		update.inc("reaction.viewCount", number);
+
+		return this.mongoTemplateRouter.mongoTemplate(service)
 			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}

@@ -37,7 +37,7 @@ public class ArticleController {
 	@GetMapping("/{id}")
 	public Article viewArticle(@PathVariable String service, @PathVariable String id,
 			@RequestParam(defaultValue = "true") boolean incViewCount) {
-		return null;
+		return this.articleService.viewArticle(service, id, incViewCount);
 	}
 
 	@GetMapping("/list")
@@ -60,9 +60,5 @@ public class ArticleController {
 	public ArticleDeleteResult deleteArticle(@PathVariable String service, @PathVariable String id) {
 		return null;
 	}
-
-	/**
-	 * TODO crud article,
-	 */
 
 }

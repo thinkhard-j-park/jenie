@@ -28,14 +28,23 @@ public class ArticleContentRepository extends MongoDBRepository {
 		AssertHelper.notNull(content, "ArticleContentEntity is required");
 		AssertHelper.hasText(content.getId(), "ArticleContentEntity id should be provided");
 		AssertHelper.hasText(content.getContent(), "content is required");
+
 		return template.insert(content);
 	}
 
 	public ArticleContentEntity modifyArticleContent(String dbKey, String articleId, String content) {
 		AssertHelper.hasText(content, "content is required");
+
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.findAndModify(Query.query(Criteria.where("_id").is(articleId)), Update.update("content", content),
 					FindAndModifyOptions.options().returnNew(true), ArticleContentEntity.class);
+	}
+
+	public ArticleContentEntity findArticleContentById(String dbKey, String id) {
+		AssertHelper.hasText(id, "id is required");
+
+		return this.mongoTemplateRouter.mongoTemplate(dbKey)
+			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleContentEntity.class);
 	}
 
 }
