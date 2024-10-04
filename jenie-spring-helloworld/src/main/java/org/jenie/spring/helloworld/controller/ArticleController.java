@@ -1,6 +1,7 @@
 package org.jenie.spring.helloworld.controller;
 
 import org.jenie.spring.helloworld.dto.article.Article;
+import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
@@ -35,7 +36,7 @@ public class ArticleController {
 
 	@GetMapping("/{id}")
 	public Article viewArticle(@PathVariable String service, @PathVariable String id,
-			@RequestParam boolean incViewCount) {
+			@RequestParam(defaultValue = "true") boolean incViewCount) {
 		return null;
 	}
 
@@ -56,7 +57,7 @@ public class ArticleController {
 	}
 
 	@DeleteMapping("/{id}")
-	public String deleteArticle(@PathVariable String service, @PathVariable String id) {
+	public ArticleDeleteResult deleteArticle(@PathVariable String service, @PathVariable String id) {
 		return null;
 	}
 
