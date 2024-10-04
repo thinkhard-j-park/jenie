@@ -14,7 +14,6 @@ import org.jenie.spring.helloworld.exception.ArticleErrors;
 import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.exception.ErrorCode;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
-import org.jenie.spring.helloworld.pojo.ArticleState;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
@@ -50,6 +49,21 @@ public class ArticleService {
 		return ArticleHeaderList.from(list, param.size());
 	}
 
+	public Article viewArticle(String service, String id, boolean incViewCount) {
+		var headerEntity = this.articleHeaderRepository.findArticleHeaderById(service, id, false);
+		var contentEntity = this.articleContentRepository.findArticleContentById(service, id);
+		var boardEntity = this.boardService.findBoardEntityById(service, headerEntity.getBoardId());
+
+		var header = ArticleHeaderMapper.toDto(headerEntity, boardEntity);
+		var content = contentEntity.getContent();
+
+		if (incViewCount) {
+			this.articleHeaderRepository.incViewCountAsync(service, id, 1);
+		}
+
+		return new Article(header, content);
+	}
+
 	@MongoKeyBasedTransactional
 	public Article writeArticle(@DBKey String service, ArticleRequest articleRequest) {
 		var board = this.getBoardEntity(service, articleRequest.boardId());
@@ -81,27 +95,25 @@ public class ArticleService {
 		}
 
 		return board;
-
 	}
 
 	@MongoKeyBasedTransactional
-	public Article modifyArticle(@DBKey String service, String articleId, ArticleRequest modifyRequest) {
+	public Article modifyArticle(@DBKey String service, String id, ArticleRequest modifyRequest) {
 		var board = this.getBoardEntity(service, modifyRequest.boardId());
-		var writer = this.articleHeaderRepository.findArticleWriterById(service, articleId);
+		var writer = this.articleHeaderRepository.findArticleWriterById(service, id);
 		if (writer == null) {
 			throw new ArticleErrors.ArticleNotFoundException(ErrorCode.ARTICLE_NOT_FOUND,
-					"Failed to get article writer: " + service + ", " + articleId);
+					"Failed to get article writer: " + service + ", " + id);
 		}
 
 		if (!writer.getWid().equals(modifyRequest.writer().getWid())) {
 			throw new ArticleErrors.ArticleModifyException(ErrorCode.ARTICLE_MODIFY_NOT_ALLOWED,
-					"This user is not allowed to modify this article: " + service + ", " + articleId + ", "
-							+ writer.getWid());
+					"This user is not allowed to modify this article: " + service + ", " + id + ", " + writer.getWid());
 		}
 
-		var modifiedArticleHeader = this.articleHeaderRepository.modifyArticleHeader(service, articleId,
+		var modifiedArticleHeader = this.articleHeaderRepository.modifyArticleHeader(service, id,
 				modifyRequest.title());
-		var modifiedArticleContent = this.articleContentRepository.modifyArticleContent(service, articleId,
+		var modifiedArticleContent = this.articleContentRepository.modifyArticleContent(service, id,
 				modifyRequest.content());
 		var header = ArticleHeaderMapper.toDto(modifiedArticleHeader, board);
 		var content = modifiedArticleContent.getContent();
