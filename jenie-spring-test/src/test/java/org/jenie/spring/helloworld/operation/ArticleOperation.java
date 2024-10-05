@@ -3,6 +3,7 @@ package org.jenie.spring.helloworld.operation;
 import java.util.Map;
 
 import org.jenie.spring.helloworld.dto.article.Article;
+import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
@@ -54,4 +55,9 @@ public class ArticleOperation extends Operation {
 				});
 	}
 
+	public ArticleDeleteResult deleteArticle(String service, String articleId) {
+		return this.doDelete("/{service}/article/{id}", Map.of("service", service, "id", articleId), null,
+				new ParameterizedTypeReference<>() {
+				});
+	}
 }

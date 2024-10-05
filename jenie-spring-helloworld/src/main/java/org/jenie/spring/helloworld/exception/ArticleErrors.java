@@ -18,4 +18,12 @@ public class ArticleErrors {
 
 	}
 
+	public static class ArticleDeleteException extends AbstractException {
+
+		public ArticleDeleteException(ErrorCode code, String message) {
+			super(code, message);
+		}
+
+	}
+
 }

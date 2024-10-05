@@ -116,9 +116,20 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 
 	public ArticleHeaderEntity incViewCount(String service, String id, Number number) {
 		AssertHelper.hasText(id, "id is required");
+
 		var update = new Update();
 		update.inc("reaction.viewCount", number);
+		return this.mongoTemplateRouter.mongoTemplate(service)
+			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
+	}
 
+	public ArticleHeaderEntity deleteArticle(String service, String id) {
+		AssertHelper.hasText(id, "id is required");
+
+		var update = new Update();
+		update.set("state", ArticleState.Deleted.getCode());
+		update.set("actionDateTime.deletedAt", ZonedDateTime.now());
 		return this.mongoTemplateRouter.mongoTemplate(service)
 			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);

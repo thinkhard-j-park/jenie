@@ -91,6 +91,18 @@ public abstract class Operation {
 			.body(responseType);
 	}
 
+	protected <T> T doDelete(String path, Map<String, Object> uriVariables,
+			LinkedMultiValueMap<String, String> queryParams, ParameterizedTypeReference<T> responseType) {
+
+		var uri = UriComponentsBuilder.fromPath(path)
+			.uriVariables(Optional.ofNullable(uriVariables).orElse(Collections.emptyMap()))
+			.queryParams(queryParams)
+			.build()
+			.toUriString();
+
+		return this.restClient.delete().uri(uri).retrieve().body(responseType);
+	}
+
 	public <T> LinkedMultiValueMap<String, String> toQueryParam(T obj) {
 		return this.objectMapper.convertValue(obj, new TypeReference<>() {
 		});
