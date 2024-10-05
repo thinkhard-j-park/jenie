@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.entity;
 
-import org.jenie.spring.helloworld.SortCode;
+import org.jenie.spring.helloworld.dto.SortCode;
 
 import org.springframework.data.domain.Sort;
 

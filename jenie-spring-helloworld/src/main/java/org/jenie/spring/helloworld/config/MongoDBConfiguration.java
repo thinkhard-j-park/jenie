@@ -9,6 +9,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories(basePackages = "org.jenie.spring.helloworld.repository")
 @Import(MongoDBAutoConfig.class)
-public class MongoDBConf {
+public class MongoDBConfiguration {
 
 }

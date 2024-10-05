@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.pojo;
+package org.jenie.spring.helloworld.common;
 
 public class Reaction {
 
