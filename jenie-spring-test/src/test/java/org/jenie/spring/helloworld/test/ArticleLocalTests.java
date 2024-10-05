@@ -13,6 +13,8 @@ import org.jenie.spring.test.util.ZdtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,18 +117,31 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticle.content()).isEqualTo(article.content());
 	}
 
-	@Test
-	void listArticleHeader() {
+	@ParameterizedTest
+	@ValueSource(strings = { "", "test-board-id" })
+	void listArticleHeader(String targetBoardId) {
+		// 목록 보기할 데이터가 없을 수 있으므로 테스트를 위한 데이터를 생성한다.
+		var zdtNow = ZdtUtil.zdtNowString();
+		var service = "jenie-test";
+		var boardId = "test-board-id";
+		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
+		var writer = testWriter();
+		for (int i = 0; i < 10; i++) {
+			writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+		}
+
+		// 목록보기
 		// given
-		var boardId = "";
-		var param = new ListArticleHeaderRequestParam(boardId, "", 10, SortCode.TIME_DESC.getCode());
+		var listArticleHeaderRequestParam = new ListArticleHeaderRequestParam(targetBoardId, "", 5,
+				SortCode.TIME_DESC.getCode());
 
 		// when
-		var articleHeaderList = this.articleOperation.listArticleHeader("jenie-test", param);
+		var articleHeaderList = this.articleOperation.listArticleHeader(service, listArticleHeaderRequestParam);
 
 		// then
 		assertThat(articleHeaderList).isNotNull();
 		assertThat(articleHeaderList.list()).isNotEmpty();
+		assertThat(articleHeaderList.hasMore()).isTrue();
 		assertThat(articleHeaderList.list()).allSatisfy((articleHeader) -> {
 			assertThat(articleHeader.id()).isNotEmpty();
 			assertThat(articleHeader.board()).isNotNull();
@@ -140,11 +155,37 @@ class ArticleLocalTests extends HelloworldTests {
 			logger.info(articleHeader.toString());
 		});
 		assertThat(articleHeaderList.list()).isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
-	}
 
-	@Test
-	void listMoreArticleHeader() {
+		// 목록보기 더보기
+		// given
+		var previousArticleHeader = articleHeaderList.list().getLast();
+		var listMoreArticleHeaderRequestParam = new ListArticleHeaderRequestParam(targetBoardId,
+				previousArticleHeader.id(), 5, SortCode.TIME_DESC.getCode());
 
+		// when
+		var moreArticleHeaderList = this.articleOperation.listArticleHeader("jenie-test",
+				listMoreArticleHeaderRequestParam);
+
+		// then
+		assertThat(moreArticleHeaderList).isNotNull();
+		assertThat(moreArticleHeaderList.list()).isNotEmpty();
+		assertThat(moreArticleHeaderList.list()).allSatisfy((articleHeader) -> {
+			assertThat(articleHeader.id()).isNotEmpty();
+			assertThat(articleHeader.id()).isLessThan(previousArticleHeader.id());
+			assertThat(articleHeader.board()).isNotNull();
+			assertThat(articleHeader.board().id()).isNotEmpty();
+			assertThat(articleHeader.state()).isEqualTo(ArticleState.Normal.getCode());
+			assertThat(articleHeader.title()).isNotEmpty();
+			assertThat(articleHeader.writer()).isNotNull();
+			assertThat(articleHeader.writer().getWid()).isNotEmpty();
+			assertThat(articleHeader.actionDateTime()).isNotNull();
+			assertThat(articleHeader.actionDateTime().getCreatedAt()).isNotNull();
+			assertThat(articleHeader.actionDateTime().getCreatedAt())
+				.isBefore(previousArticleHeader.actionDateTime().getCreatedAt());
+			logger.info(articleHeader.toString());
+		});
+		assertThat(moreArticleHeaderList.list())
+			.isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
 	@Test

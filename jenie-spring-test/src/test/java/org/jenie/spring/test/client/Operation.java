@@ -93,7 +93,6 @@ public abstract class Operation {
 
 	protected <T> T doDelete(String path, Map<String, Object> uriVariables,
 			LinkedMultiValueMap<String, String> queryParams, ParameterizedTypeReference<T> responseType) {
-
 		var uri = UriComponentsBuilder.fromPath(path)
 			.uriVariables(Optional.ofNullable(uriVariables).orElse(Collections.emptyMap()))
 			.queryParams(queryParams)
