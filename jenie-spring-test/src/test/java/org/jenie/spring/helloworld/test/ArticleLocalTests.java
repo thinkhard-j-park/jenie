@@ -227,4 +227,36 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticleHeader.actionDateTime().getUpdatedAt()).isNull();
 	}
 
+	@Test
+	void deleteArticle() {
+		// given
+		var createdAt = ZdtUtil.zdtNowString();
+		var service = "jenie-test";
+		var writer = testWriter();
+		var title = this.testInfo.getDisplayName() + "-" + createdAt;
+		var content = "content-" + title;
+		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, content, writer);
+		var articleHeader = createdArticle.header();
+
+		// when
+		var articleDeleteResult = this.articleOperation.deleteArticle(service, articleHeader.id());
+
+		// then
+		assertThat(articleDeleteResult).isNotNull();
+		assertThat(articleDeleteResult.id()).isEqualTo(articleHeader.id());
+		assertThat(articleDeleteResult.state()).isEqualTo(ArticleState.Deleted.getCode());
+		assertThat(articleDeleteResult.deletedAt()).isNotNull();
+	}
+
+	@Test
+	void deleteArticleWithInvalidId() {
+		// given
+		var service = "jenie-test";
+		var articleId = "unknown-id";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleOperation.deleteArticle(service, articleId))
+			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+	}
+
 }

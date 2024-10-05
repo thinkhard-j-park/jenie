@@ -58,7 +58,7 @@ public class ArticleController {
 
 	@DeleteMapping("/{id}")
 	public ArticleDeleteResult deleteArticle(@PathVariable String service, @PathVariable String id) {
-		return null;
+		return this.articleService.deleteArticle(service, id);
 	}
 
 }

@@ -3,6 +3,7 @@ package org.jenie.spring.helloworld.service;
 import org.jenie.spring.data.mongodb.transaction.DBKey;
 import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
 import org.jenie.spring.helloworld.dto.article.Article;
+import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
@@ -119,6 +120,17 @@ public class ArticleService {
 		var content = modifiedArticleContent.getContent();
 
 		return new Article(header, content);
+	}
+
+	public ArticleDeleteResult deleteArticle(String service, String id) {
+		var articleHeader = this.articleHeaderRepository.findArticleHeaderById(service, id, true);
+		if (articleHeader == null) {
+			throw new ArticleErrors.ArticleDeleteException(ErrorCode.ARTICLE_NOT_FOUND,
+					"There is no article to delete: " + service + ", " + id);
+		}
+		var deletedArticleHeaderEntity = this.articleHeaderRepository.deleteArticle(service, id);
+		return new ArticleDeleteResult(deletedArticleHeaderEntity.getId(), deletedArticleHeaderEntity.getState(),
+				deletedArticleHeaderEntity.getActionDateTime().getDeletedAt());
 	}
 
 }
