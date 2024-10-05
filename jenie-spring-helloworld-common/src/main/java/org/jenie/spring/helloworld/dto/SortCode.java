@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld;
+package org.jenie.spring.helloworld.dto;
 
 public enum SortCode {
 

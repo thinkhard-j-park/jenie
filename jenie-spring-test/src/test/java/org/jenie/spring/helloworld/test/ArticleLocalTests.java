@@ -2,13 +2,13 @@ package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
 
-import org.jenie.spring.helloworld.SortCode;
+import org.jenie.spring.helloworld.dto.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.helloworld.pojo.ArticleState;
-import org.jenie.spring.helloworld.pojo.Writer;
+import org.jenie.spring.helloworld.common.ArticleState;
+import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.test.util.ZdtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

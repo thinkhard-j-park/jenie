@@ -1,8 +1,8 @@
 package org.jenie.spring.helloworld.entity.article;
 
-import org.jenie.spring.helloworld.pojo.ActionDateTime;
-import org.jenie.spring.helloworld.pojo.Reaction;
-import org.jenie.spring.helloworld.pojo.Writer;
+import org.jenie.spring.helloworld.common.ActionDateTime;
+import org.jenie.spring.helloworld.common.Reaction;
+import org.jenie.spring.helloworld.common.Writer;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
