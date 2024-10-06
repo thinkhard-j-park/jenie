@@ -54,6 +54,7 @@ jobs:
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
   jenie-spring-helloworld-common:
