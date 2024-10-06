@@ -40,7 +40,7 @@ jobs:
           cp -R jenie-spring-data-mongodb/build/kover/bin-reports/* jenie-spring-data-mongodb/.qodana/code-coverage/
 
       - name: Archive coverage data
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gradle-coverage-data.zip
           path: jenie-spring-data-mongodb/.qodana/code-coverage
