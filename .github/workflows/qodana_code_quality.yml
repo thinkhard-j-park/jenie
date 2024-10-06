@@ -26,7 +26,7 @@ jobs:
           pr-mode: false
           args: |
             --source-directory,jenie-spring-helloworld-common,--config,qodana.yaml
-                     artifact-name: jenie-spring-helloworld-common
+          artifact-name: jenie-spring-helloworld-common
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
