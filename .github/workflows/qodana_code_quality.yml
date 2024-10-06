@@ -16,10 +16,35 @@ jobs:
       pull-requests: write
       checks: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-#          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
           fetch-depth: 0  # a full history is required for pull request analysis
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper
+        run: ./gradlew --version
+        working-directory: jenie-spring-data-mongodb
+
+      - name: Run Tests
+        run: ./gradlew test
+        working-directory: jenie-spring-data-mongodb
+
+      - name: Create coverage-data directory and copy contents
+        run: |
+          mkdir -p jenie-spring-data-mongodb/.qodana/code-coverage
+          cp -R jenie-spring-data-mongodb/build/kover/bin-reports/* jenie-spring-data-mongodb/.qodana/code-coverage/
+
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v2
+        with:
+          name: gradle-coverage-data.zip
+          path: jenie-spring-data-mongodb/.qodana/code-coverage
+
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
@@ -40,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-#          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
           fetch-depth: 0  # a full history is required for pull request analysis
       - name: 'Qodana jenie-spring-helloworld-common'
         uses: JetBrains/qodana-action@v2024.2
@@ -62,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-#          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
           fetch-depth: 0  # a full history is required for pull request analysis
       - name: 'Qodana jenie-spring-helloworld'
         uses: JetBrains/qodana-action@v2024.2
