@@ -48,10 +48,10 @@ jobs:
     - name: Build jenie-spring-helloworld-common
       run: ./jenie-spring-helloworld-common/gradlew -b ./jenie-spring-helloworld-common/build.gradle build
 
-    - name: Publish jenie-spring-helloworld-common
-      run: ./jenie-spring-helloworld-common/gradlew -b ./jenie-spring-helloworld-common/build.gradle publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#    - name: Publish jenie-spring-helloworld-common
+#      run: ./jenie-spring-helloworld-common/gradlew -b ./jenie-spring-helloworld-common/build.gradle publish
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dependency-submission:
     runs-on: ubuntu-latest
