@@ -9,7 +9,7 @@ on:
       - 'releases/*' # The release branches
 
 jobs:
-  qodana:
+  jenie-spring-data-mongodb:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -32,6 +32,13 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
+  jenie-spring-helloworld-common:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
       - name: 'Qodana jenie-spring-helloworld-common'
         uses: JetBrains/qodana-action@v2024.2
         with:
@@ -43,6 +50,13 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
+  jenie-spring-helloworld:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
       - name: 'Qodana jenie-spring-helloworld'
         uses: JetBrains/qodana-action@v2024.2
         with:
