@@ -50,7 +50,8 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-data-mongodb,--config,qodana.yaml
+            --project-dir,jenie-spring-data-mongodb,
+            --config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
