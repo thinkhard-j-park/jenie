@@ -47,7 +47,7 @@ jobs:
 
       - name: test
         run: |
-          ls -al ./jenie-spring-data-mongodb/.qodana/code-coverage
+          ls -al ./jenie-spring-data-mongodb/.qodana/code-coverage/test
 
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
