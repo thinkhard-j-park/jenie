@@ -1,5 +1,11 @@
 version: "1.0"
 linter: jetbrains/qodana-jvm:2024.2
+checks:
+  - id: "Unit tests"
+    name: "Test"
+    run:
+      - name: "Unit tests"
+        command: ./gradlew test
 profile:
   name: qodana.recommended
 include:
