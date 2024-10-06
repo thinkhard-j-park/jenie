@@ -33,7 +33,7 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build and publish jenie-spring-helloworld-common
-      run: ./gradlew -b ./jenie-spring-helloworld-common/build.gradle publish
+      run: ./jenie-spring-helloworld-common/gradlew -b ./jenie-spring-helloworld-common/build.gradle publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
