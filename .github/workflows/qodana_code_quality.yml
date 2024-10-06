@@ -50,11 +50,10 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --source-directory,jenie-spring-data-mongodb,--config,qodana.yaml
+            -i,jenie-spring-data-mongodb,--source-directory,jenie-spring-data-mongodb,--config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
   jenie-spring-helloworld-common:
