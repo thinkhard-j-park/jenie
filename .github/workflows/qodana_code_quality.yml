@@ -45,6 +45,10 @@ jobs:
           name: gradle-coverage-data-jacoco
           path: jenie-spring-data-mongodb/.qodana/code-coverage
 
+      - name: test
+        run: |
+          ls -al ./jenie-spring-data-mongodb/.qodana/code-coverage
+
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
