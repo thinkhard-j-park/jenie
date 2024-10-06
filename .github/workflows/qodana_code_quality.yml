@@ -36,13 +36,13 @@ jobs:
 
       - name: Create coverage-data directory and copy contents
         run: |
-          mkdir -p jenie-spring-data-mongodb/.qodana/code-coverage
-          cp -R jenie-spring-data-mongodb/build/kover/bin-reports/* jenie-spring-data-mongodb/.qodana/code-coverage/
+          mkdir -p .qodana/code-coverage
+        working-directory: jenie-spring-data-mongodb
 
       - name: Archive coverage data
         uses: actions/upload-artifact@v4
         with:
-          name: gradle-coverage-data.zip
+          name: gradle-coverage-data-jacoco
           path: jenie-spring-data-mongodb/.qodana/code-coverage
 
       - name: 'Qodana jenie-spring-data-mongodb'
