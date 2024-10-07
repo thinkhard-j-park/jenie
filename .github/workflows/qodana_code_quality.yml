@@ -57,7 +57,7 @@ jobs:
         with:
           args: |
             --source-directory,jenie-spring-data-mongodb
-            --config,qodana.yaml,
+            --config,jenie-spring-data-mongodb/qodana.yaml,
             --log-level,debug
 #          artifact-name: jenie-spring-data-mongodb
         env:
