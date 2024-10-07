@@ -60,7 +60,8 @@ jobs:
           args: |
             --project-dir,jenie-spring-data-mongodb,
             --config,qodana.yaml,
-            --log-level,debug
+            --log-level,debug,
+            --print-problems
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
