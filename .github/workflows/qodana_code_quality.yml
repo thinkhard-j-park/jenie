@@ -38,18 +38,22 @@ jobs:
         run: ls -al .qodana/code-coverage/test
         working-directory: jenie-spring-data-mongodb
 
-#      - name: Archive coverage data
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: gradle-coverage-data-jacoco
-#          path: jenie-spring-data-mongodb/.qodana/code-coverage
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-coverage-data-jacoco
+          path: jenie-spring-data-mongodb/.qodana/code-coverage
+
+      - name: PWD
+        run: pwd
+        working-directory: ./
 
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
           args: |
             --project-dir,jenie-spring-data-mongodb,--config,qodana.yaml
-#          artifact-name: jenie-spring-data-mongodb
+          artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
