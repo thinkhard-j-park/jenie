@@ -45,6 +45,7 @@ jacocoTestReport {
     }
     finalizedBy 'jacocoTestCoverageVerification'
 }
+
 jacocoTestCoverageVerification {
     violationRules {
         rule {
@@ -63,8 +64,7 @@ jacocoTestCoverageVerification {
     }
 }
 
-
-tasks.named('test') {
+test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
 }

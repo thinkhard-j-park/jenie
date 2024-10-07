@@ -34,27 +34,19 @@ jobs:
         run: ./gradlew test
         working-directory: jenie-spring-data-mongodb
 
-      - name: Create coverage-data directory and copy contents
-        run: |
-          mkdir -p .qodana/code-coverage
-        working-directory: jenie-spring-data-mongodb
-
       - name: Archive coverage data
         uses: actions/upload-artifact@v4
         with:
           name: gradle-coverage-data-jacoco
           path: jenie-spring-data-mongodb/.qodana/code-coverage
 
-      - name: test
-        run: |
-          ls -al ./jenie-spring-data-mongodb/.qodana/code-coverage/test
-
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
           pr-mode: false
           args: |
-            --source-directory,./jenie-spring-data-mongodb,--config,qodana.yaml
+            --project-dir,jenie-spring-data-mongodb,
+            --config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
