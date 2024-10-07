@@ -55,10 +55,11 @@ jobs:
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
-          pr-mode: 'false'
+          pr-mode: false
           args: |
             --project-dir,jenie-spring-data-mongodb,
             --config,qodana.yaml,
+            --coverage-dir,.qodana/code-coverage,
             --log-level,debug
           artifact-name: jenie-spring-data-mongodb
         env:
