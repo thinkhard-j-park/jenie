@@ -48,11 +48,17 @@ jobs:
         run: pwd
         working-directory: ./
 
+      - name: ls -al
+        run: ls -al
+        working-directory: ./
+
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
           args: |
-            --project-dir,jenie-spring-data-mongodb,--config,qodana.yaml
+            --project-dir,jenie-spring-data-mongodb,
+            --config,qodana.yaml,
+            --log-level,debug
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
