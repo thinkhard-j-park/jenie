@@ -50,13 +50,13 @@ jobs:
 
       - name: ls -al
         run: ls -al
-        working-directory: ./
+        working-directory: ./jenie-spring-data-mongodb
 
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
         with:
           args: |
-            --source-directory,jenie-spring-data-mongodb,
+            --project-dir,jenie-spring-data-mongodb,
             --config,qodana.yaml,
             --log-level,debug
 #          artifact-name: jenie-spring-data-mongodb
