@@ -56,10 +56,10 @@ jobs:
         uses: JetBrains/qodana-action@v2024.2
         with:
           args: |
-            --project-dir,jenie-spring-data-mongodb,
+            --source-directory,jenie-spring-data-mongodb
             --config,qodana.yaml,
             --log-level,debug
-          artifact-name: jenie-spring-data-mongodb
+#          artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
