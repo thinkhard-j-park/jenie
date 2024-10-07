@@ -56,7 +56,7 @@ jobs:
         uses: JetBrains/qodana-action@v2024.2
         with:
           args: |
-            --source-directory,jenie-spring-data-mongodb
+            --source-directory,jenie-spring-data-mongodb,
             --config,qodana.yaml,
             --log-level,debug
 #          artifact-name: jenie-spring-data-mongodb
