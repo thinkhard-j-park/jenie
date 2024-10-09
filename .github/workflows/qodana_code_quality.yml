@@ -88,7 +88,6 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
-
   jenie-spring-helloworld:
     runs-on: ubuntu-latest
     permissions:
@@ -128,6 +127,38 @@ jobs:
             --project-dir,jenie-spring-helloworld,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
+
+
+  jenie-spring-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          fetch-depth: 0  # a full history is required for pull request analysis
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: 'Qodana jenie-spring-test'
+        uses: JetBrains/qodana-action@v2024.2
+        with:
+          pr-mode: false
+          args: |
+            --project-dir,jenie-spring-test,
+            --config,qodana.yaml
+          artifact-name: jenie-spring-test
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
