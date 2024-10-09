@@ -13,6 +13,7 @@ version = '0.0.1-SNAPSHOT'
 ext {
     jenieSpringDataMongodbVersion = '0.0.1-SNAPSHOT'
     jenieSpringHelloworldCommonVersion = '0.0.1-SNAPSHOT'
+    findBugsVersion = '3.0.2'
 }
 
 java {
@@ -38,6 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
     implementation 'com.github.ben-manes.caffeine:caffeine'
+    implementation "com.google.code.findbugs:jsr305:${findBugsVersion}"
 
     implementation "org.jenie:jenie-spring-data-mongodb:${jenieSpringDataMongodbVersion}"
     implementation "org.jenie:jenie-spring-helloworld-common:${jenieSpringHelloworldCommonVersion}"
