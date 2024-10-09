@@ -3,6 +3,8 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
+    id 'jacoco'
+    id 'maven-publish'
 }
 
 group = 'org.jenie'
@@ -43,6 +45,55 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') {
+jacoco {
+    setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = false
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            // includes = []
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            excludes = []
+        }
+    }
+}
+
+test {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+publishing {
+    publications {
+        gpr(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/thinkhard-j-park/jenie"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
