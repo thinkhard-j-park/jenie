@@ -33,12 +33,14 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build and publish jenie-spring-data-mongodb
-      run: ./jenie-spring-data-mongodb/gradlew -b ./jenie-spring-data-mongodb/build.gradle publish
+      run: ./gradlew publish
+      working-directory: jenie-spring-data-mongodb
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and publish jenie-spring-helloworld-common
-      run: ./jenie-spring-helloworld-common/gradlew -b ./jenie-spring-helloworld-common/build.gradle publish
+      run: ./gradlew publish
+      working-directory: jenie-spring-helloworld-common
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
