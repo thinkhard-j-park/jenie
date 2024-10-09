@@ -42,8 +42,7 @@ jobs:
           pr-mode: false
           args: |
             --project-dir,jenie-spring-data-mongodb,
-            --config,qodana.yaml,
-            --print-problems
+            --config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
@@ -77,31 +76,44 @@ jobs:
           pr-mode: false
           args: |
             --project-dir,jenie-spring-helloworld-common,
-            --config,qodana.yaml,
-            --print-problems
+            --config,qodana.yaml
           artifact-name: jenie-spring-helloworld-common
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
-#  jenie-spring-helloworld:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: write
-#      pull-requests: write
-#      checks: write
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-#          fetch-depth: 0  # a full history is required for pull request analysis
-#      - name: 'Qodana jenie-spring-helloworld'
-#        uses: JetBrains/qodana-action@v2024.2
-#        with:
-#          pr-mode: false
-#          args: |
-#            --source-directory,jenie-spring-helloworld,--config,qodana.yaml
-#          artifact-name: jenie-spring-helloworld
-#        env:
-#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-#          QODANA_ENDPOINT: 'https://qodana.cloud'
+
+  jenie-spring-helloworld:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          fetch-depth: 0  # a full history is required for pull request analysis
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Run Tests
+        run: ./gradlew test
+        working-directory: jenie-spring-helloworld
+
+      - name: 'Qodana jenie-spring-helloworld-common'
+        uses: JetBrains/qodana-action@v2024.2
+        with:
+          pr-mode: false
+          args: |
+            --project-dir,jenie-spring-helloworld,
+            --config,qodana.yaml
+          artifact-name: jenie-spring-helloworld
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
+
