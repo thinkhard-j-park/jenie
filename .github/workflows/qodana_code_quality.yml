@@ -27,10 +27,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Validate Gradle Wrapper
-        run: ./gradlew --version
-        working-directory: jenie-spring-data-mongodb
-
       - name: Run Tests
         run: ./gradlew test
         working-directory: jenie-spring-data-mongodb
@@ -48,13 +44,11 @@ jobs:
           args: |
             --project-dir,jenie-spring-data-mongodb,
             --config,qodana.yaml,
-            --log-level,debug,
             --print-problems
           artifact-name: jenie-spring-data-mongodb
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
-
 
   jenie-spring-helloworld-common:
     runs-on: ubuntu-latest
@@ -74,10 +68,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Validate Gradle Wrapper
-        run: ./gradlew --version
-        working-directory: jenie-spring-helloworld-common
-
       - name: Run Tests
         run: ./gradlew test
         working-directory: jenie-spring-helloworld-common
@@ -89,7 +79,6 @@ jobs:
           args: |
             --project-dir,jenie-spring-helloworld-common,
             --config,qodana.yaml,
-            --log-level,debug,
             --print-problems
           artifact-name: jenie-spring-helloworld-common
         env:
