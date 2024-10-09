@@ -14,7 +14,7 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
-      packages: write
+      packages: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -55,7 +55,7 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
-      packages: write
+      packages: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,7 +91,7 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
-      packages: write
+      packages: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -107,8 +107,10 @@ jobs:
       - name: Run Tests
         run: ./gradlew test
         working-directory: jenie-spring-helloworld
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Qodana jenie-spring-helloworld-common'
+      - name: 'Qodana jenie-spring-helloworld'
         uses: JetBrains/qodana-action@v2024.2
         with:
           pr-mode: false
