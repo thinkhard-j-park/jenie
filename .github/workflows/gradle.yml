@@ -44,6 +44,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Build and publish jenie-spring-helloworld
+      run: ./gradlew publish
+      working-directory: jenie-spring-helloworld
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   dependency-submission:
     runs-on: ubuntu-latest
     permissions:
@@ -59,7 +65,17 @@ jobs:
 
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
+    - name: Generate and submit dependency graph - jenie-spring-data-mongodb
+      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      with:
+        build-root-directory: jenie-spring-data-mongodb
+
     - name: Generate and submit dependency graph - jenie-spring-helloworld-common
       uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
       with:
         build-root-directory: jenie-spring-helloworld-common
+
+    - name: Generate and submit dependency graph - jenie-spring-helloworld
+      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      with:
+        build-root-directory: jenie-spring-helloworld
