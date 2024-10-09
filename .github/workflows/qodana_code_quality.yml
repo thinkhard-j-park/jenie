@@ -124,7 +124,7 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-helloworld,
+            --source-directory,jenie-spring-helloworld,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld
         env:
