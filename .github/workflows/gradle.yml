@@ -6,20 +6,15 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
 name: Build
-
 on:
-  push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "master" ]
-
+  release:
+    types: [created]
 jobs:
   build-publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -27,20 +22,16 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
     - name: Build and publish jenie-spring-data-mongodb
       run: ./gradlew :jenie-spring-data-mongodb:publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Build and publish jenie-spring-helloworld-common
       run: ./gradlew :jenie-spring-helloworld-common:publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Build and publish jenie-spring-helloworld
       run: ./gradlew :jenie-spring-helloworld:publish
       env:
@@ -50,7 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
