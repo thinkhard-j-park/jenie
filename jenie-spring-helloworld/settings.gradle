@@ -1,4 +1,1 @@
 rootProject.name = 'jenie-spring-helloworld'
-
-//includeBuild('../jenie-spring-data-mongodb')
-//includeBuild('../jenie-spring-helloworld-common')

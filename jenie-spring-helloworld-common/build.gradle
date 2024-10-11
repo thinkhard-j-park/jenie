@@ -1,11 +1,5 @@
 version = '0.0.1-SNAPSHOT'
 
-ext {
-    springBomVersion = '6.1.10'
-    junitBomVersion = '5.10.2'
-    assertjVersion = '3.25.3'
-}
-
 dependencies {
     implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")
     implementation 'org.springframework:spring-core'
