@@ -17,7 +17,7 @@ def testProjects = ['jenie-spring-test']
 ext {
     mainProjs = subprojects.findAll{ it.name !in testProjects}
     testProjs = subprojects.findAll{ it.name in testProjects}
-    bootProjs =subprojects.findAll{ it.name in bootProjects}
+    bootProjs = subprojects.findAll{ it.name in bootProjects}
 }
 
 configure(allprojects) { project ->
@@ -66,7 +66,7 @@ configure(mainProjs) {
     apply plugin: 'jacoco'
 
     jacoco {
-        setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
+        setReportsDirectory(file("${projectDir}/.qodana/code-coverage"))
     }
 
     jacocoTestReport {
@@ -113,5 +113,4 @@ configure(testProjs) {
     test {
         useJUnitPlatform()
     }
-
 }
