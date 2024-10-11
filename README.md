@@ -1,4 +1,5 @@
-# jenie = java + genie 
+# Jenie, Java Genie!
 
+Java 기반의 기술들을 실험하는 프로젝트입니다.
 
-# mongodb 트랜잭션은 복제셋이나 샤드 클러스터에서만 동작한다. 복제셋 설정없이 개발용으로 구동하게 되면 트랜잭션 관련 에러가 나온다.
+It's a project to experiment with Java-based technologies.
