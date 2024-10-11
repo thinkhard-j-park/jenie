@@ -1,47 +1,16 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.1'
-}
-
-group = 'org.jenie'
 version = '0.0.1-SNAPSHOT'
 
 ext {
     httpClientVersion = '5.3.1'
-    jenieSpringHelloworldCommonVersion = '0.0.1-SNAPSHOT'
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/thinkhard-j-park/jenie")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
 }
 
 dependencies {
-    implementation platform(SpringBootPlugin.BOM_COORDINATES)
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
-    implementation "org.jenie:jenie-spring-helloworld-common:${jenieSpringHelloworldCommonVersion}"
+    implementation(project(':jenie-spring-helloworld-common'))
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-test {
-    useJUnitPlatform()
 }
