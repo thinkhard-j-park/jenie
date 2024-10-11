@@ -1,27 +1,6 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.1'
-    id 'jacoco'
-    id 'maven-publish'
-}
-
-group = 'org.jenie'
 version = '0.0.1-SNAPSHOT'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation platform(SpringBootPlugin.BOM_COORDINATES)
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -33,57 +12,4 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mongodb'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-jacoco {
-    setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
-}
-
-jacocoTestReport {
-    reports {
-        xml.required = true
-        html.required = false
-    }
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-            element = 'CLASS'
-            // includes = []
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.00
-            }
-
-            excludes = []
-        }
-    }
-}
-
-test {
-    useJUnitPlatform()
-    finalizedBy 'jacocoTestReport'
-}
-
-publishing {
-    publications {
-        gpr(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/thinkhard-j-park/jenie"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
 }

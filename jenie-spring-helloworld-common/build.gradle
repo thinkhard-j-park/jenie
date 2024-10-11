@@ -1,25 +1,9 @@
-plugins {
-    id 'java'
-    id 'maven-publish'
-}
-
-group = 'org.jenie'
 version = '0.0.1-SNAPSHOT'
 
 ext {
     springBomVersion = '6.1.10'
     junitBomVersion = '5.10.2'
     assertjVersion = '3.25.3'
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -29,27 +13,4 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation "org.assertj:assertj-core:${assertjVersion}"
-
-}
-
-test {
-    useJUnitPlatform()
-}
-
-publishing {
-    publications {
-       gpr(MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/thinkhard-j-park/jenie"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
 }
