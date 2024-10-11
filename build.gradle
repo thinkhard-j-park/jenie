@@ -1,0 +1,117 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootPlugInVersion}")
+    }
+}
+
+description = "Jenie, Java Genie!"
+
+def bootProjects = ['jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
+def testProjects = ['jenie-spring-test']
+
+ext {
+    mainProjs = subprojects.findAll{ it.name !in testProjects}
+    testProjs = subprojects.findAll{ it.name in testProjects}
+    bootProjs =subprojects.findAll{ it.name in bootProjects}
+}
+
+configure(allprojects) { project ->
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    group = 'org.jenie'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("${repoUrl}")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publishing {
+        publications {
+            gpr(MavenPublication) {
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = "${repoUrl}"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
+
+configure(mainProjs) {
+    apply plugin: 'jacoco'
+
+    jacoco {
+        setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            html.required = false
+        }
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                enabled = true
+                element = 'CLASS'
+                // includes = []
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.00
+                }
+
+                excludes = []
+            }
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+    }
+}
+
+configure(bootProjs) {
+    apply plugin: 'org.springframework.boot'
+
+    dependencies {
+        implementation platform(SpringBootPlugin.BOM_COORDINATES)
+    }
+}
+
+configure(testProjs) {
+    test {
+        useJUnitPlatform()
+    }
+
+}

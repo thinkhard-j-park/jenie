@@ -28,8 +28,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
-        run: ./gradlew test
-        working-directory: jenie-spring-data-mongodb
+        run: ./gradlew :jenie-spring-data-mongodb:test
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -44,7 +43,7 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-data-mongodb,
+            --source-directory,jenie-spring-data-mongodb,
             --config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
         env:
@@ -71,8 +70,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
-        run: ./gradlew test
-        working-directory: jenie-spring-helloworld-common
+        run: ./gradlew :jenie-spring-helloworld-common:test
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -81,7 +79,7 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-helloworld-common,
+            --source-directory,jenie-spring-helloworld-common,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld-common
         env:
@@ -108,8 +106,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
-        run: ./gradlew test
-        working-directory: jenie-spring-helloworld
+        run: ./gradlew :jenie-spring-helloworld:test
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -124,7 +121,7 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-helloworld,
+            --source-directory,jenie-spring-helloworld,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld
         env:
@@ -156,7 +153,7 @@ jobs:
         with:
           pr-mode: false
           args: |
-            --project-dir,jenie-spring-test,
+            --source-directory,jenie-spring-test,
             --config,qodana.yaml
           artifact-name: jenie-spring-test
         env:
