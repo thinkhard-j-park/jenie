@@ -36,4 +36,5 @@ public class ArticleContentEntity {
 				'}';
 		//@formatter:on
 	}
+
 }

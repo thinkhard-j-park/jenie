@@ -27,8 +27,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: ls -al
-        run: ls -al
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-data-mongodb:checkFormat :jenie-spring-data-mongodb:checkStyleMain :jenie-spring-data-mongodb:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Run Tests
         run: ./gradlew :jenie-spring-data-mongodb:test
@@ -39,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jenie-spring-data-mongodb_code-coverage
-          path: jenie-spring-data-mongodb/.qodana/code-coverage
+          path: .qodana/code-coverage
 
       - name: 'Qodana jenie-spring-data-mongodb'
         uses: JetBrains/qodana-action@v2024.2
@@ -72,10 +74,21 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-helloworld-common:checkFormat :jenie-spring-helloworld-common:checkStyleMain :jenie-spring-helloworld-common:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: Run Tests
         run: ./gradlew :jenie-spring-helloworld-common:test
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: jenie-spring-helloworld-common_code-coverage
+          path: .qodana/code-coverage
 
       - name: 'Qodana jenie-spring-helloworld-common'
         uses: JetBrains/qodana-action@v2024.2
@@ -108,6 +121,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-helloworld:checkFormat :jenie-spring-helloworld:checkStyleMain :jenie-spring-helloworld:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: Run Tests
         run: ./gradlew :jenie-spring-helloworld:test
         env:
@@ -117,7 +135,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jenie-spring-helloworld_code-coverage
-          path: jenie-spring-helloworld/.qodana/code-coverage
+          path: .qodana/code-coverage
 
       - name: 'Qodana jenie-spring-helloworld'
         uses: JetBrains/qodana-action@v2024.2
@@ -130,7 +148,6 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
-
 
   jenie-spring-test:
     runs-on: ubuntu-latest
@@ -151,6 +168,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-test:checkFormat :jenie-spring-test:checkStyleMain :jenie-spring-test:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: 'Qodana jenie-spring-test'
         uses: JetBrains/qodana-action@v2024.2
         with:
@@ -162,4 +184,3 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
-

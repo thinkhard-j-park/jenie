@@ -5,7 +5,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootPlugInVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:${springJavaFormatVersion}")
     }
 }
 
@@ -17,12 +18,14 @@ def testProjects = ['jenie-spring-test']
 ext {
     mainProjs = subprojects.findAll{ it.name !in testProjects}
     testProjs = subprojects.findAll{ it.name in testProjects}
-    bootProjs =subprojects.findAll{ it.name in bootProjects}
+    bootProjs = subprojects.findAll{ it.name in bootProjects}
 }
 
 configure(allprojects) { project ->
     apply plugin: 'java'
     apply plugin: 'maven-publish'
+    apply plugin: 'io.spring.javaformat'
+    apply plugin: 'checkstyle'
 
     group = 'org.jenie'
 
@@ -30,6 +33,10 @@ configure(allprojects) { project ->
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
+    }
+
+    dependencies {
+        checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:${springJavaFormatVersion}")
     }
 
     repositories {
@@ -113,5 +120,4 @@ configure(testProjs) {
     test {
         useJUnitPlatform()
     }
-
 }
