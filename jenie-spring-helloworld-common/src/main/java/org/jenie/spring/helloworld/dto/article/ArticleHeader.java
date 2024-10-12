@@ -1,10 +1,10 @@
 package org.jenie.spring.helloworld.dto.article;
 
-import org.jenie.spring.helloworld.dto.board.Board;
 import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Reaction;
 import org.jenie.spring.helloworld.common.Writer;
+import org.jenie.spring.helloworld.dto.board.Board;
 
 public record ArticleHeader(String id, Board board, int state, String title, Reaction reaction, Writer writer,
 		ActionDateTime actionDateTime) {

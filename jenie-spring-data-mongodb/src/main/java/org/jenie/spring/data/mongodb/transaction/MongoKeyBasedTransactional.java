@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Transactional
 public @interface MongoKeyBasedTransactional {
@@ -40,4 +40,3 @@ public @interface MongoKeyBasedTransactional {
 	String key() default "";
 
 }
-

@@ -1,6 +1,5 @@
 package org.jenie.spring.helloworld.entity.board;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -59,4 +58,5 @@ public class BoardEntity {
 				'}';
 		//@formatter:on
 	}
+
 }
