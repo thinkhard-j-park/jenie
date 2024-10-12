@@ -60,4 +60,5 @@ public class ArticleOperation extends Operation {
 				new ParameterizedTypeReference<>() {
 				});
 	}
+
 }

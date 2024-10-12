@@ -27,6 +27,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-data-mongodb:checkFormat :jenie-spring-data-mongodb:checkStyleMain :jenie-spring-data-mongodb:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: Run Tests
         run: ./gradlew :jenie-spring-data-mongodb:test
         env:
@@ -68,6 +73,11 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-helloworld-common:checkFormat :jenie-spring-helloworld-common:checkStyleMain :jenie-spring-helloworld-common:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Run Tests
         run: ./gradlew :jenie-spring-helloworld-common:test
@@ -111,6 +121,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-helloworld:checkFormat :jenie-spring-helloworld:checkStyleMain :jenie-spring-helloworld:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
       - name: Run Tests
         run: ./gradlew :jenie-spring-helloworld:test
         env:
@@ -134,7 +149,6 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
-
   jenie-spring-test:
     runs-on: ubuntu-latest
     permissions:
@@ -153,6 +167,11 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-test:checkFormat :jenie-spring-test:checkStyleMain :jenie-spring-test:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: 'Qodana jenie-spring-test'
         uses: JetBrains/qodana-action@v2024.2

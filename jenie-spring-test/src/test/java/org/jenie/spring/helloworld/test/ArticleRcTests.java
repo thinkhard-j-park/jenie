@@ -15,4 +15,5 @@ public class ArticleRcTests extends HelloworldTests {
 		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-rc");
 		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://rc-api:30000");
 	}
+
 }
