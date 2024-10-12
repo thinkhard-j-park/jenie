@@ -39,16 +39,16 @@ class ArticleControllerTests {
 		var boardId = "board-id";
 		var id = "article-id";
 		var header = ArticleHeader.builder().id(id).board(Board.builder().id(boardId).build()).build();
-		given(articleService.getArticleHeaderById(service, id, false)).willReturn(header);
+		given(this.articleService.getArticleHeaderById(service, id, false)).willReturn(header);
 
 		// when
-		var fetchedHeader = articleController.getArticleHeaderById(service, id, false);
+		var fetchedHeader = this.articleController.getArticleHeaderById(service, id, false);
 
 		// then
 		assertThat(fetchedHeader).isNotNull();
 		assertThat(fetchedHeader.id()).isEqualTo(id);
 		assertThat(fetchedHeader.board()).isNotNull();
-		assertThat(fetchedHeader.board().id()).isNotNull();
+		assertThat(fetchedHeader.board().id()).isEqualTo(boardId);
 	}
 
 	@Test
@@ -60,10 +60,10 @@ class ArticleControllerTests {
 		var header = ArticleHeader.builder().id(id).board(Board.builder().id(boardId).build()).build();
 		var content = "content";
 		var article = new Article(header, content);
-		given(articleService.viewArticle(service, id, false)).willReturn(article);
+		given(this.articleService.viewArticle(service, id, false)).willReturn(article);
 
 		// when
-		var fetchedArticle = articleController.viewArticle(service, id, false);
+		var fetchedArticle = this.articleController.viewArticle(service, id, false);
 
 		// then
 		assertThat(fetchedArticle).isNotNull();
@@ -81,10 +81,10 @@ class ArticleControllerTests {
 		var boardId = "board-id";
 		var param = new ListArticleHeaderRequestParam(boardId, "", 5, SortCode.TIME_DESC.getCode());
 		var articleHeaderList = ArticleHeaderList.from(List.of(ArticleHeader.builder().build()), 1);
-		given(articleService.listArticleHeader(service, param)).willReturn(articleHeaderList);
+		given(this.articleService.listArticleHeader(service, param)).willReturn(articleHeaderList);
 
 		// when
-		var fetchedArticleHeaderList = articleController.listArticleHeader(service, param);
+		var fetchedArticleHeaderList = this.articleController.listArticleHeader(service, param);
 
 		// then
 		assertThat(fetchedArticleHeaderList).isNotNull();
@@ -109,10 +109,10 @@ class ArticleControllerTests {
 			.writer(writer)
 			.build();
 		var article = new Article(header, content);
-		given(articleService.writeArticle(service, articleRequest)).willReturn(article);
+		given(this.articleService.writeArticle(service, articleRequest)).willReturn(article);
 
 		// when
-		var createdArticle = articleController.writeArticle(service, articleRequest);
+		var createdArticle = this.articleController.writeArticle(service, articleRequest);
 
 		// then
 		assertThat(createdArticle).isNotNull();
@@ -144,10 +144,10 @@ class ArticleControllerTests {
 			.writer(writer)
 			.build();
 		var article = new Article(header, content);
-		given(articleService.modifyArticle(service, articleId, articleRequest)).willReturn(article);
+		given(this.articleService.modifyArticle(service, articleId, articleRequest)).willReturn(article);
 
 		// when
-		var modifiedArticle = articleController.modifyArticle(service, articleId, articleRequest);
+		var modifiedArticle = this.articleController.modifyArticle(service, articleId, articleRequest);
 
 		// then
 		assertThat(modifiedArticle).isNotNull();
@@ -167,10 +167,10 @@ class ArticleControllerTests {
 		var service = "jenie-test";
 		var id = "article-id";
 		var articleDeleteResult = new ArticleDeleteResult(id, ArticleState.Deleted.getCode(), ZonedDateTime.now());
-		given(articleService.deleteArticle(service, id)).willReturn(articleDeleteResult);
+		given(this.articleService.deleteArticle(service, id)).willReturn(articleDeleteResult);
 
 		// when
-		var deleteResult = articleController.deleteArticle(service, id);
+		var deleteResult = this.articleController.deleteArticle(service, id);
 
 		// then
 		assertThat(deleteResult).isNotNull();

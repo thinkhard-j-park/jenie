@@ -20,7 +20,7 @@ class ErrorTypeControllerTests {
 		var errorCode = ErrorCode.ARTICLE_NOT_FOUND.getCode();
 
 		// when
-		var errorType = errorTypeController.getErrorType(errorCode);
+		var errorType = this.errorTypeController.getErrorType(errorCode);
 
 		// then
 		assertThat(errorType).isNotNull();

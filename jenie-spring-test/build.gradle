@@ -5,12 +5,16 @@ ext {
 }
 
 dependencies {
+    // spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // others
     implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
+
+    // jenie
     implementation(project(':jenie-spring-helloworld-common'))
 
+    // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
