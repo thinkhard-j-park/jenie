@@ -65,11 +65,11 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 			criteria.and("boardId").is(param.boardId());
 		}
 
-		var sortOrder = SortOrder.fromValue(param.sort());
+		var sortOrder = SortOrder.fromCode(param.sort());
 		if (StringUtils.hasText(param.prevArticleId())) {
 			switch (sortOrder) {
-				case TIME_DESC -> criteria.and("id").lt(param.prevArticleId());
-				case TIME_ASC -> criteria.and("id").gt(param.prevArticleId());
+				case TIME_DESC -> criteria.and("_id").lt(param.prevArticleId());
+				case TIME_ASC -> criteria.and("_id").gt(param.prevArticleId());
 			}
 		}
 		var sort = Sort.by(sortOrder.getDirection(), sortOrder.getField());
