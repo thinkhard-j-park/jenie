@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.entity.board;
 
-import org.jenie.spring.helloworld.common.ExcludeFromCodeCoverage;
+import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -49,7 +49,7 @@ public class BoardEntity {
 		this.rootId = rootId;
 	}
 
-	@ExcludeFromCodeCoverage
+	@ExcludeCodeCoverageGenerated
 	@Override
 	public String toString() {
 		//@formatter:off

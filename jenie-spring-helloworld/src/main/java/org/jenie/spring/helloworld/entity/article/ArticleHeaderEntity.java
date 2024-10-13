@@ -1,7 +1,7 @@
 package org.jenie.spring.helloworld.entity.article;
 
 import org.jenie.spring.helloworld.common.ActionDateTime;
-import org.jenie.spring.helloworld.common.ExcludeFromCodeCoverage;
+import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
 import org.jenie.spring.helloworld.common.Reaction;
 import org.jenie.spring.helloworld.common.Writer;
 
@@ -82,7 +82,7 @@ public class ArticleHeaderEntity {
 		this.actionDateTime = actionDateTime;
 	}
 
-	@ExcludeFromCodeCoverage
+	@ExcludeCodeCoverageGenerated
 	@Override
 	public String toString() {
 		//@formatter:off

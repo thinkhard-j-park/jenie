@@ -83,7 +83,7 @@ configure(mainProjs) {
         }
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: ['**/*ExcludeFromCodeCoverage*.class'])
+                fileTree(dir: it, exclude: ['**/*ExcludeCodeCoverageGenerated*.class'])
             }))
         }
         finalizedBy 'jacocoTestCoverageVerification'
