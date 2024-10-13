@@ -7,6 +7,7 @@ import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 
 public final class ArticleHeaderMapper {
+
 	private ArticleHeaderMapper() {
 	}
 
