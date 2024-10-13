@@ -47,9 +47,9 @@ public class BoardEntity {
 		this.rootId = rootId;
 	}
 
-	// $COVERAGE-IGNORE$
 	@Override
 	public String toString() {
+		// $COVERAGE-IGNORE$
 		//@formatter:off
 		return "BoardEntity{" +
 				"id='" + this.id + '\'' +

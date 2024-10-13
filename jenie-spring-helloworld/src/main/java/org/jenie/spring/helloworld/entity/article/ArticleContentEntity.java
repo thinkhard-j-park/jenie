@@ -27,9 +27,9 @@ public class ArticleContentEntity {
 		this.content = content;
 	}
 
-	// $COVERAGE-IGNORE$
 	@Override
 	public String toString() {
+		// $COVERAGE-IGNORE$
 		//@formatter:off
 		return "ArticleContentEntity{" +
 				"id='" + this.id + '\'' +
