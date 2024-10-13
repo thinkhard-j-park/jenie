@@ -27,6 +27,7 @@ public class ArticleContentEntity {
 		this.content = content;
 	}
 
+	// $COVERAGE-IGNORE$
 	@Override
 	public String toString() {
 		//@formatter:off

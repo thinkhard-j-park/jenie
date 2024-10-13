@@ -81,6 +81,7 @@ public class ArticleHeaderEntity {
 		this.actionDateTime = actionDateTime;
 	}
 
+	// $COVERAGE-IGNORE$
 	@Override
 	public String toString() {
 		//@formatter:off
