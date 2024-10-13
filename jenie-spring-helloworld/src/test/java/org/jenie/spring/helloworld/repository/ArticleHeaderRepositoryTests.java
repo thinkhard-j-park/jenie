@@ -1,11 +1,16 @@
 package org.jenie.spring.helloworld.repository;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import com.mongodb.ReadPreference;
+import com.mongodb.WriteConcern;
+import org.bson.Document;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
+import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;
+import org.jenie.spring.helloworld.common.Reaction;
 import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.SortCode;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
@@ -23,8 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.util.StringUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,22 +133,33 @@ class ArticleHeaderRepositoryTests {
 	}
 
 	static Stream<Arguments> provideListArticleHeader() {
-		return Stream.of(Arguments.of("", "", 1, SortCode.TIME_DESC, -1));
+		var param1 = new ListArticleHeaderRequestParam("", "", 5, SortCode.TIME_DESC.getCode());
+		var param2 = new ListArticleHeaderRequestParam("board-id", "", 5, SortCode.TIME_DESC.getCode());
+		var param3 = new ListArticleHeaderRequestParam("board-id", "prev-id", 5, SortCode.TIME_DESC.getCode());
+		var param4 = new ListArticleHeaderRequestParam("board-id", "prev-id", 5, SortCode.TIME_ASC.getCode());
+		var param5 = new ListArticleHeaderRequestParam("", "prev-id", 5, SortCode.TIME_ASC.getCode());
+
+		//@formatter:off
+		return Stream.of(
+				Arguments.of(param1, 1, -1),
+				Arguments.of(param2, 2, -1),
+				Arguments.of(param3, 3, -1),
+				Arguments.of(param4, 3, 1),
+				Arguments.of(param5, 2, 1));
+		//@formatter:on
 	}
 
 	@ParameterizedTest
 	@MethodSource("provideListArticleHeader")
-	// TODO 입력 파라미터 갯수가 많으므로, ListArticleHeaderRequestParam 과 expectedValue 을 이용한다.
-	void listArticleHeader(String boardId, String prevId, int querySize, SortCode sortCode, int expectedSortOrder) {
+	void listArticleHeader(ListArticleHeaderRequestParam param, int querySize, int expectedSortOrder) {
 		// given
 		var service = "jenie-test";
 		var title = "title-";
-		var param = new ListArticleHeaderRequestParam(boardId, prevId, 5, sortCode.getCode());
 		var entityList = new ArrayList<ArticleHeaderEntity>();
 		for (int i = 0; i < 3; i++) {
 			var headerEntity = new ArticleHeaderEntity();
 			headerEntity.setId("article-id-" + i);
-			headerEntity.setBoardId(boardId);
+			headerEntity.setBoardId(param.boardId());
 			headerEntity.setTitle(title + i);
 			headerEntity.setWriter(new Writer("wid-" + i, "name-" + i));
 			entityList.add(headerEntity);
@@ -163,15 +181,23 @@ class ArticleHeaderRepositoryTests {
 
 		assertThat(capturedQuery.getQueryObject().get("state")).isEqualTo(ArticleState.Normal.getCode());
 
-		if (StringUtils.hasText(boardId)) {
-			assertThat(capturedQuery.getQueryObject().get("boardId")).isEqualTo(boardId);
+		if (StringUtils.hasText(param.boardId())) {
+			assertThat(capturedQuery.getQueryObject().get("boardId")).isEqualTo(param.boardId());
 		}
 
-		if (StringUtils.hasText(prevId)) {
-			assertThat(capturedQuery.getQueryObject().get("_id")).isEqualTo(prevId);
+		if (StringUtils.hasText(param.prevArticleId())) {
+			Document doc = (Document) capturedQuery.getQueryObject().get("_id");
+			assertThat(doc).isNotNull();
+
+			if (SortCode.fromCode(param.sort()) == SortCode.TIME_DESC) {
+				assertThat(doc.get("$lt")).isEqualTo(param.prevArticleId());
+			}
+			else {
+				assertThat(doc.get("$gt")).isEqualTo(param.prevArticleId());
+			}
 		}
 
-		assertThat(capturedQuery.getSortObject().get(SortOrder.fromCode(sortCode.getCode()).getField()))
+		assertThat(capturedQuery.getSortObject().get(SortOrder.fromCode(param.sort()).getField()))
 			.isEqualTo(expectedSortOrder);
 		assertThat(capturedQuery.getLimit()).isEqualTo(param.size() + 1);
 
@@ -179,12 +205,198 @@ class ArticleHeaderRepositoryTests {
 		assertThat(result).hasSize(3);
 		assertThat(result).allSatisfy((headerEntity) -> {
 			assertThat(headerEntity.getId()).isNotEmpty();
-			assertThat(headerEntity.getBoardId()).isEqualTo(boardId);
+			assertThat(headerEntity.getBoardId()).isEqualTo(param.boardId());
 			assertThat(headerEntity.getTitle()).isNotEmpty();
 			assertThat(headerEntity.getWriter()).isNotNull();
 			assertThat(headerEntity.getWriter().getWid()).isNotEmpty();
 		});
+	}
 
+	@Test
+	void insert() {
+		// given
+		var service = "jenie-test";
+		var boardId = "board-id";
+		var id = "article-id";
+		var title = "hello world";
+		var writer = new Writer("writer-id", "olleh");
+
+		var articleHeaderEntity = new ArticleHeaderEntity();
+		articleHeaderEntity.setId(id);
+		articleHeaderEntity.setTitle(title);
+		articleHeaderEntity.setBoardId(boardId);
+		articleHeaderEntity.setWriter(writer);
+
+		given(this.mongoTemplateRouter.mongoTemplate(eq(service), any(ReadPreference.class), eq(WriteConcern.MAJORITY)))
+			.willReturn(this.mongoTemplate);
+		given(this.mongoTemplate.insert(articleHeaderEntity)).willReturn(articleHeaderEntity);
+
+		// when
+		var createdHeaderEntity = this.articleHeaderRepository.insert(service, articleHeaderEntity);
+
+		// then
+		assertThat(createdHeaderEntity).isNotNull();
+		assertThat(createdHeaderEntity.getId()).isEqualTo(id);
+		assertThat(createdHeaderEntity.getBoardId()).isEqualTo(boardId);
+		assertThat(createdHeaderEntity.getTitle()).isEqualTo(title);
+		assertThat(createdHeaderEntity.getWriter()).isNotNull();
+		assertThat(createdHeaderEntity.getWriter().getWid()).isEqualTo(writer.getWid());
+		assertThat(createdHeaderEntity.getActionDateTime()).isNotNull();
+		assertThat(createdHeaderEntity.getActionDateTime().getCreatedAt()).isNotNull();
+	}
+
+	@Test
+	void modifyArticleHeader() {
+		// given
+		var service = "jenie-test";
+		var boardId = "board-id";
+		var id = "article-id";
+		var title = "hello world";
+		var writer = new Writer("writer-id", "olleh");
+
+		var articleHeaderEntity = new ArticleHeaderEntity();
+		articleHeaderEntity.setId(id);
+		articleHeaderEntity.setTitle(title);
+		articleHeaderEntity.setBoardId(boardId);
+		articleHeaderEntity.setWriter(writer);
+		articleHeaderEntity.setActionDateTime(new ActionDateTime());
+		articleHeaderEntity.getActionDateTime().setUpdatedAt(ZonedDateTime.now());
+
+		var readPreferenceCaptor = ArgumentCaptor.forClass(ReadPreference.class);
+		given(this.mongoTemplateRouter.mongoTemplate(eq(service), any(ReadPreference.class), eq(WriteConcern.MAJORITY)))
+			.willReturn(this.mongoTemplate);
+
+		var queryCaptor = ArgumentCaptor.forClass(Query.class);
+		var updateCaptor = ArgumentCaptor.forClass(Update.class);
+		var findAndModifyCaptor = ArgumentCaptor.forClass(FindAndModifyOptions.class);
+		given(this.mongoTemplate.findAndModify(any(Query.class), any(Update.class), any(FindAndModifyOptions.class),
+				eq(ArticleHeaderEntity.class)))
+			.willReturn(articleHeaderEntity);
+
+		// when
+		var modifiedHeaderEntity = this.articleHeaderRepository.modifyArticleHeader(service, id, title);
+
+		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(eq(service), readPreferenceCaptor.capture(),
+				eq(WriteConcern.MAJORITY));
+		assertThat(readPreferenceCaptor.getValue()).isNotNull();
+		assertThat(readPreferenceCaptor.getValue()).isEqualTo(ReadPreference.primary());
+
+		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
+				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
+		assertThat(queryCaptor.getValue()).isNotNull();
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(updateCaptor.getValue()).isNotNull();
+		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$set");
+		assertThat(doc.get("title")).isEqualTo(title);
+		assertThat(doc.get("actionDateTime.updatedAt")).isNotNull();
+		assertThat(findAndModifyCaptor.getValue()).isNotNull();
+		assertThat(findAndModifyCaptor.getValue().isReturnNew()).isTrue();
+
+		assertThat(modifiedHeaderEntity).isNotNull();
+		assertThat(modifiedHeaderEntity.getId()).isEqualTo(id);
+		assertThat(modifiedHeaderEntity.getBoardId()).isEqualTo(boardId);
+		assertThat(modifiedHeaderEntity.getTitle()).isEqualTo(title);
+		assertThat(modifiedHeaderEntity.getWriter()).isNotNull();
+		assertThat(modifiedHeaderEntity.getWriter().getWid()).isEqualTo(writer.getWid());
+		assertThat(modifiedHeaderEntity.getActionDateTime()).isNotNull();
+		assertThat(modifiedHeaderEntity.getActionDateTime().getCreatedAt()).isNotNull();
+		assertThat(modifiedHeaderEntity.getActionDateTime().getUpdatedAt()).isNotNull();
+	}
+
+	@Test
+	void incViewCount() {
+		// given
+		var service = "jenie-test";
+		var id = "article-id";
+		var inc = 1;
+
+		var reaction = new Reaction();
+		var articleHeaderEntity = new ArticleHeaderEntity();
+		articleHeaderEntity.setId(id);
+		articleHeaderEntity.setReaction(reaction);
+		articleHeaderEntity.getReaction().setViewCount(articleHeaderEntity.getReaction().getViewCount() + inc);
+
+		var readPreferenceCaptor = ArgumentCaptor.forClass(ReadPreference.class);
+		given(this.mongoTemplateRouter.mongoTemplate(eq(service), any(ReadPreference.class), eq(WriteConcern.MAJORITY)))
+			.willReturn(this.mongoTemplate);
+
+		var queryCaptor = ArgumentCaptor.forClass(Query.class);
+		var updateCaptor = ArgumentCaptor.forClass(Update.class);
+		var findAndModifyCaptor = ArgumentCaptor.forClass(FindAndModifyOptions.class);
+		given(this.mongoTemplate.findAndModify(any(Query.class), any(Update.class), any(FindAndModifyOptions.class),
+				eq(ArticleHeaderEntity.class)))
+			.willReturn(articleHeaderEntity);
+
+		// when
+		var result = this.articleHeaderRepository.incViewCount(service, id, inc);
+
+		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(eq(service), readPreferenceCaptor.capture(),
+				eq(WriteConcern.MAJORITY));
+		assertThat(readPreferenceCaptor.getValue()).isNotNull();
+		assertThat(readPreferenceCaptor.getValue()).isEqualTo(ReadPreference.primary());
+
+		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
+				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
+		assertThat(queryCaptor.getValue()).isNotNull();
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(updateCaptor.getValue()).isNotNull();
+		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$inc");
+		assertThat(doc.get("reaction.viewCount")).isEqualTo(inc);
+		assertThat(findAndModifyCaptor.getValue()).isNotNull();
+		assertThat(findAndModifyCaptor.getValue().isReturnNew()).isTrue();
+
+		assertThat(result).isNotNull();
+		assertThat(result.getReaction().getViewCount()).isEqualTo(articleHeaderEntity.getReaction().getViewCount());
+	}
+
+	@Test
+	void deleteArticle() {
+		// given
+		var service = "jenie-test";
+		var id = "article-id";
+
+		var articleHeaderEntity = new ArticleHeaderEntity();
+		articleHeaderEntity.setId(id);
+		articleHeaderEntity.setState(ArticleState.Deleted.getCode());
+		articleHeaderEntity.setActionDateTime(new ActionDateTime());
+		articleHeaderEntity.getActionDateTime().setDeletedAt(ZonedDateTime.now());
+
+		var readPreferenceCaptor = ArgumentCaptor.forClass(ReadPreference.class);
+		given(this.mongoTemplateRouter.mongoTemplate(eq(service), any(ReadPreference.class), eq(WriteConcern.MAJORITY)))
+			.willReturn(this.mongoTemplate);
+
+		var queryCaptor = ArgumentCaptor.forClass(Query.class);
+		var updateCaptor = ArgumentCaptor.forClass(Update.class);
+		var findAndModifyCaptor = ArgumentCaptor.forClass(FindAndModifyOptions.class);
+		given(this.mongoTemplate.findAndModify(any(Query.class), any(Update.class), any(FindAndModifyOptions.class),
+				eq(ArticleHeaderEntity.class)))
+			.willReturn(articleHeaderEntity);
+
+		// when
+		var result = this.articleHeaderRepository.deleteArticle(service, id);
+
+		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(eq(service), readPreferenceCaptor.capture(),
+				eq(WriteConcern.MAJORITY));
+		assertThat(readPreferenceCaptor.getValue()).isNotNull();
+		assertThat(readPreferenceCaptor.getValue()).isEqualTo(ReadPreference.primary());
+
+		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
+				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
+		assertThat(queryCaptor.getValue()).isNotNull();
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(updateCaptor.getValue()).isNotNull();
+		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$set");
+		assertThat(doc.get("state")).isEqualTo(ArticleState.Deleted.getCode());
+		assertThat(doc.get("actionDateTime.deletedAt")).isNotNull();
+		assertThat(findAndModifyCaptor.getValue()).isNotNull();
+		assertThat(findAndModifyCaptor.getValue().isReturnNew()).isTrue();
+
+		assertThat(result).isNotNull();
+		assertThat(result.getState()).isEqualTo(ArticleState.Deleted.getCode());
+		assertThat(result.getActionDateTime().getDeletedAt()).isNotNull();
 	}
 
 }
