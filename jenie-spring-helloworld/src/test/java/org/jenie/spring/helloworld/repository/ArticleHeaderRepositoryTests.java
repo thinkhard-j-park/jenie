@@ -16,6 +16,7 @@ import org.jenie.spring.helloworld.dto.SortCode;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.entity.SortOrder;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
+import org.jenie.spring.helloworld.exception.CommonErrors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,8 +26,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -35,6 +34,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.util.StringUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -43,8 +43,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ArticleHeaderRepositoryTests {
-
-	private static final Logger logger = LoggerFactory.getLogger(ArticleHeaderRepositoryTests.class);
 
 	@InjectMocks
 	private ArticleHeaderRepository articleHeaderRepository;
@@ -100,6 +98,14 @@ class ArticleHeaderRepositoryTests {
 	}
 
 	@Test
+	void findArticleHeaderByIdShouldFail() {
+		var service = "jenie-test";
+		var id = "";
+		assertThatThrownBy(() -> this.articleHeaderRepository.findArticleHeaderById(service, id, false))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+	}
+
+	@Test
 	void findArticleWriterById() {
 		// given
 		var service = "jenie-test";
@@ -119,6 +125,7 @@ class ArticleHeaderRepositoryTests {
 		var result = this.articleHeaderRepository.findArticleWriterById(service, id);
 
 		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(service);
 		verify(this.mongoTemplate).findOne(queryCaptor.capture(), eq(ArticleHeaderEntity.class));
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
@@ -130,6 +137,14 @@ class ArticleHeaderRepositoryTests {
 		assertThat(result).isNotNull();
 		assertThat(result.getWid()).isEqualTo(writer.getWid());
 		assertThat(result.getName()).isEqualTo(writer.getName());
+	}
+
+	@Test
+	void findArticleWriterByIdShouldFail() {
+		var service = "jenie-test";
+		var id = "";
+		assertThatThrownBy(() -> this.articleHeaderRepository.findArticleWriterById(service, id))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
 	}
 
 	static Stream<Arguments> provideListArticleHeader() {
@@ -174,6 +189,7 @@ class ArticleHeaderRepositoryTests {
 		var result = this.articleHeaderRepository.listArticleHeader(service, param);
 
 		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(service);
 		verify(this.mongoTemplate).find(queryCaptor.capture(), eq(ArticleHeaderEntity.class));
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
@@ -227,6 +243,7 @@ class ArticleHeaderRepositoryTests {
 		articleHeaderEntity.setBoardId(boardId);
 		articleHeaderEntity.setWriter(writer);
 
+		var readPreferenceCaptor = ArgumentCaptor.forClass(ReadPreference.class);
 		given(this.mongoTemplateRouter.mongoTemplate(eq(service), any(ReadPreference.class), eq(WriteConcern.MAJORITY)))
 			.willReturn(this.mongoTemplate);
 		given(this.mongoTemplate.insert(articleHeaderEntity)).willReturn(articleHeaderEntity);
@@ -235,6 +252,9 @@ class ArticleHeaderRepositoryTests {
 		var createdHeaderEntity = this.articleHeaderRepository.insert(service, articleHeaderEntity);
 
 		// then
+		verify(this.mongoTemplateRouter).mongoTemplate(eq(service), readPreferenceCaptor.capture(),
+				eq(WriteConcern.MAJORITY));
+		verify(this.mongoTemplate).insert(any(ArticleHeaderEntity.class));
 		assertThat(createdHeaderEntity).isNotNull();
 		assertThat(createdHeaderEntity.getId()).isEqualTo(id);
 		assertThat(createdHeaderEntity.getBoardId()).isEqualTo(boardId);
