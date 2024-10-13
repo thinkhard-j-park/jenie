@@ -1,5 +1,7 @@
 package org.jenie.spring.helloworld.entity.board;
 
+import org.jenie.spring.helloworld.common.ExcludeFromCodeCoverage;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -47,9 +49,9 @@ public class BoardEntity {
 		this.rootId = rootId;
 	}
 
+	@ExcludeFromCodeCoverage
 	@Override
 	public String toString() {
-		// $COVERAGE-IGNORE$
 		//@formatter:off
 		return "BoardEntity{" +
 				"id='" + this.id + '\'' +

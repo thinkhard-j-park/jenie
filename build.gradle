@@ -81,6 +81,11 @@ configure(mainProjs) {
             xml.required = true
             html.required = false
         }
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: ['**/*ExcludeFromCodeCoverage*.class'])
+            }))
+        }
         finalizedBy 'jacocoTestCoverageVerification'
     }
 

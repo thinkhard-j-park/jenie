@@ -1,5 +1,7 @@
 package org.jenie.spring.helloworld.entity.article;
 
+import org.jenie.spring.helloworld.common.ExcludeFromCodeCoverage;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,9 +29,9 @@ public class ArticleContentEntity {
 		this.content = content;
 	}
 
+	@ExcludeFromCodeCoverage
 	@Override
 	public String toString() {
-		// $COVERAGE-IGNORE$
 		//@formatter:off
 		return "ArticleContentEntity{" +
 				"id='" + this.id + '\'' +
