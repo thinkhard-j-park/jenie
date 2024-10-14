@@ -16,7 +16,6 @@ import org.jenie.spring.helloworld.exception.AssertHelper;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -53,9 +52,8 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		var query = Query.query(Criteria.where("_id").is(id));
 		query.fields().include("writer");
 		var articleHeader = this.mongoTemplateRouter.mongoTemplate(dbKey).findOne(query, ArticleHeaderEntity.class);
-		if (articleHeader == null) {
-			return null;
-		}
+		AssertHelper.notNull(articleHeader, "id is not valid");
+
 		return articleHeader.getWriter();
 	}
 
@@ -65,11 +63,11 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 			criteria.and("boardId").is(param.boardId());
 		}
 
-		var sortOrder = SortOrder.fromValue(param.sort());
+		var sortOrder = SortOrder.fromCode(param.sort());
 		if (StringUtils.hasText(param.prevArticleId())) {
 			switch (sortOrder) {
-				case TIME_DESC -> criteria.and("id").lt(param.prevArticleId());
-				case TIME_ASC -> criteria.and("id").gt(param.prevArticleId());
+				case TIME_DESC -> criteria.and("_id").lt(param.prevArticleId());
+				case TIME_ASC -> criteria.and("_id").gt(param.prevArticleId());
 			}
 		}
 		var sort = Sort.by(sortOrder.getDirection(), sortOrder.getField());
@@ -78,13 +76,10 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	}
 
 	public ArticleHeaderEntity insert(String dbKey, ArticleHeaderEntity header) {
-		return this.insert(this.mongoTemplateRouter.mongoTemplate(dbKey), header);
-	}
-
-	public ArticleHeaderEntity insert(MongoTemplate template, ArticleHeaderEntity header) {
 		this.validateHeader(header);
 		header.setActionDateTime(new ActionDateTime());
-		return template.insert(header);
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
+			.insert(header);
 	}
 
 	private void validateHeader(ArticleHeaderEntity header) {
@@ -95,42 +90,42 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		AssertHelper.hasText(header.getWriter().getName(), "writerName is required");
 	}
 
-	public ArticleHeaderEntity modifyArticleHeader(String service, String id, String title) {
+	public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String title) {
 		AssertHelper.hasText(id, "id is required");
 		AssertHelper.hasText(title, "title is required");
 
 		var update = new Update();
 		update.set("title", title);
 		update.set("actionDateTime.updatedAt", ZonedDateTime.now());
-		return this.mongoTemplateRouter.mongoTemplate(service, ReadPreference.primary(), WriteConcern.MAJORITY)
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 
 	@Async
-	public void incViewCountAsync(String service, String id, Number number) {
+	public void incViewCountAsync(String dbKey, String id, Number number) {
 		AssertHelper.hasText(id, "id is required");
 
-		this.incViewCount(service, id, number);
+		this.incViewCount(dbKey, id, number);
 	}
 
-	public ArticleHeaderEntity incViewCount(String service, String id, Number number) {
+	public ArticleHeaderEntity incViewCount(String dbKey, String id, Number number) {
 		AssertHelper.hasText(id, "id is required");
 
 		var update = new Update();
 		update.inc("reaction.viewCount", number);
-		return this.mongoTemplateRouter.mongoTemplate(service)
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 
-	public ArticleHeaderEntity deleteArticle(String service, String id) {
+	public ArticleHeaderEntity deleteArticle(String dbKey, String id) {
 		AssertHelper.hasText(id, "id is required");
 
 		var update = new Update();
 		update.set("state", ArticleState.Deleted.getCode());
 		update.set("actionDateTime.deletedAt", ZonedDateTime.now());
-		return this.mongoTemplateRouter.mongoTemplate(service)
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}

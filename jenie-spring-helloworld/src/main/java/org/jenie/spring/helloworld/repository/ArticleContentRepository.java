@@ -7,7 +7,6 @@ import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.exception.AssertHelper;
 
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -21,15 +20,12 @@ public class ArticleContentRepository extends MongoDBRepository {
 	}
 
 	public ArticleContentEntity insert(String dbKey, ArticleContentEntity content) {
-		return this.insert(this.mongoTemplateRouter.mongoTemplate(dbKey), content);
-	}
-
-	public ArticleContentEntity insert(MongoTemplate template, ArticleContentEntity content) {
 		AssertHelper.notNull(content, "ArticleContentEntity is required");
 		AssertHelper.hasText(content.getId(), "ArticleContentEntity id should be provided");
 		AssertHelper.hasText(content.getContent(), "content is required");
 
-		return template.insert(content);
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
+			.insert(content);
 	}
 
 	public ArticleContentEntity modifyArticleContent(String dbKey, String articleId, String content) {
