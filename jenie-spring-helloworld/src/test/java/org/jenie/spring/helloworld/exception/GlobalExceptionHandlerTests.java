@@ -2,7 +2,6 @@ package org.jenie.spring.helloworld.exception;
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +14,6 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.HandlerMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,29 +28,24 @@ class GlobalExceptionHandlerTests {
 	@Mock
 	private AbstractException abstractException;
 
-	private WebRequest request;
-
-	@BeforeEach
-	public void setUp() {
-		MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
+	@Test
+	void handleControllerExceptionTest() {
+		// given
+		var httpServletRequest = new MockHttpServletRequest();
 		httpServletRequest.setScheme("http");
 		httpServletRequest.setServerName("localhost");
 		httpServletRequest.setServerPort(30000);
 		httpServletRequest.setRequestURI("/jenie-test/article/1");
 		httpServletRequest.setAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE, "/{service}/article/{id}");
 		httpServletRequest.setMethod("GET");
-		request = new ServletWebRequest(httpServletRequest);
-	}
+		var request = new ServletWebRequest(httpServletRequest);
 
-	@Test
-	public void handleControllerExceptionTest() {
-		// given
-		given(abstractException.getErrorCode()).willReturn(ErrorCode.ILLEGAL_DATA);
-		given(abstractException.getMessage()).willReturn("id is required");
+		given(this.abstractException.getErrorCode()).willReturn(ErrorCode.ILLEGAL_DATA);
+		given(this.abstractException.getMessage()).willReturn("id is required");
 
 		// when
-		ResponseEntity<ProblemDetail> responseEntity = globalExceptionHandler
-			.handleControllerException(abstractException, request);
+		ResponseEntity<ProblemDetail> responseEntity = this.globalExceptionHandler
+			.handleControllerException(this.abstractException, request);
 
 		// then
 		assertThat(responseEntity).isNotNull();
