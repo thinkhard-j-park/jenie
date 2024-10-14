@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(AbstractException.class)
-	private ResponseEntity<ProblemDetail> handleControllerException(AbstractException ex, WebRequest request) {
+	ResponseEntity<ProblemDetail> handleControllerException(AbstractException ex, WebRequest request) {
 		var httpServletRequest = ((ServletRequestAttributes) request).getRequest();
 		var scheme = httpServletRequest.getScheme();
 		var host = httpServletRequest.getServerName();
