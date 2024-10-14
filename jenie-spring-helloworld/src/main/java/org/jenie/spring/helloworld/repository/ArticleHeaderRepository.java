@@ -52,10 +52,8 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		var query = Query.query(Criteria.where("_id").is(id));
 		query.fields().include("writer");
 		var articleHeader = this.mongoTemplateRouter.mongoTemplate(dbKey).findOne(query, ArticleHeaderEntity.class);
+		AssertHelper.notNull(articleHeader, "id is not valid");
 
-		if (articleHeader == null) {
-			return null;
-		}
 		return articleHeader.getWriter();
 	}
 

@@ -141,8 +141,11 @@ class ArticleHeaderRepositoryTests {
 
 	@Test
 	void findArticleWriterByIdShouldFail() {
+		// given
 		var service = "jenie-test";
 		var id = "";
+
+		// when, then
 		assertThatThrownBy(() -> this.articleHeaderRepository.findArticleWriterById(service, id))
 			.isInstanceOf(CommonErrors.IllegalDataException.class);
 	}
@@ -265,6 +268,53 @@ class ArticleHeaderRepositoryTests {
 		assertThat(createdHeaderEntity.getActionDateTime().getCreatedAt()).isNotNull();
 	}
 
+	static Stream<Arguments> provideInvalidInsertHeaderEntity() {
+		var entity1 = new ArticleHeaderEntity();
+
+		var entity2 = new ArticleHeaderEntity();
+		entity2.setBoardId("board-id");
+
+		var entity3 = new ArticleHeaderEntity();
+		entity3.setBoardId("board-id");
+		entity3.setTitle("hello world");
+
+		var entity4 = new ArticleHeaderEntity();
+		entity4.setBoardId("board-id");
+		entity4.setTitle("hello world");
+		entity4.setWriter(new Writer("", ""));
+
+		var entity5 = new ArticleHeaderEntity();
+		entity5.setBoardId("board-id");
+		entity5.setTitle("hello world");
+		entity5.setWriter(new Writer("wid", ""));
+
+		var entity6 = new ArticleHeaderEntity();
+		entity6.setBoardId("board-id");
+		entity6.setTitle("hello world");
+		entity6.setWriter(new Writer("", "wid"));
+
+		//@formatter:off
+		return Stream.of(
+				Arguments.of(entity1),
+				Arguments.of(entity2),
+				Arguments.of(entity3),
+				Arguments.of(entity4),
+				Arguments.of(entity5),
+				Arguments.of(entity6));
+		//@formatter:on
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideInvalidInsertHeaderEntity")
+	void insertShouldFail(ArticleHeaderEntity articleHeaderEntity) {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleHeaderRepository.insert(service, articleHeaderEntity))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+	}
+
 	@Test
 	void modifyArticleHeader() {
 		// given
@@ -324,6 +374,25 @@ class ArticleHeaderRepositoryTests {
 		assertThat(modifiedHeaderEntity.getActionDateTime().getUpdatedAt()).isNotNull();
 	}
 
+	static Stream<Arguments> provideInvalidModifyArgs() {
+		//@formatter:off
+		return Stream.of(
+				Arguments.of("", "title"),
+				Arguments.of("id", ""));
+		//@formatter:on
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideInvalidModifyArgs")
+	void modifyShouldFail(String id, String title) {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleHeaderRepository.modifyArticleHeader(service, id, title))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+	}
+
 	@Test
 	void incViewCount() {
 		// given
@@ -372,6 +441,16 @@ class ArticleHeaderRepositoryTests {
 	}
 
 	@Test
+	void incViewCountShouldFail() {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleHeaderRepository.incViewCount(service, "", 1))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+	}
+
+	@Test
 	void deleteArticle() {
 		// given
 		var service = "jenie-test";
@@ -417,6 +496,16 @@ class ArticleHeaderRepositoryTests {
 		assertThat(result).isNotNull();
 		assertThat(result.getState()).isEqualTo(ArticleState.Deleted.getCode());
 		assertThat(result.getActionDateTime().getDeletedAt()).isNotNull();
+	}
+
+	@Test
+	void deleteShouldFail() {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleHeaderRepository.deleteArticle(service, ""))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
 	}
 
 }
