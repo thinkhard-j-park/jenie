@@ -1,9 +1,9 @@
 # Jenie, Java Genie!
 
 This is a project to experiment with Java-based technologies. The main goals of this project are to:
-- Simplify and organise techniques that have been applied in practice.
-- Research, test, and validate technologies.
-- Develop and apply best practices.
+- Simplify and document the technology used in our work.
+- Research, development, test technologies.
+- Establish and apply best practices.
 
 ## Project Structure
 
