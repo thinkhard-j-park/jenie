@@ -1,10 +1,13 @@
 package org.jenie.spring.helloworld.exception;
 
+import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
+
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 public final class AssertHelper {
 
+	@ExcludeCodeCoverageGenerated
 	private AssertHelper() {
 	}
 

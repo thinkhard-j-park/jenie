@@ -1,10 +1,12 @@
 package org.jenie.spring.helloworld.mapper;
 
+import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
 import org.jenie.spring.helloworld.dto.board.Board;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 
 public final class BoardMapper {
 
+	@ExcludeCodeCoverageGenerated
 	private BoardMapper() {
 	}
 
