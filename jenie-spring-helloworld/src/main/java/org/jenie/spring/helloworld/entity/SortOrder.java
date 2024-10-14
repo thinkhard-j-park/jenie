@@ -23,7 +23,7 @@ public enum SortOrder {
 		this.field = field;
 	}
 
-	public static SortOrder fromValue(int code) {
+	public static SortOrder fromCode(int code) {
 		for (SortOrder sortOrder : SortOrder.values()) {
 			if (code == sortOrder.sortCode.getCode()) {
 				return sortOrder;

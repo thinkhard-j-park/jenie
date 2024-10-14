@@ -1,6 +1,7 @@
 package org.jenie.spring.helloworld.mapper;
 
 import org.jenie.spring.helloworld.common.ArticleState;
+import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.board.Board;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
@@ -8,6 +9,7 @@ import org.jenie.spring.helloworld.entity.board.BoardEntity;
 
 public final class ArticleHeaderMapper {
 
+	@ExcludeCodeCoverageGenerated
 	private ArticleHeaderMapper() {
 	}
 

@@ -16,6 +16,15 @@ public enum SortCode {
 		this.desc = desc;
 	}
 
+	public static SortCode fromCode(int code) {
+		for (SortCode sortCode : SortCode.values()) {
+			if (sortCode.code == code) {
+				return sortCode;
+			}
+		}
+		return null;
+	}
+
 	public int getCode() {
 		return this.code;
 	}
