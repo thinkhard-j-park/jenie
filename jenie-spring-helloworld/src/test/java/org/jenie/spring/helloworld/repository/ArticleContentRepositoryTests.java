@@ -5,6 +5,7 @@ import com.mongodb.WriteConcern;
 import org.bson.Document;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
+import org.jenie.spring.helloworld.exception.CommonErrors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -65,6 +67,30 @@ class ArticleContentRepositoryTests {
 		assertThat(createdContentEntity).isNotNull();
 		assertThat(createdContentEntity.getId()).isEqualTo(id);
 		assertThat(createdContentEntity.getContent()).isEqualTo(content);
+	}
+
+	@Test
+	void insertShouldFail() {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleContentRepository.insert(service, null))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+
+		// give
+		var articleContentEntity = new ArticleContentEntity();
+
+		// when, then
+		assertThatThrownBy(() -> this.articleContentRepository.insert(service, articleContentEntity))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+
+		// give
+		articleContentEntity.setId("id");
+
+		// when, then
+		assertThatThrownBy(() -> this.articleContentRepository.insert(service, articleContentEntity))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
 	}
 
 	@Test
@@ -117,6 +143,19 @@ class ArticleContentRepositoryTests {
 	}
 
 	@Test
+	void modifyShouldFail() {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleContentRepository.modifyArticleContent(service, null, null))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+
+		assertThatThrownBy(() -> this.articleContentRepository.modifyArticleContent(service, "id", ""))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
+	}
+
+	@Test
 	void findArticleContentById() {
 		// given
 		var service = "jenie-test";
@@ -148,6 +187,16 @@ class ArticleContentRepositoryTests {
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(id);
 		assertThat(result.getContent()).isEqualTo(content);
+	}
+
+	@Test
+	void findArticleContentByIdShouldFail() {
+		// given
+		var service = "jenie-test";
+
+		// when, then
+		assertThatThrownBy(() -> this.articleContentRepository.findArticleContentById(service, ""))
+			.isInstanceOf(CommonErrors.IllegalDataException.class);
 	}
 
 }
