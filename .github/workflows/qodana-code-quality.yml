@@ -48,6 +48,8 @@ jobs:
         with:
           pr-mode: false
           args: |
+            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
+            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
             --source-directory,jenie-spring-data-mongodb,
             --config,qodana.yaml
           artifact-name: jenie-spring-data-mongodb
@@ -95,6 +97,8 @@ jobs:
         with:
           pr-mode: false
           args: |
+            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
+            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
             --source-directory,jenie-spring-helloworld-common,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld-common
@@ -142,6 +146,8 @@ jobs:
         with:
           pr-mode: false
           args: |
+            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
+            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
             --source-directory,jenie-spring-helloworld,
             --config,qodana.yaml
           artifact-name: jenie-spring-helloworld
@@ -178,6 +184,8 @@ jobs:
         with:
           pr-mode: false
           args: |
+            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
+            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
             --source-directory,jenie-spring-test,
             --config,qodana.yaml
           artifact-name: jenie-spring-test
