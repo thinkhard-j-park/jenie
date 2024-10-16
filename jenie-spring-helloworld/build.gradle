@@ -31,6 +31,10 @@ jib {
     }
     to {
         image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld'
+        auth {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
         tags = ["${version}", 'latest']
     }
 }
