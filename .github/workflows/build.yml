@@ -7,7 +7,7 @@
 
 name: Build
 on:
-  tworkflow_dispatch:
+  workflow_dispatch:
   pull_request:
     branches: # Specify your branches here
       - 'feature/7-jib'
