@@ -54,6 +54,7 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   jenie-spring-helloworld-common:
     runs-on: ubuntu-latest
@@ -101,6 +102,7 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   jenie-spring-helloworld:
     runs-on: ubuntu-latest
@@ -148,6 +150,7 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   jenie-spring-test:
     runs-on: ubuntu-latest
