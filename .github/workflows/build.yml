@@ -53,9 +53,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish container jenie-spring-helloworld
-      run: ./gradlew :jenie-spring-helloworld:jib
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        ./gradlew :jenie-spring-helloworld:jib \
+        -Djib.to.auth.username=${{ secrets.GITHUB_ACTOR }} \
+        -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }} 
 
   dependency-submission:
     runs-on: ubuntu-latest
