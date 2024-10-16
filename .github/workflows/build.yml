@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
   pull_request:
     branches: # Specify your branches here
-      - 'feature/7-jib'
+#      - 'feature/7-jib'
+      - develop
   release:
     types: [created]
 jobs:
