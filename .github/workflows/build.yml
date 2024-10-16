@@ -9,6 +9,9 @@ name: Build
 on:
   release:
     types: [created]
+  pull_request:
+    branches: # Specify your branches here
+      - feature/7-jib
 jobs:
   build-publish:
     runs-on: ubuntu-latest
@@ -44,6 +47,11 @@ jobs:
 
     - name: Build and publish jenie-spring-helloworld
       run: ./gradlew :jenie-spring-helloworld:publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish container jenie-spring-helloworld
+      run: ./gradlew :jenie-spring-helloworld:jib
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
