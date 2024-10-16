@@ -14,11 +14,13 @@ description = "Jenie, Java Genie!"
 
 def bootProjects = ['jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
 def testProjects = ['jenie-spring-test']
+def containerizeProjects = ['jenie-spring-helloworld']
 
 ext {
     mainProjs = subprojects.findAll{ it.name !in testProjects}
     testProjs = subprojects.findAll{ it.name in testProjects}
     bootProjs = subprojects.findAll{ it.name in bootProjects}
+    containerProjs = subprojects.findAll{ it.name in containerizeProjects}
 }
 
 configure(allprojects) { project ->
@@ -114,6 +116,25 @@ configure(bootProjs) {
     dependencies {
         implementation platform(SpringBootPlugin.BOM_COORDINATES)
     }
+}
+
+configure(containerProjs) {
+    apply plugin: 'com.google.cloud.tools.jib' version '3.4.3'
+
+    jib {
+        from {
+            image = 'eclipse-temurin:21'
+        }
+        to {
+            image = "ghcr.io/thinkhard-j-park/${project.name}"
+            auth {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+            tags = ["${version}", 'latest']
+        }
+    }
+
 }
 
 configure(testProjs) {
