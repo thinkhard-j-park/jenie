@@ -1,3 +1,7 @@
+plugins {
+    id 'com.google.cloud.tools.jib' version '3.4.3'
+}
+
 version = "${jenieSpringHelloworldVersion}"
 
 ext {
@@ -19,4 +23,18 @@ dependencies {
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jib {
+    from {
+        image = 'eclipse-temurin:21'
+    }
+    to {
+        image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld'
+        auth {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+        tags = ["${version}", 'latest']
+    }
 }
