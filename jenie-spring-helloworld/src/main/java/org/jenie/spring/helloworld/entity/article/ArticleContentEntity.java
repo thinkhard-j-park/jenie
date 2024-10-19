@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.entity.article;
 
-import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

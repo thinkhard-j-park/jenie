@@ -3,8 +3,11 @@ package org.jenie.spring.data.mongodb.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@ExcludeCodeCoverageGenerated
 @ConfigurationProperties(prefix = "mongodb.setting")
 public class MongoDBSetting {
 
@@ -36,6 +39,18 @@ public class MongoDBSetting {
 
 	public void setAppName(String appName) {
 		this.appName = appName;
+	}
+
+	@ExcludeCodeCoverageGenerated
+	@Override
+	public String toString() {
+		//@formatter:off
+		return "MongoDBSetting{" +
+				"appName='" + this.appName + '\'' +
+				", enabled=" + this.enabled +
+				", cluster=" + this.cluster +
+				'}';
+		//@formatter:on
 	}
 
 }

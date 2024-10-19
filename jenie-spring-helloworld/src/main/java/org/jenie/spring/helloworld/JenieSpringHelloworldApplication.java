@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld;
 
-import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

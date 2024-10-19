@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.exception;
 
-import org.jenie.spring.helloworld.common.ExcludeCodeCoverageGenerated;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
