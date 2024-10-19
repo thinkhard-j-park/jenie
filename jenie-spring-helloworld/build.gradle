@@ -30,7 +30,7 @@ publishing {
     publications {
         gpr(MavenPublication) {
             from components.java
-//            artifact tasks.named("bootJar")
+            artifact tasks.named("bootJar")
         }
     }
     repositories {
@@ -45,13 +45,13 @@ publishing {
     }
 }
 
-//publish {
-//    dependsOn('bootJar')
-//}
-//
-//publishToMavenLocal {
-//    dependsOn('bootJar')
-//}
+publish {
+    dependsOn('bootJar')
+}
+
+publishToMavenLocal {
+    dependsOn('bootJar')
+}
 
 jib {
     from {
