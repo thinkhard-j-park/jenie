@@ -16,6 +16,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
@@ -139,6 +140,21 @@ public class MongoDBConnector {
 
 	public MongoTemplate getTemplate() {
 		return this.template;
+	}
+
+	@ExcludeCodeCoverageGenerated
+	@Override
+	public String toString() {
+		//@formatter:off
+		return "MongoDBConnector{" +
+				"client=" + this.client +
+				", cluster=" + this.cluster +
+				", customConversions=" + this.customConversions +
+				", mappingContext=" + this.mappingContext +
+				", mappingMongoConverter=" + this.mappingMongoConverter +
+				", template=" + this.template +
+				'}';
+		//@formatter:on
 	}
 
 }

@@ -9,6 +9,9 @@ name: Build
 on:
   release:
     types: [created]
+  pull_request:
+    branches: # Specify your branches here
+      - develop
 jobs:
   build-publish:
     runs-on: ubuntu-latest
@@ -31,6 +34,11 @@ jobs:
       run: ./gradlew :checkFormat :checkStyleMain :checkStyleTest
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Build and publish jenie-spring-core
+      run: ./gradlew :jenie-spring-core:publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and publish jenie-spring-data-mongodb
       run: ./gradlew :jenie-spring-data-mongodb:publish

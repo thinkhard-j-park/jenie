@@ -14,7 +14,6 @@ description = "Jenie, Java Genie!"
 
 def bootProjects = ['jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
 def testProjects = ['jenie-spring-test']
-def containerizeProjects = ['jenie-spring-helloworld']
 
 ext {
     mainProjs = subprojects.findAll{ it.name !in testProjects}
@@ -24,6 +23,7 @@ ext {
 
 configure(allprojects) { project ->
     apply plugin: 'java'
+    apply plugin: 'idea'
     apply plugin: 'maven-publish'
     apply plugin: 'io.spring.javaformat'
     apply plugin: 'checkstyle'
@@ -33,6 +33,12 @@ configure(allprojects) { project ->
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+    idea {
+        module {
+            downloadSources = true
+            downloadJavadoc = true
         }
     }
 

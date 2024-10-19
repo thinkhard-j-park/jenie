@@ -18,3 +18,11 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+bootJar {
+    enabled = false
+}
+
+test {
+    exclude '**/helloworld/**'
+}
