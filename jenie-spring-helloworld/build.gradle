@@ -22,9 +22,16 @@ dependencies {
     implementation(project(":jenie-spring-data-mongodb"))
     implementation(project(":jenie-spring-helloworld-common"))
 
-
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+publish {
+    dependsOn('bootJar')
+}
+
+publishToMavenLocal {
+    dependsOn('bootJar')
 }
 
 jib {
