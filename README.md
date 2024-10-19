@@ -21,3 +21,6 @@ A backend server project that experiments with server-side technologies like Ser
 This project contains a suite of integration tests for modules.
 - [jenie-spring-test](jenie-spring-test/README.md)
 
+
+## License
+The Jenie project is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
