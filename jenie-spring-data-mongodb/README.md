@@ -81,5 +81,10 @@ MongoDB transactions work only on replica sets or sharded clusters. For more det
 public void txMethod(@DBKey String dbKey, String data) {
     // some logic
 }
+
+@MongoKeyBasedTransactional(key = "dbKey")
+public void txMethod(String data) {
+    // some logic
+}
 ```
 - For more detailed usage, refer to  [MongoKeyBasedTransactionAspectTests](src/test/java/org/jenie/spring/data/mongodb/transaction/MongoKeyBasedTransactionAspectTests.java).
