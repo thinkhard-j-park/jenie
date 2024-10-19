@@ -1,2 +1,2 @@
 # Jenie Spring Helloworld 
-- Spring Boot 기반의 실험용 서버입니다.
+  This is a server project based on Spring Boot. Experiments with various java based backend technologies. 
