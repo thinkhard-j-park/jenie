@@ -9,9 +9,6 @@ name: Containerize
 on:
   release:
     types: [created]
-  pull_request:
-    branches: # Specify your branches here
-      - develop
 
 jobs:
   build-publish-container:
