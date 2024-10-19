@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mongodb.client.MongoClient;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
@@ -41,4 +42,13 @@ public class MongoDBConnectorRegistry {
 		return this.connectors.get(clusterKey);
 	}
 
+	@ExcludeCodeCoverageGenerated
+	@Override
+	public String toString() {
+		//@formatter:off
+		return "MongoDBConnectorRegistry{" +
+				"connectors=" + this.connectors +
+				'}';
+		//@formatter:to
+	}
 }

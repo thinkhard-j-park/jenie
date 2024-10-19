@@ -9,7 +9,14 @@ dependencies {
     // others
     implementation 'com.github.ben-manes.caffeine:caffeine'
 
+    // jenie
+    implementation(project(":jenie-spring-core"))
+
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+}
+
+bootJar {
+    enabled = false
 }

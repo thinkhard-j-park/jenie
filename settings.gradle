@@ -1,4 +1,7 @@
+include 'jenie-spring-core'
 include 'jenie-spring-data-mongodb'
+
 include 'jenie-spring-helloworld'
 include 'jenie-spring-helloworld-common'
+
 include 'jenie-spring-test'

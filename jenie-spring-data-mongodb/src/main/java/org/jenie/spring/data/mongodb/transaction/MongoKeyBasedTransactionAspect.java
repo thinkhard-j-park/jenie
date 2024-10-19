@@ -24,7 +24,7 @@ public class MongoKeyBasedTransactionAspect {
 		this.mongoTemplateRouter = mongoTemplateRouter;
 	}
 
-	private String getDBKey(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional) {
+	String getDBKey(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional) {
 		MethodSignature signature = (MethodSignature) pjp.getSignature();
 		Method method = signature.getMethod();
 

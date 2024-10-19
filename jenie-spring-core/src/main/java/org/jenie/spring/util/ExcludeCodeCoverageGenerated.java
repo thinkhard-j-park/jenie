@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.common;
+package org.jenie.spring.util;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
