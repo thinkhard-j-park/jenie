@@ -16,8 +16,6 @@ public class MongoTemplateKeyTests {
 	@Test
 	void compareMongoTemplateKey() {
 		var key1 = new MongoTemplateKey("k1", null, null);
-		var refKey1 = key1;
-		assertThat(key1).isEqualTo(refKey1);
 		assertThat(key1).isNotEqualTo(null);
 		assertThat(key1).isNotEqualTo(String.class);
 

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -224,37 +226,46 @@ class MongoKeyBasedTransactionAspectTests {
 
 	static class TestClass {
 
+		private final Logger logger = LoggerFactory.getLogger(TestClass.class);
+
 		@MongoKeyBasedTransactional
 		String txMethod1(@DBKey String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 			return "success";
 		}
 
 		@MongoKeyBasedTransactional
 		String txMethod2(String arg, @DBKey String someKey, String someValue) {
+			this.logger.info("{}, {}, {}", arg, someKey, someValue);
 			return "success";
 		}
 
 		@MongoKeyBasedTransactional(key = "dbKey")
 		String txMethod3(String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 			return "success";
 		}
 
 		@MongoKeyBasedTransactional
 		void txMethod4(String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 		}
 
 		@MongoKeyBasedTransactional
 		void txMethod5(@DBKey String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 			throw new RuntimeException();
 		}
 
 		@MongoKeyBasedTransactional(noRollbackFor = { IllegalArgumentException.class })
 		String txMethod6(@DBKey String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 			return "success";
 		}
 
 		@MongoKeyBasedTransactional(rollbackFor = { RuntimeException.class })
 		String txMethod7(@DBKey String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
 			throw new RuntimeException();
 		}
 

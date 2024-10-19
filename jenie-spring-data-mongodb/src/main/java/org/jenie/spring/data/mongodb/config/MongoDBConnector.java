@@ -122,14 +122,6 @@ public class MongoDBConnector {
 		return this.cluster;
 	}
 
-	public MongoCustomConversions getCustomConversions() {
-		return this.customConversions;
-	}
-
-	public MongoMappingContext getMappingContext() {
-		return this.mappingContext;
-	}
-
 	public MongoClient getClient() {
 		return this.client;
 	}
