@@ -3,7 +3,7 @@ This module provides access to multiple MongoDB clusters and databases based on 
 
 ## Setting up multiple mongodb cluster access
 ### Routing configuration
-- Each Mongo cluster should create a 'dbconn' database with the schema below. The database name can be set differently via options.
+- Each mongo cluster should create a 'dbconn' database with the schema below. The database name can be set differently via options.
 - Configure the 'dbconn' collection within this database.
 
 ```mongodb-json
@@ -42,7 +42,7 @@ The application accesses the 'dbconn' database of the cluster configured with th
 
 | Property                                    | Purpose              | Description                                               |
 |---------------------------------------------|----------------------|-----------------------------------------------------------|
-| mongodb.setting.enabled                     | Module usage setting             | false                                                     |
+| mongodb.setting.enabled                     | Module usage setting             | Default is false                                          |
 | mongodb.setting.app-name                    | Application name connecting to MongoDB | -                                                         |
 | mongodb.setting.cluster.${clusterKey}.hosts | MongoDB connection address           | e.g. mongodb.setting.cluster.dckr.host[0]=localhost:27017 | 
 

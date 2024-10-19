@@ -14,8 +14,8 @@ A reusable module for shared functionality.
 
 ### Jenie Spring Helloworld
 A backend server project that experiments with server-side technologies like Servlet, Webflux, Rest, gRPC, MSA, Service Mesh, etc.
-- [jenie-spring-helloworld](jenie-spring-helloworld/README.md)
 - [jenie-spring-helloworld-common](jenie-spring-helloworld-common/README.md)
+- [jenie-spring-helloworld](jenie-spring-helloworld/README.md)
 
 ### Jenie Spring Test
 This project contains a suite of integration tests for modules.
