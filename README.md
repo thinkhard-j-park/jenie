@@ -22,5 +22,8 @@ This project contains a suite of integration tests for modules.
 - [jenie-spring-test](jenie-spring-test/README.md)
 
 
+## Coding Style, Formatting
+The coding formatting and style settings are stored in the [config](config/README.md).
+
 ## License
 The Jenie project is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
