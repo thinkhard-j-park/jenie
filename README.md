@@ -9,10 +9,11 @@ This is a project to experiment with Java-based technologies. The main goals of 
 
 ### Jenie Common Module
 A reusable module for shared functionality.
+- [jenie-spring-core](jenie-spring-core/README.md)
 - [jenie-spring-data-mongodb](jenie-spring-data-mongodb/README.md)
 
 ### Jenie Spring Helloworld
-A backend server project that experiments with technologies like Servlet, Webflux, Rest, gRPC, MSA, Service Mesh, etc.
+A backend server project that experiments with server-side technologies like Servlet, Webflux, Rest, gRPC, MSA, Service Mesh, etc.
 - [jenie-spring-helloworld](jenie-spring-helloworld/README.md)
 - [jenie-spring-helloworld-common](jenie-spring-helloworld-common/README.md)
 

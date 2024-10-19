@@ -1,25 +1,85 @@
 # Jenie Spring Data MongoDB
-key 기반의 다중 몽고 클러스터 및 데이터베이스에 접근, 트랜잭션을 처리하는 모듈을 제공한다. 
+This module provides access to multiple MongoDB clusters and databases based on keys.
 
-## 다중 몽고 클러스터 접근 설정
-### 몽고 클러스터 DBConn 데이터베이스 및 컬렉션
-- 각 클러스터에는 링크와 같은 형태의 여러 데이터베이스 접근을 위한 키와 데이터베이스 연결 정보를 담고 있는 컬렉션을 구성한다.
-- 어플리케이션에서 접근하는 여러 클러스터간에서 키는 중복되지 않은 유일한 값이어야 한다.
+## Setting up multiple mongodb cluster access
+### Routing configuration
+- Each Mongo cluster should create a 'dbconn' database with the schema below. The database name can be set differently via options.
+- Configure the 'dbconn' collection within this database.
 
-### 어플리케이션 설정
-어플리케이션을 아래 옵션으로 설정된 클러스터의 DBConn 데이터베이스에 접근하여 데이터베이스 라우팅 정보를 읽어온다.
-- 프로퍼티1
-- 프로퍼티2
+```mongodb-json
+{
+  "_id" : "...",
+  "clusterKey" : "dckr",
+  "dbKey" : "seoul",
+  "dbName" : "seoul"
+},
+{
+  "_id" : "...",
+  "clusterKey" : "dckr",
+  "dbKey" : "yongin",
+  "dbName" : "yongin"
+},
+{
+  "_id" : "...",
+  "clusterKey" : "dcus",
+  "dbKey" : "newyork",
+  "dbName" : "newyork"
+}
+```
+- The 'dbconn' collection contains database routing information.
+- The settings above allow access to 2 mongo clusters: dckr, dcus and 3 databases: seoul, yongin, newyork.
+- The name of the database containing the 'dbconn' collection can be changed through the following setting:
 
-### 몽고템플릿 캐시
-- 캐시키에 사용되는 옵션
+| Property                                            | Purpose                                              | Description         |
+|-----------------------------------------------------|------------------------------------------------------|---------------------|
+| mongodb.setting.cluster.${clusterKey}.database-name |Database containing connection information. | Default is 'dbconn' |
+- The 'dbconn' collection is accessed by the application to read and cache the configured dbKey and dbName.
+- Queries are executed on the database specified by dbKey using [MongoTemplateRouter](src/main/java/org/jenie/spring/data/mongodb/operation/MongoTemplateRouter.java).
 
-## 사용예제
+
+### Application Settings
+The application accesses the 'dbconn' database of the cluster configured with the options below to read database routing information
+
+| Property                                    | Purpose              | Description                                               |
+|---------------------------------------------|----------------------|-----------------------------------------------------------|
+| mongodb.setting.enabled                     | Module usage setting             | false                                                     |
+| mongodb.setting.app-name                    | Application name connecting to MongoDB | -                                                         |
+| mongodb.setting.cluster.${clusterKey}.hosts | MongoDB connection address           | e.g. mongodb.setting.cluster.dckr.host[0]=localhost:27017 | 
+
+- For detailed options, refer to [MongoDBSetting](src/main/java/org/jenie/spring/data/mongodb/config/MongoDBSetting.java).
+
+## Usage Example
 
 ### MongoTemplateRouter
-- 키을 기반으로 데이터베이스에 접근하는 템플릿을 가져온다.
+- Retrieves a template to access the database based on keys.
+```java
 
-### 트랜잭션 처리
-- MongoKeyBasedTransactional 어노테이션
-- 복제셋, 또는 샤디드 클러스터에서만 동작
-- 사용예제
+protected final MongoTemplateRouter mongoTemplateRouter;
+
+public Writer findWriterById(String dbKey, String id) {
+	var query = Query.query(Criteria.where("_id").is(id));
+	return this.mongoTemplateRouter.mongoTemplate(dbKey).findOne(query, Writer.class);
+}
+
+
+public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String title) {
+	var update = new Update();
+	update.set("title", title);
+	return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
+			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
+}
+```
+
+### Transaction
+
+MongoDB transactions work only on replica sets or sharded clusters. For more details, refer to [MongoDB Official Document](https://www.mongodb.com/docs/manual/core/transactions). 
+- Provides the MongoKeyBasedTransactional annotation, an extension of Spring's Transactional.
+```java
+
+@MongoKeyBasedTransactional
+public void txMethod(@DBKey String dbKey, String data) {
+    // some logic
+}
+```
+- For more detailed usage, refer to  [MongoKeyBasedTransactionAspectTests](src/test/java/org/jenie/spring/data/mongodb/transaction/MongoKeyBasedTransactionAspectTests.java).
