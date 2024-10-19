@@ -12,6 +12,7 @@ on:
   pull_request:
     branches: # Specify your branches here
       - develop
+
 jobs:
   build-publish-container:
     runs-on: ubuntu-latest
