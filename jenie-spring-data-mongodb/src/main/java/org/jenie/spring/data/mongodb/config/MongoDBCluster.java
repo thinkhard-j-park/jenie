@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.mongodb.Tag;
 import com.mongodb.TagSet;
 import com.mongodb.WriteConcern;
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.util.StringUtils;
 
@@ -220,6 +221,7 @@ public class MongoDBCluster {
 		this.writeConcernJournal = writeConcernJournal;
 	}
 
+	@ExcludeCodeCoverageGenerated
 	@Override
 	public String toString() {
 		//@formatter:off

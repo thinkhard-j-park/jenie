@@ -12,6 +12,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.data.mongodb.config.MongoDBCluster;
 import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
+import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
 
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
@@ -71,8 +72,7 @@ public class MongoTemplateRouter {
 					return dbConn;
 				}
 			}
-
-			return null;
+			throw new DBConnNotFoundException("DBConn must not be null: " + key);
 		}
 
 	}
@@ -147,10 +147,6 @@ public class MongoTemplateRouter {
 
 			var cluster = connector.getCluster();
 			var writeConcern = (key.writeConcern() == null) ? cluster.writeConcern() : key.writeConcern();
-
-			if (factory instanceof SimpleMongoClientDatabaseFactory simpleMongoClientDatabaseFactory) {
-				simpleMongoClientDatabaseFactory.setWriteConcern(writeConcern);
-			}
 
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 			if (key.readPreference() != null && !"primary".equalsIgnoreCase(key.readPreference().getName())) {

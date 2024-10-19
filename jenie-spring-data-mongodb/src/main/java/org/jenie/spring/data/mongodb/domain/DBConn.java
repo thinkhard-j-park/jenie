@@ -1,5 +1,7 @@
 package org.jenie.spring.data.mongodb.domain;
 
+import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -47,6 +49,7 @@ public class DBConn {
 		this.dbName = dbName;
 	}
 
+	@ExcludeCodeCoverageGenerated
 	@Override
 	public String toString() {
 		//@formatter:off
