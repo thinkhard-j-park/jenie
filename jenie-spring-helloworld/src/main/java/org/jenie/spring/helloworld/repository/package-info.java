@@ -1,4 +1,4 @@
 /**
- * 몽고에 접근하는 클래스들을 위치시킨다.
+ * Contains classes that access MongoDB.
  */
 package org.jenie.spring.helloworld.repository;

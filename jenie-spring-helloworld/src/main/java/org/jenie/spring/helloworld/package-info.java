@@ -1,4 +1,5 @@
 /**
- * Java Spring Boot 기반의 백엔드 서버 어플리케이션이다. 관련 기술의 연구, 개발, 테스트 용도의 서버이다.
+ * This is a backend server application based on Java Spring Boot. It is intended for
+ * research, development, and testing purposes of java based technologies.
  */
 package org.jenie.spring.helloworld;
