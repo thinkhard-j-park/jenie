@@ -1,4 +1,4 @@
 /**
- * MongoDB 커넥션 설정.
+ * MongoDB Connection Configuration.
  */
 package org.jenie.spring.data.mongodb.config;

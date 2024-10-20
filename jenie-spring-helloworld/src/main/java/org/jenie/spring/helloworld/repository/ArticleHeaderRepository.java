@@ -31,12 +31,13 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	}
 
 	/**
-	 * ArticleHeader 을 조회한다.
-	 * @param dbKey '클러스터-데이터베이스' 을 찾는 키
-	 * @param id 게시글 아이디
-	 * @param latest true 로 지정된 경우 Primary 에서 데이터를 읽는다. 그렇지 않는 경우는 SecondaryPreferred 을
-	 * 사용한다. SecondaryPreferred 을 사용하는 경우 ReplicaSet 동기화 시간 동안 최신 데이터가 아닐 수 있다.
-	 * @return db 에서 읽어온 ArticleHeader 데이터 .
+	 * Retrieves ArticleHeaderEntity.
+	 * @param dbKey key used to find the cluster, database.
+	 * @param id article ID.
+	 * @param latest if set to true, reads data from the Primary. Otherwise, uses
+	 * SecondaryPreferred. Note that when using SecondaryPreferred, the data might not be
+	 * the latest during the ReplicaSet sync period.
+	 * @return data read from the database.
 	 */
 	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id, boolean latest) {
 		AssertHelper.hasText(id, "id is required");

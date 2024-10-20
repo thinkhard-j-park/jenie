@@ -7,8 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * For more information on annotation-based filtering, refer to
  * <a href="https://github.com/jacoco/jacoco/wiki/FilteringOptions">Annotation-Based
- * Filtering</a> 을 참고한다. 어노테이션 이름에 Generated 가 포함되어야 한다.
+ * Filtering</a>. The annotation name must contain 'Generated'.
  *
  * @author thinkhardj park
  */

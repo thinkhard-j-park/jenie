@@ -1,4 +1,4 @@
 /**
- * domain 을 담고 있는 패키지.
+ * This package contains entity class for MongoDB connection.
  */
 package org.jenie.spring.data.mongodb.domain;
