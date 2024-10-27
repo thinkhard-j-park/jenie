@@ -1,13 +1,8 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:${springJavaFormatVersion}")
-    }
+plugins {
+    id 'org.springframework.boot' apply false
+    id 'io.spring.javaformat'
 }
 
 description = "Jenie, Java Genie!"

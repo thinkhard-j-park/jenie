@@ -1,3 +1,16 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}" apply false
+        id 'io.spring.javaformat' version "${springJavaFormatVersion}"
+        id 'com.google.cloud.tools.jib' version "${jibPluginVersion}" apply false
+    }
+}
+
 include 'jenie-spring-core'
 include 'jenie-spring-data-mongodb'
 
