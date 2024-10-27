@@ -1,6 +1,7 @@
 package org.jenie.spring.data.mongodb.transaction;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,11 +9,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 @Aspect
 @Component
@@ -43,6 +47,18 @@ public class MongoKeyBasedTransactionAspect {
 		}
 
 		var dbKey = mongoKeyBasedTransactional.key();
+
+		var expr = mongoKeyBasedTransactional.expr();
+		if (StringUtils.hasText(expr)) {
+			var parser = new SpelExpressionParser();
+			var context = new StandardEvaluationContext();
+			Parameter[] parameters = method.getParameters();
+			for (int i = 0; i < parameters.length; i++) {
+				context.setVariable(parameters[i].getName(), args[i]);
+			}
+			dbKey = parser.parseExpression(expr).getValue(context, String.class);
+		}
+
 		if (ObjectUtils.isEmpty(dbKey)) {
 			throw new IllegalArgumentException("dbKey parameter is empty");
 		}

@@ -39,4 +39,6 @@ public @interface MongoKeyBasedTransactional {
 
 	String key() default "";
 
+	String expr() default "";
+
 }

@@ -95,7 +95,7 @@ class MongoKeyBasedTransactionAspectTests {
 	}
 
 	@Test
-	void getDbKeyWithMethodAnnotation() throws NoSuchMethodException {
+	void getDbKeyWithMethodAnnotationKey() throws NoSuchMethodException {
 		// given
 		var dbKey = "dbKey";
 		var method = TestClass.class.getDeclaredMethod("txMethod3", String.class, String.class);
@@ -104,6 +104,42 @@ class MongoKeyBasedTransactionAspectTests {
 		given(this.pjp.getSignature()).willReturn(this.methodSignature);
 		given(this.methodSignature.getMethod()).willReturn(method);
 		given(this.pjp.getArgs()).willReturn(new Object[] { dbKey, "someValue" });
+
+		// when
+		var result = this.mongoKeyBasedTransactionAspect.getDBKey(this.pjp, methodAnnotation);
+
+		// then
+		assertThat(result).isEqualTo(dbKey);
+	}
+
+	@Test
+	void getDbKeyWithMethodAnnotationExpr() throws NoSuchMethodException {
+		// given
+		var dbKey = "dbKey";
+		var method = TestClass.class.getDeclaredMethod("txMethod8", String.class, String.class);
+		var methodAnnotation = method.getAnnotation(MongoKeyBasedTransactional.class);
+
+		given(this.pjp.getSignature()).willReturn(this.methodSignature);
+		given(this.methodSignature.getMethod()).willReturn(method);
+		given(this.pjp.getArgs()).willReturn(new Object[] { dbKey, "someValue" });
+
+		// when
+		var result = this.mongoKeyBasedTransactionAspect.getDBKey(this.pjp, methodAnnotation);
+
+		// then
+		assertThat(result).isEqualTo(dbKey);
+	}
+
+	@Test
+	void getDbKeyWithMethodAnnotationExprObj() throws NoSuchMethodException {
+		// given
+		var dbKey = "dbKey";
+		var method = TestClass.class.getDeclaredMethod("txMethod9", TestDto.class, String.class);
+		var methodAnnotation = method.getAnnotation(MongoKeyBasedTransactional.class);
+
+		given(this.pjp.getSignature()).willReturn(this.methodSignature);
+		given(this.methodSignature.getMethod()).willReturn(method);
+		given(this.pjp.getArgs()).willReturn(new Object[] { new TestDto(dbKey, "name"), "someValue" });
 
 		// when
 		var result = this.mongoKeyBasedTransactionAspect.getDBKey(this.pjp, methodAnnotation);
@@ -224,6 +260,9 @@ class MongoKeyBasedTransactionAspectTests {
 		verify(this.transactionManager).rollback(this.transactionStatus);
 	}
 
+	record TestDto(String service, String name) {
+	}
+
 	static class TestClass {
 
 		private final Logger logger = LoggerFactory.getLogger(TestClass.class);
@@ -267,6 +306,18 @@ class MongoKeyBasedTransactionAspectTests {
 		String txMethod7(@DBKey String someKey, String someValue) {
 			this.logger.info("{}, {}", someKey, someValue);
 			throw new RuntimeException();
+		}
+
+		@MongoKeyBasedTransactional(expr = "#someKey")
+		String txMethod8(String someKey, String someValue) {
+			this.logger.info("{}, {}", someKey, someValue);
+			return "success";
+		}
+
+		@MongoKeyBasedTransactional(expr = "#dto.service")
+		String txMethod9(TestDto dto, String someValue) {
+			this.logger.info("{}, {}", dto, someValue);
+			return "success";
 		}
 
 	}
