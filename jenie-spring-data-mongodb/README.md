@@ -86,5 +86,10 @@ public void txMethod(@DBKey String dbKey, String data) {
 public void txMethod(String data) {
     // some logic
 }
+
+@MongoKeyBasedTransactional(expr = "#dto.service")
+String txMethod(TestDto dto, String someValue) {
+	// some logic
+}
 ```
 - For more detailed usage, refer to  [MongoKeyBasedTransactionAspectTests](src/test/java/org/jenie/spring/data/mongodb/transaction/MongoKeyBasedTransactionAspectTests.java).
