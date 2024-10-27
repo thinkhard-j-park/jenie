@@ -1,5 +1,8 @@
 package org.jenie.spring.data.mongodb.config;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +16,8 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MongoDBConfigTests {
@@ -24,6 +29,9 @@ class MongoDBConfigTests {
 
 	@Mock
 	private MongoCustomConversions customConversions;
+
+	@Mock
+	private MongoCustomConversions.MongoConverterConfigurationAdapter converterConfigurationAdapter;
 
 	@BeforeEach
 	void setUp() {
@@ -58,6 +66,37 @@ class MongoDBConfigTests {
 		assertThat(registry.getConnector(clusterKey)).isNotNull();
 		assertThat(registry.getConnector(clusterKey).getCluster()).isNotNull();
 		assertThat(registry.getConnector(clusterKey).getCluster().getAppName()).isEqualTo(setting.getAppName());
+	}
+
+	@Test
+	void configureConverters() {
+		// when
+		this.mongoDBConfig.configureConverters(this.converterConfigurationAdapter);
+
+		// then
+		verify(this.converterConfigurationAdapter)
+			.registerConverter(any(MongoDBConfig.ZonedDateTimeReadConverter.class));
+		verify(this.converterConfigurationAdapter)
+			.registerConverter(any(MongoDBConfig.ZonedDateTimeWriteConverter.class));
+
+	}
+
+	@Test
+	void zonedDataTimeReadConverter() {
+		var zdt = ZonedDateTime.of(2024, 10, 27, 12, 1, 2, 0, ZoneId.systemDefault());
+		var source = Date.from(zdt.toInstant());
+		var converter = new MongoDBConfig.ZonedDateTimeReadConverter();
+		ZonedDateTime converted = converter.convert(source);
+		assertThat(converted).isEqualTo(zdt);
+	}
+
+	@Test
+	void zonedDataTimeWriteConverter() {
+		var source = ZonedDateTime.of(2024, 10, 27, 12, 1, 2, 0, ZoneId.systemDefault());
+		var converter = new MongoDBConfig.ZonedDateTimeWriteConverter();
+		Date converted = converter.convert(source);
+		assertThat(converted).isNotNull();
+		assertThat(converted.toInstant()).isEqualTo(source.toInstant());
 	}
 
 }

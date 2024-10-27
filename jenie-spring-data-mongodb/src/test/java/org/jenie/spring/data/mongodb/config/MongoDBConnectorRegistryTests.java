@@ -29,6 +29,15 @@ class MongoDBConnectorRegistryTests {
 		// given
 		var clusterKey = "cluster1";
 		var cluster = new MongoDBCluster();
+		cluster.setUser("test-user");
+		cluster.setPassword("<PASSWORD>");
+		cluster.setAuthDB("admin");
+		cluster.setDatabaseName("dbconn");
+		cluster.setTagSet("");
+		cluster.setMaxConnecting(10);
+		cluster.setMaxSize(100);
+		cluster.setMinSize(10);
+		cluster.setWriteConcernW("W1");
 		cluster.setHosts(List.of("192.168.0.1:27017", "192.168.0.2:27017", "192.168.0.3:27017"));
 		var connector = new MongoDBConnector(cluster, this.mappingContext, this.customConversions);
 		var registry = new MongoDBConnectorRegistry();
