@@ -92,7 +92,7 @@ record TestDto(String service, String name) {
 
 @MongoKeyBasedTransactional(expr = "#dto.service")
 String txMethod(TestDto dto, String someValue) {
-	// some logic
+    // some logic
 }
 ```
 - For more detailed usage, refer to  [MongoKeyBasedTransactionAspectTests](src/test/java/org/jenie/spring/data/mongodb/transaction/MongoKeyBasedTransactionAspectTests.java).
