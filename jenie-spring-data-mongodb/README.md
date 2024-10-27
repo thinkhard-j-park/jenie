@@ -87,6 +87,9 @@ public void txMethod(String data) {
     // some logic
 }
 
+record TestDto(String service, String name) {
+}
+
 @MongoKeyBasedTransactional(expr = "#dto.service")
 String txMethod(TestDto dto, String someValue) {
 	// some logic
