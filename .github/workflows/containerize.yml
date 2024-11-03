@@ -7,6 +7,9 @@
 
 name: Containerize
 on:
+  pull_request:
+    branches: # Specify your branches here
+      - develop
   release:
     types: [created]
 
