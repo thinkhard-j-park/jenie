@@ -1,4 +1,4 @@
-package org.jenie.spring.test.client;
+package org.jenie.spring.client;
 
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.DefaultConnectionKeepAliveStrategy;

@@ -47,7 +47,7 @@ public class ArticleService {
 					this.boardService.findBoardEntityById(service, articleEntity.getBoardId())))
 			.toList();
 
-		return ArticleHeaderList.from(list, param.size());
+		return ArticleHeaderList.from(list, param.getSize());
 	}
 
 	public Article viewArticle(String service, String id, boolean incViewCount) {

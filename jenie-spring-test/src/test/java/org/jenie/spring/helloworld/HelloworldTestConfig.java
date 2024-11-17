@@ -1,7 +1,7 @@
 package org.jenie.spring.helloworld;
 
+import org.jenie.spring.client.HttpClient;
 import org.jenie.spring.helloworld.operation.ArticleOperation;
-import org.jenie.spring.test.client.HttpClient;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

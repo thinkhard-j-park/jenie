@@ -1,11 +1,11 @@
 version = "${jenieSpringDataMongodbVersion}"
 
 dependencies {
-    implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")
-    implementation 'org.springframework:spring-core'
-    implementation(project(":jenie-spring-core"))
+	implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")
+	implementation 'org.springframework:spring-core'
+	implementation(project(":jenie-spring-core"))
 
-    testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+	testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }

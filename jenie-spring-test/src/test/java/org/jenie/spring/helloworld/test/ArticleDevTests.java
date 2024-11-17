@@ -6,14 +6,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("rc")
-public class ArticleRcTests extends HelloworldTests {
+@ActiveProfiles("dev")
+public class ArticleDevTests extends HelloworldTests {
 
 	@Test
 	void checkProperties() {
 		assertThat(this.testProperties).isNotNull();
-		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-rc");
-		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://rc-api:30000");
+		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-dev");
+		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://dev-api:30000");
 	}
 
 }

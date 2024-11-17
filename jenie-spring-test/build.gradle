@@ -1,28 +1,32 @@
 version = "${jenieSpringTestVersion}"
 
 ext {
-    httpClientVersion = '5.3.1'
+	httpClientVersion = '5.3.1'
+	jasyptVersion = '3.0.5'
 }
 
 dependencies {
-    // spring
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-test'
+	// spring
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // others
-    implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
-    // jenie
-    implementation(project(':jenie-spring-helloworld-common'))
+	// others
+	implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
 
-    // test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// jenie
+	implementation(project(':jenie-spring-helloworld-common'))
+	implementation(project(":jenie-spring-data-mongodb"))
+
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 bootJar {
-    enabled = false
+	enabled = false
 }
 
 test {
-    exclude '**/helloworld/**'
+	exclude '**/helloworld/**'
 }
