@@ -177,7 +177,7 @@ class ArticleHeaderRepositoryTests {
 		for (int i = 0; i < 3; i++) {
 			var headerEntity = new ArticleHeaderEntity();
 			headerEntity.setId("article-id-" + i);
-			headerEntity.setBoardId(param.boardId());
+			headerEntity.setBoardId(param.getBoardId());
 			headerEntity.setTitle(title + i);
 			headerEntity.setWriter(new Writer("wid-" + i, "name-" + i));
 			entityList.add(headerEntity);
@@ -200,31 +200,31 @@ class ArticleHeaderRepositoryTests {
 
 		assertThat(capturedQuery.getQueryObject().get("state")).isEqualTo(ArticleState.Normal.getCode());
 
-		if (StringUtils.hasText(param.boardId())) {
-			assertThat(capturedQuery.getQueryObject().get("boardId")).isEqualTo(param.boardId());
+		if (StringUtils.hasText(param.getBoardId())) {
+			assertThat(capturedQuery.getQueryObject().get("boardId")).isEqualTo(param.getBoardId());
 		}
 
-		if (StringUtils.hasText(param.prevArticleId())) {
+		if (StringUtils.hasText(param.getPrevArticleId())) {
 			Document doc = (Document) capturedQuery.getQueryObject().get("_id");
 			assertThat(doc).isNotNull();
 
-			if (SortCode.fromCode(param.sort()) == SortCode.TIME_DESC) {
-				assertThat(doc.get("$lt")).isEqualTo(param.prevArticleId());
+			if (SortCode.fromCode(param.getSort()) == SortCode.TIME_DESC) {
+				assertThat(doc.get("$lt")).isEqualTo(param.getPrevArticleId());
 			}
 			else {
-				assertThat(doc.get("$gt")).isEqualTo(param.prevArticleId());
+				assertThat(doc.get("$gt")).isEqualTo(param.getPrevArticleId());
 			}
 		}
 
-		assertThat(capturedQuery.getSortObject().get(SortOrder.fromCode(param.sort()).getField()))
+		assertThat(capturedQuery.getSortObject().get(SortOrder.fromCode(param.getSort()).getField()))
 			.isEqualTo(expectedSortOrder);
-		assertThat(capturedQuery.getLimit()).isEqualTo(param.size() + 1);
+		assertThat(capturedQuery.getLimit()).isEqualTo(param.getSize() + 1);
 
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(3);
 		assertThat(result).allSatisfy((headerEntity) -> {
 			assertThat(headerEntity.getId()).isNotEmpty();
-			assertThat(headerEntity.getBoardId()).isEqualTo(param.boardId());
+			assertThat(headerEntity.getBoardId()).isEqualTo(param.getBoardId());
 			assertThat(headerEntity.getTitle()).isNotEmpty();
 			assertThat(headerEntity.getWriter()).isNotNull();
 			assertThat(headerEntity.getWriter().getWid()).isNotEmpty();

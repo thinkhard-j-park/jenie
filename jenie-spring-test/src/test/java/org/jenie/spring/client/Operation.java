@@ -1,4 +1,4 @@
-package org.jenie.spring.test.client;
+package org.jenie.spring.client;
 
 import java.util.Collections;
 import java.util.Map;

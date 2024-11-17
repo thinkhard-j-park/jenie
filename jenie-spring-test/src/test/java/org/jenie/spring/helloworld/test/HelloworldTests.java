@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = { HelloworldTestConfig.class })
-abstract class HelloworldTests {
+public abstract class HelloworldTests {
 
 	@Autowired
 	protected HelloworldTestProperties testProperties;

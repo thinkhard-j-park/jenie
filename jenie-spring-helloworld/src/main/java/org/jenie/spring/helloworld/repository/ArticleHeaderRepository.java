@@ -60,19 +60,19 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 
 	public List<ArticleHeaderEntity> listArticleHeader(String dbKey, ListArticleHeaderRequestParam param) {
 		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode());
-		if (StringUtils.hasText(param.boardId())) {
-			criteria.and("boardId").is(param.boardId());
+		if (StringUtils.hasText(param.getBoardId())) {
+			criteria.and("boardId").is(param.getBoardId());
 		}
 
-		var sortOrder = SortOrder.fromCode(param.sort());
-		if (StringUtils.hasText(param.prevArticleId())) {
+		var sortOrder = SortOrder.fromCode(param.getSort());
+		if (StringUtils.hasText(param.getPrevArticleId())) {
 			switch (sortOrder) {
-				case TIME_DESC -> criteria.and("_id").lt(param.prevArticleId());
-				case TIME_ASC -> criteria.and("_id").gt(param.prevArticleId());
+				case TIME_DESC -> criteria.and("_id").lt(param.getPrevArticleId());
+				case TIME_ASC -> criteria.and("_id").gt(param.getPrevArticleId());
 			}
 		}
 		var sort = Sort.by(sortOrder.getDirection(), sortOrder.getField());
-		var query = Query.query(criteria).with(sort).limit(param.size() + 1);
+		var query = Query.query(criteria).with(sort).limit(param.getSize() + 1);
 		return this.mongoTemplateRouter.mongoTemplate(dbKey).find(query, ArticleHeaderEntity.class);
 	}
 

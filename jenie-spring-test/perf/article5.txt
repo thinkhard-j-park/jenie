@@ -1,0 +1,403 @@
+현대오토에버
+
+차트닫기
+종합정보
+시세
+차트
+투자자별 매매동향
+뉴스·공시
+종목분석
+종목토론실
+전자공시
+공매도현황
+종합정보
+투자자별 매매동향거래원 정보 : 일별 상위 5위 거래원의 누적 정보 기준 (20분 지연)
+거래원 정보
+거래원 정보
+매도상위	거래량	매수상위	거개량
+외국계추정합
+359	-359	0
+키움증권	12,156	한국투자증권	12,457
+한국투자증권	11,210	NH투자증권	10,915
+신한투자증권	9,383	신한투자증권	9,100
+삼성증권	8,319	키움증권	8,701
+KB증권	7,295	미래에셋증권	6,604
+외국인 기관
+외국인 기관
+날짜	종가	전일비	외국인	기관
+11/15	127,800	600	+6,623	-12,878
+11/14	128,400	600	-1,384	-929
+11/13	129,000	8,800	-12,912	-21,792
+11/12	137,800	4,500	-5,976	-7,193
+11/11	142,300	1,200	+3,579	+6,740
+11/08	143,500	4,800	-1,924	+34,177
+더보기
+[DD퇴근길] 네이버 밴드, 美 MAU 600만 돌파...11/15
+대기업 IT서비스 수장들, 변화보다 안정?…연말...11/15
+[유미's 픽] 삼성·LG·SK·현대 '빅4'는 웃는데…3...11/15
+"웨이모가 증명한 자율주행 AI시대…HL만도·현...11/14
+현대오토에버 ‘파트너스 데이’… 협력사 상생 지...11/14
+현대오토에버, 협력사 동반성장 위... 관련 13건11/13
+“차량용 SW 중요성 커져...국산제품 개발해야 가...11/13
+KB증권 "내년 AI 서비스 수익창출 본격화…삼성...11/13
+"AI산업, 인프라에서 서비스로…삼성SDS·현대차...11/13
+삼성SDS·현대오토에버 신사업 잘 나가네…3분...11/11
+더보기
+글쓰기
+내가 사는날11/16 12:14
+이 회사는 주주 안중에도 없는 하급 회사다...11/15 22:21
+속보]삼성전자, 10조원 규모 자사주 매입 나...11/15 20:58
+4분기 실적 소통11/15 17:13
+이친구도 합병할? 말 많지않았음?11/15 16:38
+이것도 큰그림의 일부인가??? [1]11/15 16:20
+국민연금 매수여부에 주가 달렸다11/15 15:41
+이거 글로비스에 1:0.5로 흡수된다는게 사실... [3]11/15 14:42
+IT는 역시 삼성11/15 13:20
+주제 파악을해야지--무슨 자율주행한다고--11/15 12:58
+더보기
+기업실적분석 테이블
+주요재무정보	최근 연간 실적	최근 분기 실적
+2021.12	2022.12	2023.12	2024.12(E)	2023.06	2023.09	2023.12	2024.03	2024.06	2024.09(E)
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+IFRS연결
+매출액	20,704	27,545	30,650	35,451	7,539	7,458	8,994	7,313	9,181	8,988
+영업이익	961	1,424	1,814	2,184	527	452	529	307	685	600
+당기순이익	714	1,162	1,403	1,747	390	365	331	261	527	500
+영업이익률	4.64	5.17	5.92	6.16	6.99	6.07	5.88	4.20	7.47	6.67
+순이익률	3.45	4.22	4.58	4.93	5.17	4.89	3.68	3.57	5.73	5.56
+ROE(지배주주)	7.26	8.00	9.01	10.28	9.88	9.94	9.01	8.65	9.26
+부채비율	70.53	75.76	78.55	 	61.33	60.40	78.55	68.43	74.34
+당좌비율	203.45	191.03	198.15	 	224.12	230.67	198.15	223.27	197.46
+유보율	9,885.23	10,688.82	11,394.86	 	10,961.04	11,220.40	11,394.86	11,294.82	11,669.53
+EPS(원)	2,702	4,154	5,024	6,212	1,381	1,302	1,206	926	1,880	1,640
+PER(배)	51.08	22.99	42.10	20.57	26.70	34.46	42.10	29.91	30.93	86.79
+BPS(원)	49,874	53,924	57,613	63,203	55,489	56,825	57,613	57,250	59,243
+PBR(배)	2.77	1.77	3.67	2.02	2.53	3.28	3.67	2.52	2.77
+주당배당금(원)	700	1,140	1,430	1,567	-		1,430
+시가배당률(%)	0.51	1.19	0.68		-		0.68
+배당성향(%)	27.50	27.44	28.47				118.58
+분기 실적은 해당 분기까지의 누적 실적에서 직전 분기까지의 누적 실적을 차감하는 방식으로 계산되므로,
+기업에서 공시한 분기 실적과 차이가 있을 수 있습니다.
+컨센서스(E) : 최근 3개월간 증권사에서 발표한 전망치의 평균값입니다.
+더보기
+(업종명 : IT서비스｜재무정보: 2024.06 분기 기준)
+종목명	현대오토에버*
+307950
+삼성에스디에스*
+018260
+포스코DX*
+022100
+카카오페이*
+377300
+카페24*
+042000
+현재가	127,800	139,600	21,350	21,900	30,200
+전일대비	600	200	1,350	450	50
+등락률	-0.47%	+0.14%	-5.95%	-2.01%	+0.17%
+시가총액(억)	35,047	108,019	32,459	29,482	7,324
+외국인비율(%)	1.62	19.10	6.52	37.76	15.95
+매출액(억)	9,181	33,690	3,530	1,855	758
+영업이익(억)	685	2,209	243	-73	69
+조정영업이익(억)	685	2,209	243	-73	69
+영업이익증가율(%)	122.99	-2.19	-30.81	25.08	221.00
+당기순이익(억)	527	1,905	204	6	67
+주당순이익(원)	1,880.45	2,282.54	132.71	28.69	298.74
+ROE(%)	9.26	8.12	18.25	0.16	16.28
+PER(%)	24.05	15.30	38.68	952.17	26.08
+PBR(배)	2.16	1.21	6.69	1.56	3.83
+더보기
+PER, PBR 수치는 최근 4분기 기준입니다.
+* 종목은 IFRS (연결) 회계기준을 적용한 종목입니다. (최근 분기보고서 기준이며, 기준 분기는 업종마다 다를 수 있습니다.)
+IFRS (연결) 적용 종목의 당기순이익 및 가치지표(주당순이익, PER, PBR)는 지배주주지분을 기준으로 산출하였습니다.
+투자정보
+시가총액
+시가총액	3조 5,048억원
+시가총액순위	코스피 104위
+상장주식수	27,423,982
+액면가l매매단위	500원 l 1주
+외국인한도주식수
+외국인한도주식수(A)	27,423,982
+외국인보유주식수(B)	444,785
+외국인소진율(B/A)외국인소진율(B/A) 상세설명
+1.62%
+투자의견
+투자의견l목표주가	4.00매수 l 209,615
+52주최고l최저	216,000 l 123,000
+PER/EPS
+PERlEPS(2024.06)추정PER EPS 상세설명
+24.05배 l 5,314원
+추정PERlEPS추정PER EPS 상세설명
+20.57배 l 6,212원
+PBRlBPS (2024.06)PBR | BPS 상세설명
+2.16배 l 59,243원
+배당수익률l2024.04배당수익률 상세설명
+1.12%
+동일업종 PER
+동일업종 PER	23.90배
+동일업종 등락률	-0.17%
+최근조회
+현대오토에버	127,800	600삭제
+
+코스피
+코스피 인기검색종목
+삼성전자	53,500	3,600
+LG에너지솔루..	371,000	51,000
+POSCO홀딩스	277,500	32,500
+유한양행	120,500	1,900
+한화오션	39,100	100
+현대차	206,000	4,500
+삼성SDI	246,500	18,000
+SK하이닉스	178,200	5,200
+두산에너빌리..	21,850	600
+NAVER	190,000	1,500
+코스피 코스닥 선물 코넥스
+코스피200 ETF 업종별 테마별
+상한가 하한가 상승 보합 하락
+거래상위 급증 급감
+고가대비급락 저가대비급등
+
+시가총액상위 외국인보유현황
+외국인매매 기관매매 프로그램매매
+관리·감리종목 신규상장종목
+증시자금동향 투자자별매매동향
+
+갭상승 종목 골든크로스 종목
+이격도과열종목 투자심리과열종목
+상대강도과열종목
+
+더보기
+대학수학능력시험일(11월 14일)...
+PC 증권 해외 종목 검색 도입 ...
+더보기
+
+{
+    "requestId": "ead98bc8db2842b784c0cdff55ddec9a",
+    "head": {
+        "version": "0.0.1",
+        "description": "Naver SSP Waterfall List"
+    },
+    "eventTracking": {
+        "ackImpressions": [
+            {
+                "url": "https://tivan.naver.com/sc2/1/"
+            }
+        ],
+        "activeViewImpressions": [
+            {
+                "url": "https://tivan.naver.com/sc2/2/"
+            }
+        ],
+        "clicks": [
+            {
+                "url": "https://tivan.naver.com/sc2/3/"
+            }
+        ],
+        "completions": [
+            {
+                "url": "https://tivan.naver.com/sc2/4/"
+            }
+        ],
+        "attached": [
+            {
+                "url": "https://tivan.naver.com/sc2/10/"
+            }
+        ],
+        "renderedImpressions": [
+            {
+                "url": "https://tivan.naver.com/sc2/11/"
+            }
+        ],
+        "viewableImpressions": [
+            {
+                "url": "https://tivan.naver.com/sc2/12/"
+            }
+        ],
+        "loadErrors": [
+            {
+                "url": "https://tivan.naver.com/sc2/91/"
+            }
+        ],
+        "startErrors": [
+            {
+                "url": "https://tivan.naver.com/sc2/92/"
+            }
+        ],
+        "lazyRenderMediaFailed": [
+            {
+                "url": "https://tivan.naver.com/sc2/93/"
+            }
+        ],
+        "mute": [
+            {
+                "url": "https://tivan.naver.com/sc2/5/"
+            }
+        ],
+        "close": [
+            {
+                "url": "https://tivan.naver.com/sc2/6/"
+            }
+        ]
+    },
+    "adUnit": "p_new_stock_sidebox",
+    "randomNumber": 89,
+    "adDivId": "_IframeBannerRight",
+    "advertiserDomains": [
+        "www.heydealer.co.kr"
+    ],
+    "adDuplicationKeys": [
+        "URL:https://www.heydealer.co.kr",
+        "GFA:372"
+    ],
+    "ads": [
+        {
+            "encrypted": "Ev7IYe3VhJjiMV7RhAvFsg7WNLKdcnQ24FZJLkoH8txy6GbWKypDpnl3DpzNsJuvVP5YVDNqNDlQyu7FOnTuFmESQhjW9s6c9P4e8ZTxjiJOOANALkKkQUOEXd10qeAbtqOqF377katxizQExnE14bedrIVLz4KdzH237vm6QE6-ztBUBubmBkqIOeA2MvnOwSoruyKzu8Qc2XzandYh7MU_XE02LiDM1-qOilsiHJUS-dfLsFdPePV7tbA2nOTUx9ihNc5BL6HR-pxAmAGsotTw3viwLFoK7ebWthr0O7SElXrM6MCcu8Ub2w5CLJ_Dc98DNFA-PIPk9VDaFawKUPOq8NJUseZWmxRO33cyspYRb2nFmBklWiKXFu98_y_wc732YIzt28cQlCbfHhxnOKkQh-qpOGegCZXTSYPXF6aY_h3U5IaaQwEiDFqB6Hd6W6x2ON3HDPF6CiQS3B1XQokXXpRMSc0hDmWTUeoqNm6ka-k7FL_aHFFzqi3njtcxMe_hTt_yd3j_tI7nWEUTygNV2JvZNjI1cxBMu_NYjtEYx5IJVDFb1B4gFQFYo7GT4aYZGRGzk-CuFah9MtL7tuvookxEcJz94se7_rug6CYHLvKVj1EPBU6B9N5YYJx_Vo4Aw5Pa8q59uwOhmDTVlM7iTlkYssu5JFP7SVebQLU_F-siKHRHpSzSdzx3UE6q2VplM9po42mTO_pAhfTlPddxbkaaV9MkcJiuPUW5OqFyR2eZpecFetnPgIQD_6O8eU13cO5fByYX6rR1QdxMkjgnLaU7ogZvZ7RHYm73n6tPq7Lrw9D-eWd4BrZjQUx0RIoNzJWnUt6f6aqMydB-6IPGzorHV5CNIUwJkROJ3hhqzpLzly6lu3Yqx2ixcTlD1JhkZe4r7CynpWE1RqTkDmdW75sxUgRUlI143RynXt_RmCFGwbTaMkjuz-HwdpNQAsIKgY0L0VgsuyKvzBSLFtVFCDZKHKfpMPceZpSkYtozZ0A7M9kU6uspNeT_to3xGcs90W4zkpxCAvQNTfIAHR6I5xPNhU4QXf4U9hsOa_wC4VQTyvkUyJakozgEnm0z",
+            "connectionType": "S2S",
+            "adProviderType": "IN_NAVER",
+            "adProviderName": "GFA",
+            "layoutType": "FLUID",
+            "creativeType": "NATIVE",
+            "renderType": "NN",
+            "eventTracking": {
+                "ackImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbackimp?eu=EU10043219\u0026oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026evtcd=BID_LOSE\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D\u0026calp=domestic\u0026ac=8902503\u0026src=6885731\u0026x_ti=1108\u0026brs=Y"
+                    }
+                ],
+                "attached": [],
+                "activeViewImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbimp?oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D"
+                    }
+                ],
+                "renderedImpressions": [],
+                "viewableImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbimp?oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D"
+                    },
+                    {
+                        "url": "https://g.tivan.naver.com/gfa/-uNv2mvHfI55h3hBcJFzyhIRuCB5wVFgPeHVe8qIO7O6YDkWj8pCtxtKiGzU-4F5x8LdtM33Zf7BuUOgio0Uaf-YwSKXjJQS4W7PZkYcqeWM3677J1kcaBdsYAJ01wPI4u-7ozps2hJYhxxEyYpMY0OJyDXFvcCXTyiQquIo4ZJ15Uc2aPj4ztUuc6WElvxL3zCTi-xN-Scvem4Wbk3bl4g52EAFEOycO3d91_Ex5tdeoxaYlaSsBuuSN-ZVww9V6xNpRj3vxHKdWm5uq5InARdbyuLmZBPoIBT6DIdeX2sV-JpgZ10GocgBhhZoUmApB_12c9IESLfNPPraBMRBx1_jlYrgY-2_trvbIUMX13YQXm5r718WbaJfZw5FTyLvjjEQM-UOBW3ADdsS_zvrkyqwcJyVWIqtGYgOEIVZnWtuyDjRn5lvuAyUGmahSVcfii0S5MYS8piYSYSHDaOT1MlnHQCvYJN28wJhlDoZpsRXBy0dru8sttAdfESV9ygixIKBYAZdeUfxLM0JEAZL3pUYja30H4_8nBMOI0sxjqXMiMAT2ynAkJCqK58x-3IhZK8kpjGJNmxPgaXRTQu0SkI-Cp0318fjCdnBTrpawkM9YBMDDsQXDQlsWCRZXhl_UIPsY-T7oojVQdBDzBJIPJQv5ey3sceRPKEoJY0-UTMZgA2pdE8XKR2ao1bnR9aNcYEZ3foDkny4lSmvbEisiDfB6Km3m6BOCRUOwVZilPQECvCDjRbxWG7e3iiZTbIh5VKVIHPJ74ElqoldK2oxT7GU0YBU5fLnE3YG6blRLiN1le6fx6jMjftJV8bb2FZbimWiCAmr1zWF39CnmqnRs1kXxYz2UXuY0N0y4pyLKSoPjEoEYls9-UG-WCJDnCFrosSo32O5MTY0CLp1W7FeG_JYK0aElI2glArTlko2xI7ElMFrwQ9tfH4KY8GvSN-B7-IkBG1AqIo2LMrIg8LonDu-Lit0tmG9lYHUX9PDuPSh9qe9SNVu07MzIp_uVlq9kxqHffl2l0x10f0rKFfydnOIzMHw8Dhy8YNoLi_hY0hskxoDaqCiXXg9YdBWUjrTHY289_1NIxSY-2xHe-_MyVIxk-NnUCKOHxk_E1vC366pJ2tff523tA4A9sDN88xT9zDRki8Hfi4Yv--WpHguQOBy7uk9g7eVhZE7NFJOMLs=/"
+                    }
+                ],
+                "clicks": [],
+                "vimp1px": [],
+                "vimp100": [],
+                "vimp100p": [],
+                "admute": [],
+                "advmute": [],
+                "like": [],
+                "unlike": [],
+                "close": [],
+                "bounce": [
+                    {
+                        "url": "https://g.tivan.naver.com/gfa/NyVCDJzUXii894KnAIcQizP4j35EgNhxp9NMf4H6VgfBUtX4RnhrrAaLa-RdFGANjMJd8l-xDV49M1jm-jMmw-WROvhIxH7rEE60Jw8AEN176yjTMDadxK1TVc4O_GFkVun8o7GZiKg7wH6ewiVzjZGbCZtqsT37P5gkd4TyYw-BESirDN2zhocdMy74dVfeh7Q7WxQ_dtFFAObhzzw8ru-h4_iKUTfJ6rHTT2XHaE8fNPKyPdaa92mClMOwtCrbFBTTC2TWXSH7J3MMpLyJfsJfcy9bQ1RmcceZMzWq3mgoRuDnZm7KMxtqeyj1uvJyHEYi9xsTi-6OTrzyJHBVJCVBdNBNjGbziEltZRSEGLCyjN1axBGP_C4uF6KAaIxJprntuQmUNDp32_x-ez2kLEzZnmwK_TNoMhanXxD18_eS8j33wtsUXxp10SwNV2tvy3eajKJdb9J4yVhExQGU5WSBI8FWrq4J-s2OO7O-owYtcp9r849CzoI2Fc7RBlqMlFuKfw2U-uPl_4dnW58bUN4pbEgiJvVyobZ4GQjb_X91WebBEbcXle_cvuuhQGqPgxlawW5zJ6yTLWBFvnM_5X0Aio7qBs6_QnN6S1it9_F4Z-AUe4uFPmeg9iZsM_oqx9QO1L4bZaGadO-ODanXDWKsshLXPmXC1i3WHyXnE54bh1By_ipe6o70fVhWhd0mEnQX2KZzJSAJpjX1lp5vN18yqQunHU2N1RPj7s7iY2biyFklZq0mJlwskBKy0E0iGe9h3Uh-EDveStw9Qpkm6xFm2xZFsg3ohbNcLHWnqE2WR3_sE4_OtxhVxv71ptxgqlJiJfFum-NQIaBIj4lW920f6Zt7OJwsgMo3qCz34UXVRjhm-ioAJFBZnvPsQGtklhAmzrNov0FcibLOoIEdMJNmfsR62XjevLRbVYlFKO5MAF8MKy6uJJw6SsTzaKXMMRxghtDf04g520WRcU4YHVRPjn-VGY-QSrB-xUEEobxpoq2p-zAffmONj-fEgOTuLm--CHWYrpBsvkg8UQHvm9HVCnWz01V8LDLmNxYlKpfDJ5OU9Z8vgSq-n0l40oowt-B9Gob3neJcsbzgUIVzZmvuG1kJ7QOx2OWo-ubBKFOmJshefES_WAX0hdh0YQjfnMcPVjVRY94EXBUC0PGSb1ZQVJxEyxU3KePnrVKZpJGs8npPWEddsJ2ExVfGT2Wh/"
+                    }
+                ]
+            },
+            "adInfo": {
+                "placeId": "655dc18a10174e001935a3c3",
+                "adomain": [
+                    "www.heydealer.co.kr"
+                ],
+                "crid": "18999080",
+                "exp": 600,
+                "encoded": 0,
+                "adchoice": {
+                    "mute": "https://g.tivan.naver.com/gfa/xVvrt5gKGfQ_QMEIL12I99DOswKGF5d80RjVeTb8V-Ju9uH73n2EdD3F1c02DcylgWFq_2nasb00elndIbD7YmXUpMoIYMaqLsR1r_w8c1nGrpWZ9fFJh_Wn9qXAxEwIXc2FzrztIVPZFFHbRO0S1A-vdqR2x5YiVSe7SRzQNGRve4HXdwmh2WL6NuvwSnjWQzGSMjAhq23iA49m12tiTqwbsPDmif26U55hmYpWxvFJe_ny2aERranbwNQazCR2f7iAOWxTn3yJtaJ3HaxoQ0lsdDQamg0RGSHpBsAnv83s_mZbgEksIFB8dyHxDI0YMR2kyE40Ls5yZdSICe4RgS_2FfbAzjzGs3LtIwzdGuvyYqv4pdQCBbmbYBI6ZFRcUF6yqiq4_9zm-ZVMwVzKUxlVb_vpNP9uWdxWBb_fyRsuj6nhU_fT1qPkMT9v5P_73fmuiGftQuFXjWKPKyOEPTXJUqBEgy8o0N8C1o9HBitVqdWXMuQXI3izoj8mVw4x8oXDKrCH-iqF3XeAKA_fMr4d8ZznP8Fczjjcxbs9NmDqMCrwhRwmtDtAYyIAgCdZxhY_cbxnylM7_xkw2CYzRHyjdBVJ1K1PiuXevoNNd98Q6B8ZWJzQdWLMubESGI6XSpgVLU5t8_3mqlnoPOxyYmgdiju71qxjttVh1G8ocqeyJm-EF91qVa_kPB9mYcEucPYjRsM8GAbYLenqcOmLI1GP-iQDkYJlBbDjrmyugq6hcjUEu7Oe3Mak2sXbkmXTOb6FWILTpd9x948G874x0oirc_qnuKTKiqug1hzfN0jOLJWWTjQGlk2hQj_0zmKknBcD90utFOXf6PipyHGYE-S49isDIe78BbsQBCqP8wbVrklqwH0Z815g16FaH6_ppXDodW-VcDoEcSqL9XKGqjLLfaGVu5VzaAD_TVHKqMxHU6tHUTsVEGtbf1SqXTyA-nkAb76R0NEKRzlpB1r40P0AGSrHSClxF-kqeRzlsB5QtNB94rLmykKUG3Qq8K2Tn-xL1AgytsmAMLyMrYJzOvCKg3Cf5pocIqzvP472nGTu7amKXsiMwwuZepIN_Uy-HBagpeEfHT4nUk3FS1OfLHAyWuIc-fPgLb4ciFj20bKGeevoeozxrw3DiROZf8gIjd3CZ287xoLZJLcnoaEVswT7dw-UXliBKkgOJj4HIBt1xMp6bRYk01vg2FBNhv8p/?reason=${ADMUTE_REASON}"
+                },
+                "adStyle": {
+                    "type": "FN",
+                    "id": "10025",
+                    "deco": {
+                        "body": "\u003cdiv id=\"ad-element\" class=\"gfa_native_topic_column_ad side_ad\" data-gfp-role=\"adChoicePos\"\u003e  {% if (o.assets[0].notice) { %}  \u003ca class=\"link_area show_text\" data-gfp-role=\"link\"\u003e    {% } else { %}    \u003ca class=\"link_area\" data-gfp-role=\"link\"\u003e  {% } %}    \u003cdiv class=\"thumb_area\"\u003e      \u003cdiv class=\"thumb_image\" style=\"background-image: url({%=o.assets[0].image%})\"\u003e\u003c/div\u003e    \u003c/div\u003e    \u003cdiv class=\"content_area\"\u003e      \u003cstrong class=\"content_title\"\u003e{%=o.assets[0].title%}\u003c/strong\u003e      \u003cp class=\"content_context\"\u003e{%=o.assets[0].desc%}\u003c/p\u003e      {% if (o.assets[0].notice) { %}      \u003cspan class=\"content_sub_text\"\u003e{%=o.assets[0].notice%}\u003c/span\u003e      {% } %}      \u003cdiv class=\"source_box\"\u003e        {% if (o.assets[0].cta) { %}        \u003cspan class=\"content_landing\"\u003e{%=o.assets[0].cta%}\u003c/span\u003e        {% } %}        \u003cspan class=\"content_company\"\u003e{%=o.assets[0].sponsor%}\u003c/span\u003e      \u003c/div\u003e    \u003c/div\u003e  \u003c/a\u003e\u003c/div\u003e\u003clink rel=\"stylesheet\" href=\"https://ssl.pstatic.net/tveta/libs/native_deco/10025/css/gfa_native_topic.e24879b961.css\"\u003e\u003cscript type=\"text/javascript\" src=\"https://ssl.pstatic.net/tveta/libs/native_deco/10025/js/pc_right.8fd81c1e53.js\" async charset=\"utf-8\"\u003e\u003c/script\u003e"
+                    },
+                    "visual": {
+                        "id": "1957371814_pc_right_240_240_N_stock"
+                    }
+                },
+                "nativeData": {
+                    "link": {
+                        "curl": "https://g.tivan.naver.com/gfa/qAWqYWsJm6K-Yf0G_UMx5MPSQES8umgqH-Zelumo5bMH_P8FiuHiLBHAtSUOiyz3vVuKoXgY0QvZl7gTHvmthhwdARPcJUvZeICJksSBGCXG_0-WOnblewB9UgcimyfmveKDNtX9u36JxRAmaP9GJt3dlG_8SGupbod0fyl1AEVxJsMbbzlGSB23IZj_mfrfdO4ZoUZaSzrLJdB1H1AFuaA5fGQDyiHKxN0TjOixyThOyLHTuH4x7bFYmIVFKKdio5u0frki_sLOZrjZpTrznzC_Y0PiDb5oPipousC2A9_frhtEMxYh_9Jd8jNPTK0A5d8m2gBTcwsUjOoum2whyfMlSw5VVhhjLLAUDVMWKm3aAuwIUvh9LcuXCYP9Rc0TyUg6OmsNUftY5WPVZye2EzziiDU-cup6seYSfiixGxHuV8egHMdC_NlVyr7UU6o59XnW3kDKUhbV8n3rugEGn19Amlqd91bKdLOg70egEMwwwM2dHVI3mIoinVvO9Ml6TloDXp0jaaCNoR7G8VV4aBw3lY9C67zkihs4FWA7km8h5ApxM832uIgsmBUK-x_OIwbWauI_AlYRp3oXIyfFx_4OMH8k0IHjQlbtpLjycRwY2jQM9XFHVrYSiinRXBQCdi9eCNS-wW8ZSvBeKT8-rza8LASqpNeoW005cT2L-O1fXaIRkCGBgMgKbk_GjW3X1VcJEXl8BPYjuwnQWxphClF-OBY_BCCeStkLtVJ__yUJJR9V-K6OQ3AA-ObNK8xjFt8KkwSR4E4X02Q2FWhmvMhf3LLq449CPpLk1Ki02czmRj-YP4RCNcY1vUM3j2en5wjRIxX8n6FEQpmw9AzD3aGonkAQVZzAL59VCbHFMomLOSfw4XgXppcahRCmw7NvfV8EOh52B8tWiS2Er9T3am9uSyreW6BbT3sogUoW1UYDlYbJZGyOe5oiyx7P8xtPnd6oZ9bov9oSj9Kf2JWeAwOOmInaaZSPKdt3iFTve3lv9CmKq9iilqyEOI3TI__RYKWXaMNcDMFofXp_KWnhLModfH-CypcDgZR5hWOJFY2d8IuH539PCLPgWc4sdnn5cWAhzMyEevsCiwrhzqMH6Ykd9x-1vQXdrj5U54EXy6pBMRAd1umLfjIE6jDPC7KLWhAMMbpk5vFDF7Y4PkqlfeNP0JIHNmF8pl34QDUMMwLnblotEkQUa37NWIVmrcqQP04GoU89UnN42ewXtbP-faP-MMGT9ErNolFuVn8Zl0cXCgmx2klHwMfufGUVVzJkikGKgeDMFn10Yk8fNosbToKqSmivkv8SwX97UWz0dmHgB4b3nb0GbYyw4JIEopdzcG5GMIkeI6J9_KD9l4CgrQ==/",
+                        "ebp": 1
+                    },
+                    "title": {
+                        "text": "폐차 가격 80만원 더 받는 법!"
+                    },
+                    "icon": {
+                        "src": "https://naverpa-phinf.pstatic.net/MjAyMTEyMzFfMjYz/MDAxNjQwOTMyMTM1ODAz.AZLIK8ppJurUujhGbjih8ebAFHyb8oWgbqBN_VuOJHMg.5HrcOUAgOst5n5MZpiGS7-cgi5Dq8ShnsbERQSvI2nEg.PNG/heydealer_profile.png",
+                        "w": 300,
+                        "h": 300
+                    },
+                    "media": {
+                        "type": 1,
+                        "src": "https://naverpa-phinf.pstatic.net/MjAyMzEyMTRfMTc0/MDAxNzAyNTQyMTg5OTYy.cXbqMz_vN8E1o6M1TW_XwJqyYU06rHNx47zRm_wjYD4g.S55q_QvF2qIbvCrLOnh_Ij-J_emuegBSkD_3BxumYhYg.JPEG/Frame_1175_170254218994116509071398456048618.jpg",
+                        "w": 342,
+                        "h": 228
+                    },
+                    "sponsor": {
+                        "text": "헤이딜러"
+                    },
+                    "desc": {
+                        "text": "딱 1분이면 가능!"
+                    },
+                    "desc2": {
+                        "text": "폐차 견적 확인하세요"
+                    },
+                    "cta": {
+                        "text": "더 알아보기"
+                    }
+                }
+            }
+        },
+        {
+            "encrypted": "gAiI9tZCVgCzpTg5sLBssUBbs4KldP5vZaxRlCqeFOSktvvGeGvRGpTHh_B9PANSYcecx5Ntk2g6YHjRrFGlZj6oqr8ymuLMHf__z8cZ5mga1yjiWJ2cUeXXnqQFymRlSHrU0NLsRJVqvu0LlS-UKCzJ2IOgBikDa3ZQXW-XeMs0vA-i-PVh2IQvgSMcjibLNLQ5UFfeD8ffYGsZJZNLwgMf9XogSMkKUAP2c3KFtQxoYYD88Z32QEa7VfFspYYi9kxw5gWcb0f_XTHDcKb47k04KR8AOjyp1E7CFKMw9Xhm-RrTvWECqLQWj9J-rJcwkhUHd9sq4xQ3xdXZeJQBkovhyL3mFVh6Q-_XCZRf2B53sWRCzFfbmqeavPPNE7ul8gml1-FVpTwOSP7D4D9u9vpS2f4zq9-TcgiAt99msbP0fdEaiVM7WGQr5DHcMr5squ9mBzzhun578Ve9HfTvG-229jh9FlPyQbwFqwTKA-Lwp4RRp2vgzpnbb3x6rgpdxdti5Qb1FA-6cDhTh-WKov_2KIMv103F1RenKSveIfnqeWlFgB7LxWEH5kIUdVe0ePSSz_ApWcNVOsNbbkHOzYNFm-W1D7Y8WcFPtgzBse3rGTicGCSv9Vy2BSD7e3Cp9OEznvN4iL5UOFC8JIgK1h3TWR7yFa27310I7S-FqJ6YrzZip_YrB1yffAXjpxWE2uIj6kl_IDPFTkOYzzHMCnXbmHJzMqBTmOgdeyp-Scr3ZOKxU_eDxEWeJ6Qxfyb_dkjlFUkUrbFAu0I2cTLhB8S2J1S5IRtWAoC1OBrLrRfvdR5y5eIFFAtf3lterQYIKpzGM-Q-fSe1kXyBmSgF0hvZDGFVlCpRbPO5u_zZUpE=",
+            "connectionType": "S2S",
+            "adProviderName": "GFP",
+            "layoutType": "FLUID",
+            "creativeType": "BANNER",
+            "renderType": "EMPTY",
+            "eventTracking": {
+                "ackImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbackimp?eu=EU10043219\u0026oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026evtcd=BID_LOSE\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D\u0026calp=domestic\u0026ac=8902503\u0026src=6885731\u0026x_ti=1108\u0026brs=Y"
+                    }
+                ],
+                "attached": [],
+                "activeViewImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbimp?oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D"
+                    }
+                ],
+                "renderedImpressions": [],
+                "viewableImpressions": [
+                    {
+                        "url": "https://siape.veta.naver.com/openrtb/nbimp?oj=zxUj0VPTJjuLkquC7UxWr2nkyofdJlIOmmHkBKQmkfxDO%2FUCLMv95anuPqy0lB7gkqyePEfBmmgiAAtLbukWFMDuD5pmjUG2goDPHkT9sThLuJDU0U7ybuMdACR5zvxaCKLV6feE4AiqR9GzOYD1374O0jsM%2FgosZxHKTXsjYaWCTbrL%2BhrjQnsQ2wwpuoplbH%2BFwbTnjCf0Aaq06wQa4r8GYPs3lvAiJ6spOSAwFpxW5%2BeZVeZ2OrBO4q%2FlJ9TU5OI0GV042yq2iADVK%2BNhjHNd0t4A6XOCq2w9tnt1yc24NkUWn%2Bd177a8cTb6JT7YzWazcueel28gldJVIr05XqsOUuRgj2Cm07sC%2BetQQTUt3Hxt5rsCxofNM6veR7Uc0zpdQ1UPLkJY3l0e7imD9vGIpi6aIjpPMkBdesnnRLY\u0026rk=L8vuJmPE0oxQCUVnvP6oww\u0026eltts=b3ZxVm43%2Fph%2BFRf2uH0UZQ%3D%3D"
+                    }
+                ],
+                "clicks": [],
+                "vimp1px": [],
+                "vimp100": [],
+                "vimp100p": [],
+                "admute": [],
+                "advmute": [],
+                "like": [],
+                "unlike": [],
+                "close": [],
+                "bounce": []
+            },
+            "adInfo": {
+                "responseSize": {
+                    "height": 0,
+                    "width": 0
+                }
+            }
+        }
+    ]
+}

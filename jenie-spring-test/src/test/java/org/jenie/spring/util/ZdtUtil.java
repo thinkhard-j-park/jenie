@@ -1,4 +1,4 @@
-package org.jenie.spring.test.util;
+package org.jenie.spring.util;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
