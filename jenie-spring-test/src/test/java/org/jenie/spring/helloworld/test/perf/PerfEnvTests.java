@@ -2,6 +2,7 @@ package org.jenie.spring.helloworld.test.perf;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = { HelloworldPerfConfig.class })
 @ActiveProfiles("perf")
 public class PerfEnvTests {
+
+	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(PerfEnvTests.class);
 
 	@Autowired
 	private MongoDBSetting mongoDBSetting;
@@ -79,32 +83,52 @@ public class PerfEnvTests {
 				Arguments.of("jenie-hello", BOARD_ID_HELLO_FREE));
 	}
 
+	@Disabled
 	@ParameterizedTest
 	@MethodSource("provideDBKeyAndBoardId")
 	void bulkInsert_1_000_000_records(String dbKey, String boardId) throws IOException, InterruptedException {
 		var titleAndContentList = readArticles();
-		for (int i = 0; i < 1_000; i++) {
-			Collections.shuffle(titleAndContentList);
-			var articleList = new ArrayList<Article>();
-			for (String[] titleAndContent : titleAndContentList) {
-				var title = titleAndContent[0];
-				var content = titleAndContent[1];
-				var objectId = new ObjectId();
-				var articleHeader = ArticleHeader.builder()
-					.id(objectId.toString())
-					.board(Board.builder().id(boardId).build())
-					.state(ArticleState.Normal)
-					.writer(new Writer("perf-tester", "perf-tester"))
-					.title(i + " " + title)
-					.actionDateTime(new ActionDateTime())
-					.build();
+		for (int j = 0; j < 100; j++) {
+			// 10,000
+			for (int i = 0; i < 1_000; i++) {
+				Collections.shuffle(titleAndContentList);
+				var articleList = new ArrayList<Article>();
+				for (String[] titleAndContent : titleAndContentList) {
+					var title = titleAndContent[0];
+					var content = titleAndContent[1];
+					var objectId = new ObjectId();
+					var articleHeader = ArticleHeader.builder()
+						.id(objectId.toString())
+						.board(Board.builder().id(boardId).build())
+						.state(ArticleState.Normal)
+						.writer(new Writer("perf-tester", "perf-tester"))
+						.title(i + " " + title)
+						.actionDateTime(new ActionDateTime())
+						.build();
 
-				var article = new Article(articleHeader, content);
-				articleList.add(article);
+					var article = new Article(articleHeader, content);
+					articleList.add(article);
+				}
+
+				this.articleRepository.bulkWriteArticle(dbKey, articleList);
 			}
-
-			this.articleRepository.bulkWriteArticle(dbKey, articleList);
+			Thread.sleep(1000);
+			logger.info("{} records inserted", (j + 1) * 10_000);
 		}
+	}
+
+	static Stream<Arguments> provideDBKeyAndCount() {
+		return Stream.of(Arguments.of("jenie-olleh", 1000), Arguments.of("jenie-hello", 1000));
+	}
+
+	@Disabled
+	@ParameterizedTest
+	@MethodSource("provideDBKeyAndCount")
+	void getRandomIds(String dbKey, int count) throws IOException {
+		var filePath = "perf/" + dbKey + "-ids.txt";
+		List<String> ids = this.articleRepository.getRandomIds(dbKey, count);
+		Files.write(Path.of(filePath), ids);
+		logger.info("{}: {} records were written.", filePath, count);
 	}
 
 }

@@ -10,17 +10,15 @@ import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.core.BulkOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 @Repository
 public class ArticleRepository extends MongoDBRepository {
-
-	private static Logger logger = LoggerFactory.getLogger(ArticleRepository.class);
 
 	ArticleRepository(MongoTemplateRouter mongoTemplateRouter) {
 		super(mongoTemplateRouter);
@@ -45,7 +43,6 @@ public class ArticleRepository extends MongoDBRepository {
 			.execute();
 
 		Assert.notNull(bulkWriteResult, "article-header bulkWriteResult must be not null");
-		logger.info("{} records inserted to article-header", bulkWriteResult.getInsertedCount());
 		return bulkWriteResult;
 	}
 
@@ -61,13 +58,22 @@ public class ArticleRepository extends MongoDBRepository {
 		}).collect(Collectors.toList());
 
 		var template = this.mongoTemplateRouter.mongoTemplate(dbKey);
-		var bulkWriteResult = template.bulkOps(BulkOperations.BulkMode.ORDERED, "article-content")
+		var bulkWriteArticleContent = template.bulkOps(BulkOperations.BulkMode.ORDERED, "article-content")
 			.insert(articleContentList)
 			.execute();
 
-		Assert.notNull(bulkWriteResult, "article-content bulkWriteResult must be not null");
-		logger.info("{} records inserted to article-content", bulkWriteResult.getInsertedCount());
-		return bulkWriteResult;
+		Assert.notNull(bulkWriteArticleContent, "article-content bulkWriteResult must be not null");
+		return bulkWriteArticleContent;
+	}
+
+	public List<String> getRandomIds(String dbKey, int size) {
+		var aggregation = Aggregation.newAggregation(Aggregation.sample(size), Aggregation.project("_id"));
+		AggregationResults<Document> results = this.mongoTemplateRouter.mongoTemplate(dbKey)
+			.aggregate(aggregation, "article-header", Document.class);
+		return results.getMappedResults()
+			.stream()
+			.map((doc) -> doc.getObjectId("_id").toString()) // ObjectId 변환
+			.toList();
 	}
 
 }
