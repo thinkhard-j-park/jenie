@@ -15,6 +15,7 @@ dependencies {
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'
 	implementation "com.google.code.findbugs:jsr305:${findBugsVersion}"
+	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
 
 	// jenie
 	implementation(project(":jenie-spring-core"))

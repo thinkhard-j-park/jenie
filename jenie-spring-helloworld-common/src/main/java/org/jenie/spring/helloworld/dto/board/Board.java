@@ -1,9 +1,23 @@
 package org.jenie.spring.helloworld.dto.board;
 
+import org.jenie.spring.helloworld.grpc.BoardMessage;
+
 public record Board(String id, String name, String rootId, String parentId) {
 
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public static BoardMessage toProtoMessage(Board board) {
+		if (board == null) {
+			return null;
+		}
+		return BoardMessage.newBuilder()
+			.setId(board.id())
+			.setName(board.name())
+			.setRootId(board.rootId())
+			.setParentId(board.parentId())
+			.build();
 	}
 
 	public static class Builder {

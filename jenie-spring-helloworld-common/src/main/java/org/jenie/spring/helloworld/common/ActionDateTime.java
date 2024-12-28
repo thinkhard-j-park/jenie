@@ -2,6 +2,9 @@ package org.jenie.spring.helloworld.common;
 
 import java.time.ZonedDateTime;
 
+import com.google.protobuf.Timestamp;
+import org.jenie.spring.helloworld.grpc.ActionDateTimeMessage;
+
 public class ActionDateTime {
 
 	private ZonedDateTime createdAt = ZonedDateTime.now();
@@ -9,6 +12,26 @@ public class ActionDateTime {
 	private ZonedDateTime updatedAt;
 
 	private ZonedDateTime deletedAt;
+
+	public static ActionDateTimeMessage toProtoMessage(ActionDateTime actionDateTime) {
+		if (actionDateTime == null) {
+			return null;
+		}
+
+		return ActionDateTimeMessage.newBuilder()
+			.setCreatedAt(toProtoMessage(actionDateTime.createdAt))
+			.setUpdatedAt(toProtoMessage(actionDateTime.updatedAt))
+			.setDeletedAt(toProtoMessage(actionDateTime.deletedAt))
+			.build();
+	}
+
+	private static Timestamp toProtoMessage(final ZonedDateTime zonedDateTime) {
+		if (zonedDateTime == null) {
+			return null;
+		}
+
+		return Timestamp.newBuilder().setSeconds(zonedDateTime.toEpochSecond()).build();
+	}
 
 	public ZonedDateTime getCreatedAt() {
 		return this.createdAt;

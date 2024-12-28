@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "org.jenie.spring.helloworld.grpc";
+option java_outer_classname = "ArticleGrpcProto";
+option java_multiple_files = true;
+
+service ArticleService {
+  rpc GetArticleHeaderById(GetArticleHeaderByIdRequestMessage) returns (ArticleHeaderMessage);
+}
+
+message GetArticleHeaderByIdRequestMessage {
+  string service = 1;
+  string id = 2;
+  bool latest = 3;
+}
+
+message ArticleHeaderMessage {
+  string id = 1;
+  BoardMessage board = 2;
+  sint32 state = 3;
+  string title = 4;
+  ReactionMessage reaction = 5;
+  WriterMessage writer = 6;
+  ActionDateTimeMessage action_date_time = 7;
+}
+
+message BoardMessage {
+  string id = 1;
+  string name = 2;
+  string root_id = 3;
+  string parent_id = 4;
+}
+
+message ReactionMessage {
+  sint64  view_count = 1;
+}
+
+message WriterMessage {
+  string wid = 1;
+  string name = 2;
+}
+
+message ActionDateTimeMessage {
+  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp updated_at = 2;
+  google.protobuf.Timestamp deleted_at = 3;
+}

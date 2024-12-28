@@ -8,13 +8,13 @@ pluginManagement {
         id 'org.springframework.boot' version "${springBootVersion}" apply false
         id 'io.spring.javaformat' version "${springJavaFormatVersion}"
         id 'com.google.cloud.tools.jib' version "${jibPluginVersion}" apply false
+        id 'com.google.protobuf' version "${protobufPluginVersion}" apply false
     }
 }
 
 include 'jenie-spring-core'
 include 'jenie-spring-data-mongodb'
-
 include 'jenie-spring-helloworld'
 include 'jenie-spring-helloworld-common'
-
 include 'jenie-spring-test'
+

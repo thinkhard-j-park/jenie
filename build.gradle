@@ -3,6 +3,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
 	id 'org.springframework.boot' apply false
 	id 'io.spring.javaformat'
+	id 'com.google.protobuf' apply false
 }
 
 description = "Jenie, Java Genie!"
@@ -11,6 +12,7 @@ def jacocoProjects = ['jenie-spring-core', 'jenie-spring-data-mongodb', 'jenie-s
 def bootProjects = ['jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
 def testProjects = ['jenie-spring-test']
 def svcProjects = ['jenie-spring-helloworld']
+def protobufProjects = ['jenie-spring-helloworld-common']
 
 ext {
 	mainProjs = subprojects.findAll { it.name !in testProjects }
@@ -19,6 +21,7 @@ ext {
 	bootProjs = subprojects.findAll { it.name in bootProjects }
 	svcProjs = subprojects.findAll { it.name in svcProjects }
 	libProjs = subprojects.findAll { it.name !in svcProjects }
+	protobufProjs = subprojects.findAll { it.name in protobufProjects }
 }
 
 configure(allprojects) { project ->
@@ -72,6 +75,33 @@ configure(libProjs) {
 				credentials {
 					username = System.getenv("GITHUB_ACTOR")
 					password = System.getenv("GITHUB_TOKEN")
+				}
+			}
+		}
+	}
+}
+
+configure(protobufProjs) {
+	apply plugin: 'com.google.protobuf'
+	dependencies {
+		implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+		implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+		implementation "io.grpc:grpc-stub:${grpcVersion}"
+		compileOnly "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
+	}
+	protobuf {
+		protoc {
+			artifact = "com.google.protobuf:protoc:${protobufVersion}"
+		}
+		plugins {
+			grpc {
+				artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+			}
+		}
+		generateProtoTasks {
+			all().each { task ->
+				task.plugins {
+					grpc {}
 				}
 			}
 		}
