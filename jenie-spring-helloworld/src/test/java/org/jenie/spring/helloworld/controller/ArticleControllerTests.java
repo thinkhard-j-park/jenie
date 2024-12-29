@@ -38,7 +38,7 @@ class ArticleControllerTests {
 		var service = "jenie-test";
 		var boardId = "board-id";
 		var id = "article-id";
-		var header = ArticleHeader.builder().id(id).board(Board.builder().id(boardId).build()).build();
+		var header = ArticleHeader.newBuilder().id(id).board(Board.newBuilder().id(boardId).build()).build();
 		given(this.articleService.getArticleHeaderById(service, id, false)).willReturn(header);
 
 		// when
@@ -57,7 +57,7 @@ class ArticleControllerTests {
 		var service = "jenie-test";
 		var boardId = "board-id";
 		var id = "article-id";
-		var header = ArticleHeader.builder().id(id).board(Board.builder().id(boardId).build()).build();
+		var header = ArticleHeader.newBuilder().id(id).board(Board.newBuilder().id(boardId).build()).build();
 		var content = "content";
 		var article = new Article(header, content);
 		given(this.articleService.viewArticle(service, id, false)).willReturn(article);
@@ -80,7 +80,7 @@ class ArticleControllerTests {
 		var service = "jenie-test";
 		var boardId = "board-id";
 		var param = new ListArticleHeaderRequestParam(boardId, "", 5, SortCode.TIME_DESC.getCode());
-		var articleHeaderList = ArticleHeaderList.from(List.of(ArticleHeader.builder().build()), 1);
+		var articleHeaderList = ArticleHeaderList.from(List.of(ArticleHeader.newBuilder().build()), 1);
 		given(this.articleService.listArticleHeader(service, param)).willReturn(articleHeaderList);
 
 		// when
@@ -102,9 +102,9 @@ class ArticleControllerTests {
 		var content = "here i am";
 		var articleRequest = new ArticleRequest(boardId, title, content, writer);
 
-		var header = ArticleHeader.builder()
+		var header = ArticleHeader.newBuilder()
 			.id("article-id")
-			.board(Board.builder().id(boardId).build())
+			.board(Board.newBuilder().id(boardId).build())
 			.title(title)
 			.writer(writer)
 			.build();
@@ -137,9 +137,9 @@ class ArticleControllerTests {
 		var content = "here i am";
 		var articleRequest = new ArticleRequest(boardId, title, content, writer);
 
-		var header = ArticleHeader.builder()
+		var header = ArticleHeader.newBuilder()
 			.id("article-id")
-			.board(Board.builder().id(boardId).build())
+			.board(Board.newBuilder().id(boardId).build())
 			.title(title)
 			.writer(writer)
 			.build();

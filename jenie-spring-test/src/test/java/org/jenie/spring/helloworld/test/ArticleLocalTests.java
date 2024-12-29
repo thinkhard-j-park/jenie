@@ -1,7 +1,9 @@
 package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
+import java.util.stream.Stream;
 
+import org.jenie.spring.client.Constant.Protocol;
 import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.SortCode;
@@ -9,11 +11,14 @@ import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.util.ZdtUtil;
+import org.jenie.spring.helloworld.operation.ArticleOperation;
+import org.jenie.spring.helloworld.utils.ZdtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,12 +45,28 @@ class ArticleLocalTests extends HelloworldTests {
 		this.testInfo = testInfo;
 	}
 
+	@Test
+	void checkProperties() {
+		assertThat(this.testProperties).isNotNull();
+		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
+		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://localhost:30000");
+	}
+
+	@Test
+	void checkGrpcOperation() {
+		assertThat(this.articleGrpcOperation).isNotNull();
+	}
+
+	static Stream<Arguments> provideProtocol() {
+		return Stream.of(Arguments.of(Protocol.rest), Arguments.of(Protocol.grpc));
+	}
+
 	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
 		// given
 		var articleRequest = new ArticleRequest(boardId, title, content, writer);
 
 		// when
-		Article createdArticle = this.articleOperation.writeArticle(service, articleRequest);
+		Article createdArticle = this.articleRestOperation.writeArticle(service, articleRequest);
 
 		// then
 		assertThat(createdArticle).isNotNull();
@@ -62,15 +83,10 @@ class ArticleLocalTests extends HelloworldTests {
 		return createdArticle;
 	}
 
-	@Test
-	void checkProperties() {
-		assertThat(this.testProperties).isNotNull();
-		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
-		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://localhost:30000");
-	}
-
-	@Test
-	void getArticleHeaderById() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void getArticleHeaderById(Protocol protocol) {
+		ArticleOperation articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var boardId = "test-board-id";
@@ -82,7 +98,7 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(article.header().id()).isNotEmpty();
 
 		var articleId = article.header().id();
-		var fetchedArticleHeader = this.articleOperation.getArticleByHeader(service, articleId, true);
+		var fetchedArticleHeader = articleOperation.getArticleByHeader(service, articleId, true);
 		assertThat(fetchedArticleHeader).isNotNull();
 		assertThat(fetchedArticleHeader.id()).isEqualTo(articleId);
 		assertThat(fetchedArticleHeader.board().id()).isEqualTo(boardId);
@@ -105,7 +121,7 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(article.header().id()).isNotEmpty();
 
 		var articleId = article.header().id();
-		var fetchedArticle = this.articleOperation.viewArticle(service, articleId, true);
+		var fetchedArticle = this.articleRestOperation.viewArticle(service, articleId, true);
 		assertThat(fetchedArticle).isNotNull();
 		assertThat(fetchedArticle.header()).isNotNull();
 		assertThat(fetchedArticle.header().id()).isEqualTo(articleId);
@@ -136,7 +152,7 @@ class ArticleLocalTests extends HelloworldTests {
 				SortCode.TIME_DESC.getCode());
 
 		// when
-		var articleHeaderList = this.articleOperation.listArticleHeader(service, listArticleHeaderRequestParam);
+		var articleHeaderList = this.articleRestOperation.listArticleHeader(service, listArticleHeaderRequestParam);
 
 		// then
 		assertThat(articleHeaderList).isNotNull();
@@ -163,7 +179,7 @@ class ArticleLocalTests extends HelloworldTests {
 				previousArticleHeader.id(), 5, SortCode.TIME_DESC.getCode());
 
 		// when
-		var moreArticleHeaderList = this.articleOperation.listArticleHeader("jenie-test",
+		var moreArticleHeaderList = this.articleRestOperation.listArticleHeader("jenie-test",
 				listMoreArticleHeaderRequestParam);
 
 		// then
@@ -224,7 +240,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var modifyRequest = new ArticleRequest(boardId, titleToModify, contentToModify, writer);
 
 		// when
-		Article modifiedArticle = this.articleOperation.modifyArticle(service, articleId, modifyRequest);
+		Article modifiedArticle = this.articleRestOperation.modifyArticle(service, articleId, modifyRequest);
 
 		// then
 		assertThat(modifiedArticle).isNotNull();
@@ -255,11 +271,11 @@ class ArticleLocalTests extends HelloworldTests {
 		var modifyRequest = new ArticleRequest(boardId, titleToModify, content, writer);
 
 		// when
-		assertThatThrownBy(() -> this.articleOperation.modifyArticle(service, articleId, modifyRequest))
+		assertThatThrownBy(() -> this.articleRestOperation.modifyArticle(service, articleId, modifyRequest))
 			.isInstanceOf(HttpClientErrorException.BadRequest.class);
 
 		// then
-		var fetchedArticleHeader = this.articleOperation.getArticleByHeader(service, articleId, true);
+		var fetchedArticleHeader = this.articleRestOperation.getArticleByHeader(service, articleId, true);
 		assertThat(fetchedArticleHeader).isNotNull();
 		assertThat(fetchedArticleHeader.id()).isEqualTo(articleId);
 		assertThat(fetchedArticleHeader.board().id()).isEqualTo(boardId);
@@ -280,7 +296,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var articleHeader = createdArticle.header();
 
 		// when
-		var articleDeleteResult = this.articleOperation.deleteArticle(service, articleHeader.id());
+		var articleDeleteResult = this.articleRestOperation.deleteArticle(service, articleHeader.id());
 
 		// then
 		assertThat(articleDeleteResult).isNotNull();
@@ -296,7 +312,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var articleId = "unknown-id";
 
 		// when, then
-		assertThatThrownBy(() -> this.articleOperation.deleteArticle(service, articleId))
+		assertThatThrownBy(() -> this.articleRestOperation.deleteArticle(service, articleId))
 			.isInstanceOf(HttpClientErrorException.BadRequest.class);
 	}
 

@@ -1,8 +1,11 @@
 package org.jenie.spring.helloworld.test;
 
+import org.jenie.spring.client.Constant.Protocol;
 import org.jenie.spring.helloworld.HelloworldTestConfig;
 import org.jenie.spring.helloworld.HelloworldTestProperties;
+import org.jenie.spring.helloworld.operation.ArticleGrpcOperation;
 import org.jenie.spring.helloworld.operation.ArticleOperation;
+import org.jenie.spring.helloworld.operation.ArticleRestOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +17,13 @@ public abstract class HelloworldTests {
 	protected HelloworldTestProperties testProperties;
 
 	@Autowired
-	protected ArticleOperation articleOperation;
+	protected ArticleRestOperation articleRestOperation;
+
+	@Autowired
+	protected ArticleGrpcOperation articleGrpcOperation;
+
+	protected ArticleOperation articleOperation(Protocol protocol) {
+		return (protocol == Protocol.rest) ? this.articleRestOperation : this.articleGrpcOperation;
+	}
 
 }

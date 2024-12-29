@@ -11,7 +11,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
-
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'
 	implementation "com.google.code.findbugs:jsr305:${findBugsVersion}"

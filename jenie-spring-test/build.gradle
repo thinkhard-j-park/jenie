@@ -8,6 +8,7 @@ dependencies {
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
 	// others
+	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
 	implementation "org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}"
 
 	// jenie

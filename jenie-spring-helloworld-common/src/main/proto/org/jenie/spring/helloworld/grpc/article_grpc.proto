@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+import "google/protobuf/timestamp.proto";
+import "org/jenie/spring/helloworld/dto/article/article_header.proto";
+import "org/jenie/spring/helloworld/dto/article/article_request.proto";
+import "org/jenie/spring/helloworld/dto/article/article.proto";
+
+option java_package = "org.jenie.spring.helloworld.grpc";
+option java_outer_classname = "ArticleGrpcProto";
+option java_multiple_files = true;
+
+service ArticleService {
+  rpc GetArticleHeaderById(ArticleRequestMessage) returns (ArticleHeaderMessage);
+  rpc ViewArticle(ViewArticleRequestMessage) returns (ArticleMessage);
+}
+
+message ViewArticleRequestMessage {
+  string service = 1;
+  string id = 2;
+  bool inc_view_count = 3;
+}

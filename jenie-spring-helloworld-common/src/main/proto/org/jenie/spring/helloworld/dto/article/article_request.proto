@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+option java_package = "org.jenie.spring.helloworld.dto.article";
+option java_outer_classname = "ArticleRequestProto";
+option java_multiple_files = true;
+
+message ArticleRequestMessage {
+  string service = 1;
+  string id = 2;
+  bool latest = 3;
+}

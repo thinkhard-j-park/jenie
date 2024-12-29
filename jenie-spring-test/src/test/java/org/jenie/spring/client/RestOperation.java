@@ -20,13 +20,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public abstract class Operation {
+public abstract class RestOperation {
 
 	protected RestClient restClient;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 
-	public Operation(RestClient restClient) {
+	public RestOperation(RestClient restClient) {
 		this.restClient = restClient;
 		this.configureObjectMapper(this.objectMapper);
 	}

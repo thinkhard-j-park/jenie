@@ -97,9 +97,9 @@ public class PerfEnvTests {
 					var title = titleAndContent[0];
 					var content = titleAndContent[1];
 					var objectId = new ObjectId();
-					var articleHeader = ArticleHeader.builder()
+					var articleHeader = ArticleHeader.newBuilder()
 						.id(objectId.toString())
-						.board(Board.builder().id(boardId).build())
+						.board(Board.newBuilder().id(boardId).build())
 						.state(ArticleState.Normal)
 						.writer(new Writer("perf-tester", "perf-tester"))
 						.title(i + " " + title)

@@ -3,6 +3,8 @@ package org.jenie.spring.helloworld.grpc;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
+import org.jenie.spring.helloworld.dto.article.ArticleHeaderMessage;
+import org.jenie.spring.helloworld.dto.article.ArticleRequestMessage;
 import org.jenie.spring.helloworld.service.ArticleService;
 
 @GrpcService
@@ -15,13 +17,16 @@ public class ArticleGrpc extends ArticleServiceGrpc.ArticleServiceImplBase {
 	}
 
 	@Override
-	public void getArticleHeaderById(GetArticleHeaderByIdRequestMessage request,
+	public void getArticleHeaderById(ArticleRequestMessage request,
 			StreamObserver<ArticleHeaderMessage> responseObserver) {
 		var articleHeader = this.articleService.getArticleHeaderById(request.getService(), request.getId(),
 				request.getLatest());
 
-		var articleHeaderMessage = ArticleHeader.toProtoMessage(articleHeader);
-		responseObserver.onNext(articleHeaderMessage);
+		emitResponse(responseObserver, ArticleHeader.toProtoMessage(articleHeader));
+	}
+
+	private <T> void emitResponse(StreamObserver<T> responseObserver, T message) {
+		responseObserver.onNext(message);
 		responseObserver.onCompleted();
 	}
 

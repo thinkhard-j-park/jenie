@@ -18,9 +18,9 @@ public final class ArticleHeaderMapper {
 			return null;
 		}
 
-		return ArticleHeader.builder()
+		return ArticleHeader.newBuilder()
 			.id(entity.getId())
-			.board(Board.builder().id(entity.getBoardId()).build())
+			.board(Board.newBuilder().id(entity.getBoardId()).build())
 			.state(ArticleState.fromCode(entity.getState()))
 			.title(entity.getTitle())
 			.reaction(entity.getReaction())
@@ -30,7 +30,7 @@ public final class ArticleHeaderMapper {
 	}
 
 	public static ArticleHeader toDto(ArticleHeaderEntity article, BoardEntity board) {
-		return ArticleHeader.builder()
+		return ArticleHeader.newBuilder()
 			.id(article.getId())
 			.board(BoardMapper.toDto(board))
 			.state(ArticleState.fromCode(article.getState()))

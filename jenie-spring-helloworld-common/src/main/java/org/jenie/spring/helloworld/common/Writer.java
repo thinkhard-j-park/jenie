@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.common;
 
-import org.jenie.spring.helloworld.grpc.WriterMessage;
+import com.google.common.base.Strings;
 
 public class Writer {
 
@@ -20,7 +20,17 @@ public class Writer {
 		if (writer == null) {
 			return null;
 		}
-		return WriterMessage.newBuilder().setWid(writer.getWid()).setName(writer.getName()).build();
+		return WriterMessage.newBuilder()
+			.setWid(Strings.nullToEmpty(writer.getWid()))
+			.setName(Strings.nullToEmpty(writer.getName()))
+			.build();
+	}
+
+	public static Writer fromProtoMessage(WriterMessage protoMessage) {
+		if (protoMessage == null) {
+			return null;
+		}
+		return new Writer(protoMessage.getWid(), protoMessage.getName());
 	}
 
 	public String getWid() {

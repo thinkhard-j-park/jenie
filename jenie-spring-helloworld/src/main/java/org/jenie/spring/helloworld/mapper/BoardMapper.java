@@ -14,7 +14,7 @@ public final class BoardMapper {
 		if (board == null) {
 			return null;
 		}
-		return Board.builder()
+		return Board.newBuilder()
 			.id(board.getId())
 			.rootId(board.getRootId())
 			.parentId(board.getParentId())

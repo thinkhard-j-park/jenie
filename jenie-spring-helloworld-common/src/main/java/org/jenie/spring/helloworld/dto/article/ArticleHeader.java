@@ -5,7 +5,6 @@ import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Reaction;
 import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.board.Board;
-import org.jenie.spring.helloworld.grpc.ArticleHeaderMessage;
 
 public record ArticleHeader(String id, Board board, int state, String title, Reaction reaction, Writer writer,
 		ActionDateTime actionDateTime) {
@@ -15,18 +14,45 @@ public record ArticleHeader(String id, Board board, int state, String title, Rea
 			return null;
 		}
 
-		return ArticleHeaderMessage.newBuilder()
-			.setId(articleHeader.id())
-			.setBoard(Board.toProtoMessage(articleHeader.board()))
-			.setState(articleHeader.state())
-			.setTitle(articleHeader.title())
-			.setReaction(Reaction.toProtoMessage(articleHeader.reaction()))
-			.setWriter(Writer.toProtoMessage(articleHeader.writer()))
-			.setActionDateTime(ActionDateTime.toProtoMessage(articleHeader.actionDateTime()))
+		var builder = ArticleHeaderMessage.newBuilder();
+		builder.setId(articleHeader.id()).setState(articleHeader.state()).setTitle(articleHeader.title());
+
+		if (articleHeader.board() != null) {
+			builder.setBoard(Board.toProtoMessage(articleHeader.board()));
+		}
+
+		if (articleHeader.reaction() != null) {
+			builder.setReaction(Reaction.toProtoMessage(articleHeader.reaction()));
+		}
+
+		if (articleHeader.writer() != null) {
+			builder.setWriter(Writer.toProtoMessage(articleHeader.writer()));
+		}
+
+		if (articleHeader.actionDateTime() != null) {
+			builder.setActionDateTime(ActionDateTime.toProtoMessage(articleHeader.actionDateTime()));
+		}
+
+		return builder.build();
+	}
+
+	public static ArticleHeader fromProtoMessage(ArticleHeaderMessage protoMessage) {
+		if (protoMessage == null) {
+			return null;
+		}
+
+		return ArticleHeader.newBuilder()
+			.id(protoMessage.getId())
+			.board(Board.fromProtoMessage(protoMessage.getBoard()))
+			.state(ArticleState.fromCode(protoMessage.getState()))
+			.title(protoMessage.getTitle())
+			.reaction(Reaction.fromProtoMessage(protoMessage.getReaction()))
+			.writer(Writer.fromProtoMessage(protoMessage.getWriter()))
+			.actionDateTime(ActionDateTime.fromProtoMessage(protoMessage.getActionDateTime()))
 			.build();
 	}
 
-	public static Builder builder() {
+	public static Builder newBuilder() {
 		return new Builder();
 	}
 
