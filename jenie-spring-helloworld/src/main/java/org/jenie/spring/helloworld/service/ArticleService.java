@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ArticleService {
+	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ArticleService.class);
 
 	private final BoardService boardService;
 
@@ -47,7 +48,9 @@ public class ArticleService {
 					this.boardService.findBoardEntityById(service, articleEntity.getBoardId())))
 			.toList();
 
-		return ArticleHeaderList.from(list, param.getSize());
+		var result =  ArticleHeaderList.from(list, param.getSize());
+		logger.info("{}", result);
+		return result;
 	}
 
 	public Article viewArticle(String service, String id, boolean incViewCount) {

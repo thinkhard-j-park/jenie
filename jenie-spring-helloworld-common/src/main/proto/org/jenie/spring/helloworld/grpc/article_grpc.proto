@@ -3,21 +3,63 @@ syntax = "proto3";
 package org.jenie.spring.helloworld;
 
 import "google/protobuf/timestamp.proto";
+import "org/jenie/spring/helloworld/common/writer.proto";
 import "org/jenie/spring/helloworld/dto/article/article_header.proto";
-import "org/jenie/spring/helloworld/dto/article/article_request.proto";
+import "org/jenie/spring/helloworld/dto/article/article_header_list.proto";
 import "org/jenie/spring/helloworld/dto/article/article.proto";
+import "org/jenie/spring/helloworld/dto/article/article_delete_result.proto";
 
 option java_package = "org.jenie.spring.helloworld.grpc";
 option java_outer_classname = "ArticleGrpcProto";
 option java_multiple_files = true;
 
 service ArticleService {
-  rpc GetArticleHeaderById(ArticleRequestMessage) returns (ArticleHeaderMessage);
+  rpc GetArticleHeaderById(GetArticleHeaderByIdRequestMessage) returns (ArticleHeaderMessage);
   rpc ViewArticle(ViewArticleRequestMessage) returns (ArticleMessage);
+  rpc ListArticleHeader(ListArticleHeaderRequestMessage) returns (ArticleHeaderListMessage);
+  rpc WriteArticle(WriteArticleRequestMessage) returns (ArticleMessage);
+  rpc ModifyArticle(ModifyArticleRequestMessage) returns (ArticleMessage);
+  rpc DeleteArticle(DeleteArticleRequestMessage) returns (ArticleDeleteResultMessage);
+}
+
+message GetArticleHeaderByIdRequestMessage {
+  string service = 1;
+  string id = 2;
+  bool latest = 3;
 }
 
 message ViewArticleRequestMessage {
   string service = 1;
   string id = 2;
   bool inc_view_count = 3;
+}
+
+message ListArticleHeaderRequestMessage {
+  string service = 1;
+  string board_id = 2;
+  string prev_article_id = 3;
+  sint32 size = 4;
+  sint32 sort = 5;
+}
+
+message WriteArticleRequestMessage {
+  string service = 1;
+  string board_id = 2;
+  string title = 3;
+  string content = 4;
+  WriterMessage writer = 5;
+}
+
+message ModifyArticleRequestMessage {
+  string service = 1;
+  string id = 2;
+  string board_id = 3;
+  string title = 4;
+  string content = 5;
+  WriterMessage writer = 6;
+}
+
+message DeleteArticleRequestMessage {
+  string service = 1;
+  string id = 2;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
+import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;
@@ -40,17 +41,17 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	 * @return data read from the database.
 	 */
 	public ArticleHeaderEntity findArticleHeaderById(String dbKey, String id, boolean latest) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 
 		var readPreference = latest ? ReadPreference.primary() : ReadPreference.secondaryPreferred();
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, readPreference, null)
-			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleHeaderEntity.class);
+			.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), ArticleHeaderEntity.class);
 	}
 
 	public Writer findArticleWriterById(String dbKey, String id) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 
-		var query = Query.query(Criteria.where("_id").is(id));
+		var query = Query.query(Criteria.where("_id").is(new ObjectId(id)));
 		query.fields().include("writer");
 		var articleHeader = this.mongoTemplateRouter.mongoTemplate(dbKey).findOne(query, ArticleHeaderEntity.class);
 		AssertHelper.notNull(articleHeader, "id is not valid");
@@ -67,8 +68,8 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		var sortOrder = SortOrder.fromCode(param.getSort());
 		if (StringUtils.hasText(param.getPrevArticleId())) {
 			switch (sortOrder) {
-				case TIME_DESC -> criteria.and("_id").lt(param.getPrevArticleId());
-				case TIME_ASC -> criteria.and("_id").gt(param.getPrevArticleId());
+				case TIME_DESC -> criteria.and("_id").lt(new ObjectId(param.getPrevArticleId()));
+				case TIME_ASC -> criteria.and("_id").gt(new ObjectId(param.getPrevArticleId()));
 			}
 		}
 		var sort = Sort.by(sortOrder.getDirection(), sortOrder.getField());
@@ -92,42 +93,42 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 	}
 
 	public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String title) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 		AssertHelper.hasText(title, "title is required");
 
 		var update = new Update();
 		update.set("title", title);
 		update.set("actionDateTime.updatedAt", ZonedDateTime.now());
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
-			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+			.findAndModify(Query.query(Criteria.where("_id").is(new ObjectId(id))), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 
 	@Async
 	public void incViewCountAsync(String dbKey, String id, Number number) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 
 		this.incViewCount(dbKey, id, number);
 	}
 
 	public ArticleHeaderEntity incViewCount(String dbKey, String id, Number number) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 
 		var update = new Update();
 		update.inc("reaction.viewCount", number);
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
-			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+			.findAndModify(Query.query(Criteria.where("_id").is(new ObjectId(id))), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 
 	public ArticleHeaderEntity deleteArticle(String dbKey, String id) {
-		AssertHelper.hasText(id, "id is required");
+		AssertHelper.validObjectId(id, "id should be valid");
 
 		var update = new Update();
 		update.set("state", ArticleState.Deleted.getCode());
 		update.set("actionDateTime.deletedAt", ZonedDateTime.now());
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
-			.findAndModify(Query.query(Criteria.where("_id").is(id)), update,
+			.findAndModify(Query.query(Criteria.where("_id").is(new ObjectId(id))), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
 	}
 

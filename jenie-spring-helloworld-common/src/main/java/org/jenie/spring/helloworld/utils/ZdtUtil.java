@@ -27,7 +27,10 @@ public final class ZdtUtil {
 			return null;
 		}
 
-		return Timestamp.newBuilder().setSeconds(zonedDateTime.toEpochSecond()).build();
+		return Timestamp.newBuilder()
+			.setSeconds(zonedDateTime.toEpochSecond())
+			.setNanos(zonedDateTime.getNano())
+			.build();
 	}
 
 	public static String zdtNowString() {

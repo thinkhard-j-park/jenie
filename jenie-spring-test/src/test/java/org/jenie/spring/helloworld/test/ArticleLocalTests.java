@@ -19,7 +19,6 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,12 +60,10 @@ class ArticleLocalTests extends HelloworldTests {
 		return Stream.of(Arguments.of(Protocol.rest), Arguments.of(Protocol.grpc));
 	}
 
-	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
-		// given
-		var articleRequest = new ArticleRequest(boardId, title, content, writer);
-
-		// when
-		Article createdArticle = this.articleRestOperation.writeArticle(service, articleRequest);
+	private Article writeArticleAndVerify(ArticleOperation articleOperation, String service,
+			ArticleRequest articleRequest) {
+		// given, when
+		Article createdArticle = articleOperation.writeArticle(service, articleRequest);
 
 		// then
 		assertThat(createdArticle).isNotNull();
@@ -74,11 +71,11 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(createdArticle.header().id()).isNotEmpty();
 		assertThat(createdArticle.header().board()).isNotNull();
 		assertThat(createdArticle.header().state()).isEqualTo(ArticleState.Normal.getCode());
-		assertThat(createdArticle.header().board().id()).isEqualTo(boardId);
+		assertThat(createdArticle.header().board().id()).isEqualTo(articleRequest.boardId());
 		assertThat(createdArticle.header().writer()).isNotNull();
-		assertThat(createdArticle.header().writer().getWid()).isEqualTo(writer.getWid());
-		assertThat(createdArticle.header().title()).isEqualTo(title);
-		assertThat(createdArticle.content()).isEqualTo(content);
+		assertThat(createdArticle.header().writer().getWid()).isEqualTo(articleRequest.writer().getWid());
+		assertThat(createdArticle.header().title()).isEqualTo(articleRequest.title());
+		assertThat(createdArticle.content()).isEqualTo(articleRequest.content());
 
 		return createdArticle;
 	}
@@ -86,13 +83,14 @@ class ArticleLocalTests extends HelloworldTests {
 	@ParameterizedTest
 	@MethodSource("provideProtocol")
 	void getArticleHeaderById(Protocol protocol) {
-		ArticleOperation articleOperation = articleOperation(protocol);
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var boardId = "test-board-id";
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
-		var article = this.writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
+		var article = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		assertThat(article).isNotNull();
 		assertThat(article.header()).isNotNull();
 		assertThat(article.header().id()).isNotEmpty();
@@ -108,20 +106,23 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticleHeader.writer().getWid()).isEqualTo(writer.getWid());
 	}
 
-	@Test
-	void viewArticle() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void viewArticle(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var boardId = "test-board-id";
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
-		var article = this.writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
+		var article = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		assertThat(article).isNotNull();
 		assertThat(article.header()).isNotNull();
 		assertThat(article.header().id()).isNotEmpty();
 
 		var articleId = article.header().id();
-		var fetchedArticle = this.articleRestOperation.viewArticle(service, articleId, true);
+		var fetchedArticle = articleOperation.viewArticle(service, articleId, true);
 		assertThat(fetchedArticle).isNotNull();
 		assertThat(fetchedArticle.header()).isNotNull();
 		assertThat(fetchedArticle.header().id()).isEqualTo(articleId);
@@ -133,17 +134,25 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticle.content()).isEqualTo(article.content());
 	}
 
+	static Stream<Arguments> provideProtocolBoardId() {
+		return Stream.of(Arguments.of(Protocol.rest, ""), Arguments.of(Protocol.rest, "test-board-id"),
+				Arguments.of(Protocol.grpc, ""), Arguments.of(Protocol.grpc, "test-board-id"));
+	}
+
 	@ParameterizedTest
-	@ValueSource(strings = { "", "test-board-id" })
-	void listArticleHeader(String targetBoardId) {
+	@MethodSource("provideProtocolBoardId")
+	void listArticleHeader(Protocol protocol, String targetBoardId) throws InterruptedException {
+		var articleOperation = articleOperation(protocol);
+
 		// 목록 보기할 데이터가 없을 수 있으므로 테스트를 위한 데이터를 생성한다.
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var boardId = "test-board-id";
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
+		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
 		for (int i = 0; i < 10; i++) {
-			writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+			writeArticleAndVerify(articleOperation, service, articleRequest);
 		}
 
 		// 목록보기
@@ -152,7 +161,7 @@ class ArticleLocalTests extends HelloworldTests {
 				SortCode.TIME_DESC.getCode());
 
 		// when
-		var articleHeaderList = this.articleRestOperation.listArticleHeader(service, listArticleHeaderRequestParam);
+		var articleHeaderList = articleOperation.listArticleHeader(service, listArticleHeaderRequestParam);
 
 		// then
 		assertThat(articleHeaderList).isNotNull();
@@ -179,8 +188,7 @@ class ArticleLocalTests extends HelloworldTests {
 				previousArticleHeader.id(), 5, SortCode.TIME_DESC.getCode());
 
 		// when
-		var moreArticleHeaderList = this.articleRestOperation.listArticleHeader("jenie-test",
-				listMoreArticleHeaderRequestParam);
+		var moreArticleHeaderList = articleOperation.listArticleHeader(service, listMoreArticleHeaderRequestParam);
 
 		// then
 		assertThat(moreArticleHeaderList).isNotNull();
@@ -209,15 +217,16 @@ class ArticleLocalTests extends HelloworldTests {
 		var zdtNow = ZdtUtil.zdtNowString();
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var content = "content-" + title;
-
-		this.writeArticleAndVerify("jenie-test", "test-board-id", title, content, testWriter());
+		var articleRequest = new ArticleRequest("test-board-id", title, content, testWriter());
+		this.writeArticleAndVerify(this.articleRestOperation, "jenie-test", articleRequest);
 	}
 
 	@Test
 	void writeArticleWithInvalidBoard() {
 		var zdtNow = ZdtUtil.zdtNowString();
-		assertThatThrownBy(() -> this.writeArticleAndVerify("jenie-test", "unknown-board-id",
-				this.testInfo.getDisplayName() + "-" + zdtNow, "content-" + zdtNow, testWriter()))
+		var articleRequest = new ArticleRequest("unknown-board-id", this.testInfo.getDisplayName() + "-" + zdtNow,
+				"content-" + zdtNow, testWriter());
+		assertThatThrownBy(() -> this.writeArticleAndVerify(this.articleRestOperation, "jenie-test", articleRequest))
 			.isInstanceOf(HttpClientErrorException.BadRequest.class);
 	}
 
@@ -229,7 +238,8 @@ class ArticleLocalTests extends HelloworldTests {
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest("test-board-id", title, content, writer);
+		var createdArticle = this.writeArticleAndVerify(this.articleRestOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		var modifiedAt = ZdtUtil.zdtNowString();
@@ -259,8 +269,8 @@ class ArticleLocalTests extends HelloworldTests {
 		var service = "jenie-test";
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, "content-" + createdAt,
-				writer);
+		var articleRequest = new ArticleRequest("test-board-id", title, "content-" + createdAt, writer);
+		var createdArticle = this.writeArticleAndVerify(this.articleRestOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		var modifiedAt = ZdtUtil.zdtNowString();
@@ -292,7 +302,8 @@ class ArticleLocalTests extends HelloworldTests {
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest("test-board-id", title, content, writer);
+		var createdArticle = this.writeArticleAndVerify(this.articleRestOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		// when

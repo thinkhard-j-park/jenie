@@ -1,5 +1,6 @@
 package org.jenie.spring.helloworld.exception;
 
+import org.bson.types.ObjectId;
 import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.lang.Nullable;
@@ -19,6 +20,13 @@ public final class AssertHelper {
 
 	public static void notNull(@Nullable Object object, String message) {
 		if (object == null) {
+			throw new CommonErrors.IllegalDataException(ErrorCode.ILLEGAL_DATA, message);
+		}
+	}
+
+	public static void validObjectId(String id, String message) {
+		AssertHelper.hasText(id, "id is required");
+		if (!ObjectId.isValid(id)) {
 			throw new CommonErrors.IllegalDataException(ErrorCode.ILLEGAL_DATA, message);
 		}
 	}
