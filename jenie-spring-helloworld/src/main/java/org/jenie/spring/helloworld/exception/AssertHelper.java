@@ -1,6 +1,7 @@
 package org.jenie.spring.helloworld.exception;
 
 import org.bson.types.ObjectId;
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.lang.Nullable;

@@ -2,6 +2,7 @@ package org.jenie.spring.helloworld.exception;
 
 import java.net.URI;
 
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class GlobalExceptionHandlerTests {
+class GlobalRestExceptionHandlerTests {
 
 	@InjectMocks
-	private GlobalExceptionHandler globalExceptionHandler;
+	private GlobalRestExceptionHandler globalExceptionHandler;
 
 	@Mock
 	private AbstractException abstractException;

@@ -1,11 +1,11 @@
-package org.jenie.spring.helloworld.exception;
+package org.jenie.spring.helloworld.dto;
 
 import org.springframework.http.HttpStatus;
 
 /**
  * Defines error code and corresponding HttpStatus as a REST API response. This class
  * provides responses for the 'type' URI defined in RFC 9457. Converts
- * {@link org.jenie.spring.helloworld.exception.ErrorCode} into JSON format.
+ * {@link ErrorCode} into JSON format.
  *
  * @param name The name of the error code
  * @param title The title of the error

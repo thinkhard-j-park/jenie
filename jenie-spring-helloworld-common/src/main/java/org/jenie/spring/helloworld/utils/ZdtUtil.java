@@ -18,6 +18,10 @@ public final class ZdtUtil {
 		}
 
 		var instant = Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
+		if (instant == Instant.EPOCH) {
+			return null;
+		}
+
 		return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
 
 	}

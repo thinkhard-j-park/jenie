@@ -1,7 +1,7 @@
 package org.jenie.spring.helloworld.controller;
 
-import org.jenie.spring.helloworld.exception.ErrorCode;
-import org.jenie.spring.helloworld.exception.ErrorType;
+import org.jenie.spring.helloworld.dto.ErrorCode;
+import org.jenie.spring.helloworld.dto.ErrorType;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

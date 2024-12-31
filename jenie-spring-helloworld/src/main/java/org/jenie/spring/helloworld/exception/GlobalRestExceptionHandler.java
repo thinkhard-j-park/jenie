@@ -12,7 +12,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(AbstractException.class)
 	ResponseEntity<ProblemDetail> handleControllerException(AbstractException ex, WebRequest request) {
@@ -32,6 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		problemDetail.setTitle(errorCode.getTitle());
 		problemDetail.setType(URI.create(errorUrl));
 		problemDetail.setInstance(URI.create(fullUrl));
+		problemDetail.setProperty("error-code", String.valueOf(errorCode.getCode()));
 		problemDetail.setProperty("method", method);
 		problemDetail.setProperty("path", path);
 

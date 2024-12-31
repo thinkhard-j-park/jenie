@@ -1,5 +1,7 @@
 package org.jenie.spring.helloworld.exception;
 
+import org.jenie.spring.helloworld.dto.ErrorCode;
+
 public class ArticleErrors {
 
 	public static class ArticleNotFoundException extends AbstractException {

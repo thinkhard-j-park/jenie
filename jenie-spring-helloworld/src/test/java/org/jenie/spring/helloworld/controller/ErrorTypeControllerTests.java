@@ -1,6 +1,6 @@
 package org.jenie.spring.helloworld.controller;
 
-import org.jenie.spring.helloworld.exception.ErrorCode;
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

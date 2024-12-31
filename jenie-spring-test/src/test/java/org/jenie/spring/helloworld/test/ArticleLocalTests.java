@@ -1,11 +1,16 @@
 package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.Stream;
 
+import io.grpc.Metadata;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import org.jenie.spring.client.Constant.Protocol;
 import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Writer;
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.dto.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
@@ -22,6 +27,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.http.ProblemDetail;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -236,7 +242,8 @@ class ArticleLocalTests extends HelloworldTests {
 		var articleRequest = new ArticleRequest("unknown-board-id", this.testInfo.getDisplayName() + "-" + zdtNow,
 				"content-" + zdtNow, testWriter());
 		assertThatThrownBy(() -> this.writeArticleAndVerify(articleOperation, "jenie-test", articleRequest))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.BOARD_NOT_FOUND));
 	}
 
 	@ParameterizedTest
@@ -295,7 +302,8 @@ class ArticleLocalTests extends HelloworldTests {
 
 		// when
 		assertThatThrownBy(() -> articleOperation.modifyArticle(service, articleId, modifyRequest))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.ILLEGAL_DATA));
 
 		// then
 		var fetchedArticleHeader = articleOperation.getArticleByHeader(service, articleId, true);
@@ -341,7 +349,34 @@ class ArticleLocalTests extends HelloworldTests {
 
 		// when, then
 		assertThatThrownBy(() -> articleOperation.deleteArticle(service, articleId))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.ILLEGAL_DATA));
+	}
+
+	void verifyErrorResponse(Throwable throwable, ErrorCode errorCode) {
+		if (throwable instanceof HttpClientErrorException.BadRequest badRequestException) {
+			assertThat(badRequestException).isNotNull();
+
+			var problemDetail = badRequestException.getResponseBodyAs(ProblemDetail.class);
+			assertThat(problemDetail).isNotNull();
+			assertThat(problemDetail.getTitle()).isEqualTo(errorCode.getTitle());
+			assertThat(Objects.requireNonNull(problemDetail.getProperties()).get("error-code"))
+				.isEqualTo(String.valueOf(errorCode.getCode()));
+		}
+
+		if (throwable instanceof StatusRuntimeException statusRuntimeException) {
+			Status status = statusRuntimeException.getStatus();
+			assertThat(status).isNotNull();
+			assertThat(status.getCode()).isEqualTo(errorCode.getGrpcStatus());
+
+			Metadata metadata = statusRuntimeException.getTrailers();
+			assertThat(metadata).isNotNull();
+			assertThat(metadata.get(Metadata.Key.of("title", Metadata.ASCII_STRING_MARSHALLER)))
+				.isEqualTo(errorCode.getTitle());
+			assertThat(metadata.get(Metadata.Key.of("error-code", Metadata.ASCII_STRING_MARSHALLER)))
+				.isEqualTo(String.valueOf(errorCode.getCode()));
+		}
+
 	}
 
 }

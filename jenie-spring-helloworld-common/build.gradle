@@ -3,6 +3,7 @@ version = "${jenieSpringDataMongodbVersion}"
 dependencies {
 	implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")
 	implementation 'org.springframework:spring-core'
+	implementation 'org.springframework:spring-web'
 	implementation(project(":jenie-spring-core"))
 
 	testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
