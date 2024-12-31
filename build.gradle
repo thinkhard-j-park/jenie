@@ -1,4 +1,3 @@
-import io.spring.javaformat.gradle.tasks.CheckFormat
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
@@ -25,7 +24,7 @@ ext {
 	protobufProjs = subprojects.findAll { it.name in protobufProjects }
 }
 
-configure(allprojects) { project ->
+configure(subprojects) { project ->
 	apply plugin: 'java'
 	apply plugin: 'idea'
 	apply plugin: 'maven-publish'
