@@ -1,8 +1,9 @@
+import io.spring.javaformat.gradle.tasks.CheckFormat
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
 	id 'org.springframework.boot' apply false
-	id 'io.spring.javaformat'
+	id 'io.spring.javaformat' apply false
 	id 'com.google.protobuf' apply false
 }
 
@@ -38,6 +39,7 @@ configure(allprojects) { project ->
 			languageVersion = JavaLanguageVersion.of(21)
 		}
 	}
+
 	idea {
 		module {
 			downloadSources = true

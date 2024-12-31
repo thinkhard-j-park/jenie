@@ -1,5 +1,6 @@
 package org.jenie.spring.helloworld.repository;
 
+import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class BoardRepositoryTests {
 
 		// given
 		var service = "jenie-test";
-		var id = "board-id";
+		var id = new ObjectId().toString();
 
 		var boardEntity = new BoardEntity();
 		boardEntity.setId(id);
@@ -55,7 +56,7 @@ public class BoardRepositoryTests {
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
 		assertThat(capturedQuery.getQueryObject().keySet()).hasSize(1);
-		assertThat(capturedQuery.getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(capturedQuery.getQueryObject().get("_id").toString()).isEqualTo(id);
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(id);

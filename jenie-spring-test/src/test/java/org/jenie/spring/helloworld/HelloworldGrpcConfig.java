@@ -1,6 +1,5 @@
 package org.jenie.spring.helloworld;
 
-
 import net.devh.boot.grpc.client.autoconfigure.GrpcClientAutoConfiguration;
 import org.jenie.spring.client.LogGrpcInterceptor;
 
@@ -13,8 +12,10 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties(HelloworldTestProperties.class)
 @Configuration
 public class HelloworldGrpcConfig {
+
 	@Bean
 	LogGrpcInterceptor logGrpcInterceptor(HelloworldTestProperties testProperties) {
 		return new LogGrpcInterceptor(testProperties);
 	}
+
 }

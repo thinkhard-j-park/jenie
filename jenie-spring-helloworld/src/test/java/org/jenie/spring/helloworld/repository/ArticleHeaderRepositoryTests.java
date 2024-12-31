@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;
@@ -64,7 +65,7 @@ class ArticleHeaderRepositoryTests {
 		// given
 		var service = "jenie-test";
 		var boardId = "board-id";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var headerEntity = new ArticleHeaderEntity();
 		headerEntity.setId(id);
 		headerEntity.setBoardId(boardId);
@@ -89,7 +90,7 @@ class ArticleHeaderRepositoryTests {
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
 		assertThat(capturedQuery.getQueryObject().keySet()).hasSize(1);
-		assertThat(capturedQuery.getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(capturedQuery.getQueryObject().get("_id").toString()).isEqualTo(id);
 
 		assertThat(capturedQuery).isNotNull();
 		assertThat(result).isNotNull();
@@ -109,7 +110,7 @@ class ArticleHeaderRepositoryTests {
 	void findArticleWriterById() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var writer = new Writer("wid", "name");
 
 		var headerEntity = new ArticleHeaderEntity();
@@ -130,7 +131,7 @@ class ArticleHeaderRepositoryTests {
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
 		assertThat(capturedQuery.getQueryObject().keySet()).hasSize(1);
-		assertThat(capturedQuery.getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(capturedQuery.getQueryObject().get("_id").toString()).isEqualTo(id);
 		assertThat(capturedQuery.getFieldsObject().keySet()).hasSize(1);
 		assertThat(capturedQuery.getFieldsObject().containsKey("writer")).isTrue();
 
@@ -151,11 +152,12 @@ class ArticleHeaderRepositoryTests {
 	}
 
 	static Stream<Arguments> provideListArticleHeader() {
+		var prevArticleId = new ObjectId().toString();
 		var param1 = new ListArticleHeaderRequestParam("", "", 5, SortCode.TIME_DESC.getCode());
 		var param2 = new ListArticleHeaderRequestParam("board-id", "", 5, SortCode.TIME_DESC.getCode());
-		var param3 = new ListArticleHeaderRequestParam("board-id", "prev-id", 5, SortCode.TIME_DESC.getCode());
-		var param4 = new ListArticleHeaderRequestParam("board-id", "prev-id", 5, SortCode.TIME_ASC.getCode());
-		var param5 = new ListArticleHeaderRequestParam("", "prev-id", 5, SortCode.TIME_ASC.getCode());
+		var param3 = new ListArticleHeaderRequestParam("board-id", prevArticleId, 5, SortCode.TIME_DESC.getCode());
+		var param4 = new ListArticleHeaderRequestParam("board-id", prevArticleId, 5, SortCode.TIME_ASC.getCode());
+		var param5 = new ListArticleHeaderRequestParam("", prevArticleId, 5, SortCode.TIME_ASC.getCode());
 
 		//@formatter:off
 		return Stream.of(
@@ -176,7 +178,7 @@ class ArticleHeaderRepositoryTests {
 		var entityList = new ArrayList<ArticleHeaderEntity>();
 		for (int i = 0; i < 3; i++) {
 			var headerEntity = new ArticleHeaderEntity();
-			headerEntity.setId("article-id-" + i);
+			headerEntity.setId(new ObjectId().toString());
 			headerEntity.setBoardId(param.getBoardId());
 			headerEntity.setTitle(title + i);
 			headerEntity.setWriter(new Writer("wid-" + i, "name-" + i));
@@ -209,10 +211,10 @@ class ArticleHeaderRepositoryTests {
 			assertThat(doc).isNotNull();
 
 			if (SortCode.fromCode(param.getSort()) == SortCode.TIME_DESC) {
-				assertThat(doc.get("$lt")).isEqualTo(param.getPrevArticleId());
+				assertThat(doc.get("$lt").toString()).isEqualTo(param.getPrevArticleId());
 			}
 			else {
-				assertThat(doc.get("$gt")).isEqualTo(param.getPrevArticleId());
+				assertThat(doc.get("$gt").toString()).isEqualTo(param.getPrevArticleId());
 			}
 		}
 
@@ -236,7 +238,7 @@ class ArticleHeaderRepositoryTests {
 		// given
 		var service = "jenie-test";
 		var boardId = "board-id";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var title = "hello world";
 		var writer = new Writer("writer-id", "olleh");
 
@@ -320,7 +322,7 @@ class ArticleHeaderRepositoryTests {
 		// given
 		var service = "jenie-test";
 		var boardId = "board-id";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var title = "hello world";
 		var writer = new Writer("writer-id", "olleh");
 
@@ -355,7 +357,7 @@ class ArticleHeaderRepositoryTests {
 		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
 				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
 		assertThat(queryCaptor.getValue()).isNotNull();
-		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id").toString()).isEqualTo(id);
 		assertThat(updateCaptor.getValue()).isNotNull();
 		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$set");
 		assertThat(doc.get("title")).isEqualTo(title);
@@ -397,7 +399,7 @@ class ArticleHeaderRepositoryTests {
 	void incViewCount() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var inc = 1;
 
 		var reaction = new Reaction();
@@ -429,7 +431,7 @@ class ArticleHeaderRepositoryTests {
 		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
 				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
 		assertThat(queryCaptor.getValue()).isNotNull();
-		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id").toString()).isEqualTo(id);
 		assertThat(updateCaptor.getValue()).isNotNull();
 		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$inc");
 		assertThat(doc.get("reaction.viewCount")).isEqualTo(inc);
@@ -454,7 +456,7 @@ class ArticleHeaderRepositoryTests {
 	void deleteArticle() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 
 		var articleHeaderEntity = new ArticleHeaderEntity();
 		articleHeaderEntity.setId(id);
@@ -485,7 +487,7 @@ class ArticleHeaderRepositoryTests {
 		verify(this.mongoTemplate).findAndModify(queryCaptor.capture(), updateCaptor.capture(),
 				findAndModifyCaptor.capture(), eq(ArticleHeaderEntity.class));
 		assertThat(queryCaptor.getValue()).isNotNull();
-		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id").toString()).isEqualTo(id);
 		assertThat(updateCaptor.getValue()).isNotNull();
 		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$set");
 		assertThat(doc.get("state")).isEqualTo(ArticleState.Deleted.getCode());

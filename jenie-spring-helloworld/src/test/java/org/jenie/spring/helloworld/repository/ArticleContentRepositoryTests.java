@@ -3,6 +3,7 @@ package org.jenie.spring.helloworld.repository;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.exception.CommonErrors;
@@ -41,7 +42,7 @@ class ArticleContentRepositoryTests {
 	void insert() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var content = "hello world";
 
 		var articleContentEntity = new ArticleContentEntity();
@@ -97,7 +98,7 @@ class ArticleContentRepositoryTests {
 	void modifyArticleContent() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var content = "hello world";
 
 		var articleContentEntity = new ArticleContentEntity();
@@ -128,7 +129,7 @@ class ArticleContentRepositoryTests {
 				findAndModifyCaptor.capture(), eq(ArticleContentEntity.class));
 		assertThat(queryCaptor.getValue()).isNotNull();
 		assertThat(queryCaptor.getValue().getQueryObject().keySet()).hasSize(1);
-		assertThat(queryCaptor.getValue().getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(queryCaptor.getValue().getQueryObject().get("_id").toString()).isEqualTo(id);
 		assertThat(updateCaptor.getValue()).isNotNull();
 
 		Document doc = (Document) updateCaptor.getValue().getUpdateObject().get("$set");
@@ -159,7 +160,7 @@ class ArticleContentRepositoryTests {
 	void findArticleContentById() {
 		// given
 		var service = "jenie-test";
-		var id = "article-id";
+		var id = new ObjectId().toString();
 		var content = "hello world";
 
 		var articleContentEntity = new ArticleContentEntity();
@@ -182,7 +183,7 @@ class ArticleContentRepositoryTests {
 		var capturedQuery = queryCaptor.getValue();
 		assertThat(capturedQuery).isNotNull();
 		assertThat(capturedQuery.getQueryObject().keySet()).hasSize(1);
-		assertThat(capturedQuery.getQueryObject().get("_id")).isEqualTo(id);
+		assertThat(capturedQuery.getQueryObject().get("_id").toString()).isEqualTo(id);
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(id);

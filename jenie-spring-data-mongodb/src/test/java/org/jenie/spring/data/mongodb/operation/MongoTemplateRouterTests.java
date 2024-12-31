@@ -280,7 +280,7 @@ class MongoTemplateRouterTests {
 
 		// then
 		assertThat(transactionManager).isNotNull();
-		assertThat(transactionManager.getDatabaseFactory()).isNotNull();
+		assertThat(transactionManager.getDbFactory()).isNotNull();
 	}
 
 }

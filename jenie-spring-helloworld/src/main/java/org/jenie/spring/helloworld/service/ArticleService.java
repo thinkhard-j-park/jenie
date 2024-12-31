@@ -2,6 +2,7 @@ package org.jenie.spring.helloworld.service;
 
 import org.jenie.spring.data.mongodb.transaction.DBKey;
 import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
@@ -13,7 +14,6 @@ import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.exception.ArticleErrors;
 import org.jenie.spring.helloworld.exception.BoardErrors;
-import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
 import org.jenie.spring.helloworld.repository.ArticleContentRepository;
 import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ArticleService {
+
 	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ArticleService.class);
 
 	private final BoardService boardService;
@@ -48,7 +49,7 @@ public class ArticleService {
 					this.boardService.findBoardEntityById(service, articleEntity.getBoardId())))
 			.toList();
 
-		var result =  ArticleHeaderList.from(list, param.getSize());
+		var result = ArticleHeaderList.from(list, param.getSize());
 		logger.info("{}", result);
 		return result;
 	}
