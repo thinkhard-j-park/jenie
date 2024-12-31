@@ -23,6 +23,6 @@ bootJar {
 	enabled = false
 }
 
-//test {
-//	exclude '**/helloworld/**'
-//}
+test {
+	exclude '**/helloworld/**'
+}
