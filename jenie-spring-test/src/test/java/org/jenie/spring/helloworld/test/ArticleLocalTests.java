@@ -39,6 +39,8 @@ class ArticleLocalTests extends HelloworldTests {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleLocalTests.class);
 
+	private static final String TEST_BOARD_ID = "677416d6f5ef8f9e9ddf0b47";
+
 	private TestInfo testInfo;
 
 	private Writer testWriter() {
@@ -97,7 +99,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
+		var boardId = TEST_BOARD_ID;
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
 		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
@@ -123,7 +125,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
+		var boardId = TEST_BOARD_ID;
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
 		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
@@ -146,8 +148,8 @@ class ArticleLocalTests extends HelloworldTests {
 	}
 
 	static Stream<Arguments> provideProtocolBoardId() {
-		return Stream.of(Arguments.of(Protocol.rest, ""), Arguments.of(Protocol.rest, "test-board-id"),
-				Arguments.of(Protocol.grpc, ""), Arguments.of(Protocol.grpc, "test-board-id"));
+		return Stream.of(Arguments.of(Protocol.rest, ""), Arguments.of(Protocol.rest, TEST_BOARD_ID),
+				Arguments.of(Protocol.grpc, ""), Arguments.of(Protocol.grpc, TEST_BOARD_ID));
 	}
 
 	@ParameterizedTest
@@ -158,10 +160,9 @@ class ArticleLocalTests extends HelloworldTests {
 		// 목록 보기할 데이터가 없을 수 있으므로 테스트를 위한 데이터를 생성한다.
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
-		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, "content-" + zdtNow, writer);
 		for (int i = 0; i < 10; i++) {
 			writeArticleAndVerify(articleOperation, service, articleRequest);
 		}
@@ -230,7 +231,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var zdtNow = ZdtUtil.zdtNowString();
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var content = "content-" + title;
-		var articleRequest = new ArticleRequest("test-board-id", title, content, testWriter());
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, testWriter());
 		this.writeArticleAndVerify(articleOperation, "jenie-test", articleRequest);
 	}
 
@@ -239,7 +240,8 @@ class ArticleLocalTests extends HelloworldTests {
 	void writeArticleWithInvalidBoard(Protocol protocol) {
 		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
-		var articleRequest = new ArticleRequest("unknown-board-id", this.testInfo.getDisplayName() + "-" + zdtNow,
+		var unknownBoardId = "66ef7422466e227d819e52fa";
+		var articleRequest = new ArticleRequest(unknownBoardId, this.testInfo.getDisplayName() + "-" + zdtNow,
 				"content-" + zdtNow, testWriter());
 		assertThatThrownBy(() -> this.writeArticleAndVerify(articleOperation, "jenie-test", articleRequest))
 			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
@@ -256,7 +258,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var articleRequest = new ArticleRequest("test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, writer);
 		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
@@ -289,7 +291,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var service = "jenie-test";
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
-		var articleRequest = new ArticleRequest("test-board-id", title, "content-" + createdAt, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, "content-" + createdAt, writer);
 		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
@@ -297,7 +299,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var boardId = articleHeader.board().id();
 		var articleId = articleHeader.id();
 		var titleToModify = this.testInfo.getDisplayName() + "-toModify-" + modifiedAt;
-		var content = ""; // content 가 empty 인 경우는 게시글이 수정되지 않아야 한다.
+		var content = ""; // Article should not be modified if content is empty.
 		var modifyRequest = new ArticleRequest(boardId, titleToModify, content, writer);
 
 		// when
@@ -325,7 +327,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var articleRequest = new ArticleRequest("test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, writer);
 		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 

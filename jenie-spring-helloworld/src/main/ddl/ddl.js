@@ -1,5 +1,5 @@
 db.board.insertMany([{
-    "_id": "test-board-id",
+    "_id": ObjectId("677416d6f5ef8f9e9ddf0b47"),
     "name": "test-board",
     "parentId": "",
     "rootId": ""
