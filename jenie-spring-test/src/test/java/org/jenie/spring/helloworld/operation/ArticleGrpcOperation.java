@@ -5,12 +5,13 @@ import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
-import org.jenie.spring.helloworld.dto.article.ArticleHeaderMessage;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.grpc.ArticleServiceGrpc;
+import org.jenie.spring.helloworld.grpc.DeleteArticleRequestMessage;
 import org.jenie.spring.helloworld.grpc.GetArticleHeaderByIdRequestMessage;
 import org.jenie.spring.helloworld.grpc.ListArticleHeaderRequestMessage;
+import org.jenie.spring.helloworld.grpc.ModifyArticleRequestMessage;
 import org.jenie.spring.helloworld.grpc.ViewArticleRequestMessage;
 import org.jenie.spring.helloworld.grpc.WriteArticleRequestMessage;
 
@@ -50,7 +51,16 @@ public class ArticleGrpcOperation implements ArticleOperation {
 
 	@Override
 	public Article modifyArticle(String service, String articleId, ArticleRequest modifyRequest) {
-		return null;
+		var requestMessage = ModifyArticleRequestMessage.newBuilder()
+			.setService(service)
+			.setId(articleId)
+			.setBoardId(modifyRequest.boardId())
+			.setTitle(modifyRequest.title())
+			.setContent(modifyRequest.content())
+			.setWriter(Writer.toProtoMessage(modifyRequest.writer()))
+			.build();
+		var article = this.blockingStub.modifyArticle(requestMessage);
+		return Article.fromProtoMessage(article);
 	}
 
 	@Override
@@ -60,7 +70,6 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setId(articleId)
 			.setIncViewCount(incViewCount)
 			.build();
-
 		var articleMessage = this.blockingStub.viewArticle(requestMessage);
 		return Article.fromProtoMessage(articleMessage);
 	}
@@ -72,13 +81,15 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setId(articleId)
 			.setLatest(latest)
 			.build();
-		ArticleHeaderMessage articleHeaderMessage = this.blockingStub.getArticleHeaderById(requestMessage);
+		var articleHeaderMessage = this.blockingStub.getArticleHeaderById(requestMessage);
 		return ArticleHeader.fromProtoMessage(articleHeaderMessage);
 	}
 
 	@Override
 	public ArticleDeleteResult deleteArticle(String service, String articleId) {
-		return null;
+		var requestMessage = DeleteArticleRequestMessage.newBuilder().setService(service).setId(articleId).build();
+		var deleteResultMessage = this.blockingStub.deleteArticle(requestMessage);
+		return ArticleDeleteResult.fromProtoMessage(deleteResultMessage);
 	}
 
 }

@@ -4,6 +4,8 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.article.Article;
+import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
+import org.jenie.spring.helloworld.dto.article.ArticleDeleteResultMessage;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderListMessage;
@@ -60,6 +62,22 @@ public class ArticleGrpc extends ArticleServiceGrpc.ArticleServiceImplBase {
 
 		var article = this.articleService.writeArticle(request.getService(), articleRequest);
 		emitResponse(responseObserver, Article.toProtoMessage(article));
+	}
+
+	@Override
+	public void modifyArticle(ModifyArticleRequestMessage request, StreamObserver<ArticleMessage> responseObserver) {
+		var articleRequest = new ArticleRequest(request.getBoardId(), request.getTitle(), request.getContent(),
+				Writer.fromProtoMessage(request.getWriter()));
+
+		var article = this.articleService.modifyArticle(request.getService(), request.getId(), articleRequest);
+		emitResponse(responseObserver, Article.toProtoMessage(article));
+	}
+
+	@Override
+	public void deleteArticle(DeleteArticleRequestMessage request,
+			StreamObserver<ArticleDeleteResultMessage> responseObserver) {
+		var deleteResult = this.articleService.deleteArticle(request.getService(), request.getId());
+		emitResponse(responseObserver, ArticleDeleteResult.toProtoMessage(deleteResult));
 	}
 
 }
