@@ -24,7 +24,7 @@ ext {
 	protobufProjs = subprojects.findAll { it.name in protobufProjects }
 }
 
-configure(subprojects) { project ->
+configure(allprojects) { project ->
 	apply plugin: 'java'
 	apply plugin: 'idea'
 	apply plugin: 'maven-publish'
