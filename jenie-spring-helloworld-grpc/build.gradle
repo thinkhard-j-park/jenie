@@ -1,0 +1,6 @@
+version = "${jenieSpringHelloworldGrpcVersion}"
+
+dependencies {
+	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
+	implementation(project(":jenie-spring-helloworld-web"))
+}

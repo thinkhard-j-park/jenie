@@ -3,7 +3,6 @@ version = "${jenieSpringTestVersion}"
 dependencies {
 	// spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
@@ -23,6 +22,6 @@ bootJar {
 	enabled = false
 }
 
-//test {
-//	exclude '**/helloworld/**'
-//}
+test {
+	exclude '**/helloworld/**'
+}
