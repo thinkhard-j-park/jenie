@@ -1,0 +1,44 @@
+configure(svcProjs) {
+	apply plugin: 'com.google.cloud.tools.jib'
+
+	publishing {
+		publications {
+			gpr(MavenPublication) {
+				from components.java
+				artifact tasks.named("bootJar")
+			}
+		}
+		repositories {
+			maven {
+				name = "GitHubPackages"
+				url = "${repoUrl}"
+				credentials {
+					username = System.getenv("GITHUB_ACTOR")
+					password = System.getenv("GITHUB_TOKEN")
+				}
+			}
+		}
+	}
+
+	publish {
+		dependsOn('bootJar')
+	}
+
+	publishToMavenLocal {
+		dependsOn('bootJar')
+	}
+
+	jib {
+		from {
+			image = 'eclipse-temurin:21'
+		}
+		to {
+			image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld'
+			auth {
+				username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+			}
+			tags = ["${version}.${new Date().format("yyyy-MM-dd-HH-mm-ss")}", 'latest']
+		}
+	}
+}

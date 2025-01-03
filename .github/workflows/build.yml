@@ -48,8 +48,18 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and publish jenie-spring-helloworld
-      run: ./gradlew :jenie-spring-helloworld:publish
+    - name: Build and publish jenie-spring-helloworld-web
+      run: ./gradlew :jenie-spring-helloworld-web:publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and publish jenie-spring-helloworld-rest
+      run: ./gradlew :jenie-spring-helloworld-web-rest:publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and publish jenie-spring-helloworld-grpc
+      run: ./gradlew :jenie-spring-helloworld-web-grpc:publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

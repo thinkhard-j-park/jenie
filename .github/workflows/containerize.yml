@@ -36,7 +36,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Publish container jenie-spring-helloworld
-      run: ./gradlew :jenie-spring-helloworld:jib
+    - name: Publish container jenie-spring-helloworld-rest
+      run: ./gradlew :jenie-spring-helloworld-rest:jib
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish container jenie-spring-helloworld-grpc
+      run: ./gradlew :jenie-spring-helloworld-grpc:jib
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+	<springProperty scope="context" name="spring.application.name" source="spring.application.name"/>
+	<property name="LOG_FILE" value="./logs/app.out"/>
+
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="FILE" />
+	</appender>
+</included>

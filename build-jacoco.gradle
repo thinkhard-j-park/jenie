@@ -1,0 +1,38 @@
+configure(jacocoProjs) {
+	apply plugin: 'jacoco'
+
+	jacoco {
+		setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
+	}
+
+	jacocoTestReport {
+		reports {
+			xml.required = true
+			html.required = false
+		}
+		finalizedBy 'jacocoTestCoverageVerification'
+	}
+
+	jacocoTestCoverageVerification {
+		violationRules {
+			rule {
+				enabled = true
+				element = 'CLASS'
+				// includes = []
+
+				limit {
+					counter = 'LINE'
+					value = 'COVEREDRATIO'
+					minimum = 0.00
+				}
+
+				excludes = []
+			}
+		}
+	}
+
+	test {
+		useJUnitPlatform()
+		finalizedBy 'jacocoTestReport'
+	}
+}

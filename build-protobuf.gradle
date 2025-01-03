@@ -1,0 +1,27 @@
+configure(protobufProjs) {
+	apply plugin: 'com.google.protobuf'
+	dependencies {
+		implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+		implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+		implementation "io.grpc:grpc-stub:${grpcVersion}"
+		compileOnly "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
+	}
+	protobuf {
+		protoc {
+			artifact = "com.google.protobuf:protoc:${protobufVersion}"
+		}
+		plugins {
+			grpc {
+				artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+			}
+		}
+		generateProtoTasks {
+			all().each { task ->
+				task.plugins {
+					grpc {}
+				}
+			}
+		}
+	}
+}
+

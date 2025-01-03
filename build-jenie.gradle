@@ -1,0 +1,20 @@
+def protobufProjects = ['jenie-spring-helloworld-common']
+def bootProjects = [
+		'jenie-spring-data-mongodb',
+		'jenie-spring-helloworld-web',
+		'jenie-spring-helloworld-rest',
+		'jenie-spring-helloworld-grpc',
+		'jenie-spring-test'
+]
+def svcProjects = ['jenie-spring-helloworld-rest', 'jenie-spring-helloworld-grpc']
+def testProjects = ['jenie-spring-test']
+
+ext {
+	protobufProjs = subprojects.findAll { it.name in protobufProjects }
+	libProjs = subprojects.findAll { it.name !in svcProjects }
+	bootProjs = subprojects.findAll { it.name in bootProjects }
+	svcProjs = subprojects.findAll { it.name in svcProjects }
+	mainProjs = subprojects.findAll { it.name !in testProjects }
+	testProjs = subprojects.findAll { it.name in testProjects }
+	jacocoProjs = subprojects.findAll { it.name !in testProjects }
+}

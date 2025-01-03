@@ -1,6 +1,6 @@
 import io.spring.javaformat.gradle.tasks.CheckFormat
 
-version = "${jenieSpringDataMongodbVersion}"
+version = "${jenieSpringHelloworldCommonVersion}"
 
 dependencies {
 	implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")

@@ -155,7 +155,7 @@ jobs:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
-  jenie-spring-helloworld:
+  jenie-spring-helloworld-web:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -175,36 +175,36 @@ jobs:
           distribution: 'temurin'
 
       - name: Check Format, Style
-        run: ./gradlew :jenie-spring-helloworld:checkFormat :jenie-spring-helloworld:checkStyleMain :jenie-spring-helloworld:checkStyleTest
+        run: ./gradlew :jenie-spring-helloworld-web:checkFormat :jenie-spring-helloworld-web:checkStyleMain :jenie-spring-helloworld-web:checkStyleTest
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Run Tests
-        run: ./gradlew :jenie-spring-helloworld:test
+        run: ./gradlew :jenie-spring-helloworld-web:test
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Archive coverage data
         uses: actions/upload-artifact@v4
         with:
-          name: jenie-spring-helloworld_code-coverage
+          name: jenie-spring-helloworld-web_code-coverage
           path: .qodana/code-coverage
 
-      - name: 'Qodana jenie-spring-helloworld'
+      - name: 'Qodana jenie-spring-helloworld-web'
         uses: JetBrains/qodana-action@v2024.3
         with:
           pr-mode: false
           args: |
             -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
             -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-helloworld,
+            --source-directory,jenie-spring-helloworld-web,
             --config,qodana.yaml
-          artifact-name: jenie-spring-helloworld
+          artifact-name: jenie-spring-helloworld-web
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
 
-  jenie-spring-test:
+  jenie-spring-helloworld-rest:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -224,20 +224,80 @@ jobs:
           distribution: 'temurin'
 
       - name: Check Format, Style
-        run: ./gradlew :jenie-spring-test:checkFormat :jenie-spring-test:checkStyleMain :jenie-spring-test:checkStyleTest
+        run: ./gradlew :jenie-spring-helloworld-rest:checkFormat :jenie-spring-helloworld-rest:checkStyleMain :jenie-spring-helloworld-rest:checkStyleTest
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Qodana jenie-spring-test'
+      - name: Run Tests
+        run: ./gradlew :jenie-spring-helloworld-rest:test
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: jenie-spring-helloworld-rest_code-coverage
+          path: .qodana/code-coverage
+
+      - name: 'Qodana jenie-spring-helloworld-rest'
         uses: JetBrains/qodana-action@v2024.3
         with:
           pr-mode: false
           args: |
             -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
             -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-test,
+            --source-directory,jenie-spring-helloworld-rest,
             --config,qodana.yaml
-          artifact-name: jenie-spring-test
+          artifact-name: jenie-spring-helloworld-rest
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
+
+  jenie-spring-helloworld-grpc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          fetch-depth: 0  # a full history is required for pull request analysis
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Check Format, Style
+        run: ./gradlew :jenie-spring-helloworld-grpc:checkFormat :jenie-spring-helloworld-grpc:checkStyleMain :jenie-spring-helloworld-grpc:checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Run Tests
+        run: ./gradlew :jenie-spring-helloworld-grpc:test
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: jenie-spring-helloworld-grpc_code-coverage
+          path: .qodana/code-coverage
+
+      - name: 'Qodana jenie-spring-helloworld-grpc'
+        uses: JetBrains/qodana-action@v2024.3
+        with:
+          pr-mode: false
+          args: |
+            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
+            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
+            --source-directory,jenie-spring-helloworld-grpc,
+            --config,qodana.yaml
+          artifact-name: jenie-spring-helloworld-grpc
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
