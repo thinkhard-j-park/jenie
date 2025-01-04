@@ -13,6 +13,8 @@ import org.jenie.spring.data.mongodb.config.MongoDBCluster;
 import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
@@ -24,6 +26,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 public class MongoTemplateRouterCaffeine implements MongoTemplateRouter {
+
+	private static final Logger logger = LoggerFactory.getLogger(MongoTemplateRouterCaffeine.class);
 
 	private final LoadingCache<String, MongoTransactionManager> transactionManagerCache;
 
@@ -39,6 +43,7 @@ public class MongoTemplateRouterCaffeine implements MongoTemplateRouter {
 
 		this.mongoTemplateCache = Caffeine.newBuilder()
 			.build(new MongoTemplateLoader(connectorRegistry, dbConnCache, databaseFactoryCache));
+		logger.info("MongoTemplateRouterCaffeine is initialized");
 	}
 
 	@Override

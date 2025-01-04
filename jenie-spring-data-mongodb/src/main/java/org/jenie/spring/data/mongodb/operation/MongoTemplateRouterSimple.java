@@ -10,6 +10,8 @@ import org.jenie.spring.data.mongodb.config.MongoDBCluster;
 import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,6 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 public class MongoTemplateRouterSimple implements MongoTemplateRouter {
+	private static final Logger logger = LoggerFactory.getLogger(MongoTemplateRouterSimple.class);
 
 	private final MongoDBConnectorRegistry connectorRegistry;
 
@@ -29,6 +32,7 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 
 	public MongoTemplateRouterSimple(MongoDBConnectorRegistry connectorRegistry) {
 		this.connectorRegistry = connectorRegistry;
+		logger.info("MongoTemplateRouterSimple is initialized");
 	}
 
 	private DBConn dbConn(String dbKey) {
