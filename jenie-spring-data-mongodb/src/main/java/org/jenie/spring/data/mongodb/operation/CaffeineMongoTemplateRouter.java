@@ -12,7 +12,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.data.mongodb.config.MongoDBCluster;
 import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
-import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,20 +19,17 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
-public class MongoTemplateRouterCaffeine implements MongoTemplateRouter {
+public class CaffeineMongoTemplateRouter implements MongoTemplateRouter {
 
-	private static final Logger logger = LoggerFactory.getLogger(MongoTemplateRouterCaffeine.class);
+	private static final Logger logger = LoggerFactory.getLogger(CaffeineMongoTemplateRouter.class);
 
 	private final LoadingCache<String, MongoTransactionManager> transactionManagerCache;
 
 	private final LoadingCache<MongoTemplateKey, MongoTemplate> mongoTemplateCache;
 
-	public MongoTemplateRouterCaffeine(MongoDBConnectorRegistry connectorRegistry) {
+	public CaffeineMongoTemplateRouter(MongoDBConnectorRegistry connectorRegistry) {
 		LoadingCache<String, DBConn> dbConnCache = Caffeine.newBuilder().build(new DBConnLoader(connectorRegistry));
 		LoadingCache<String, MongoDatabaseFactory> databaseFactoryCache = Caffeine.newBuilder()
 			.build(new MongoDatabaseFactoryLoader(connectorRegistry, dbConnCache));
@@ -73,14 +69,7 @@ public class MongoTemplateRouterCaffeine implements MongoTemplateRouter {
 
 		@Override
 		public @Nullable DBConn load(String key) {
-			for (var dbConnTemplate : this.connectorRegistry.getTemplatesList()) {
-				var query = Query.query(Criteria.where("dbKey").is(key));
-				var dbConn = dbConnTemplate.findOne(query, DBConn.class);
-				if (dbConn != null && StringUtils.hasText(dbConn.getId())) {
-					return dbConn;
-				}
-			}
-			throw new DBConnNotFoundException("DBConn must not be null: " + key);
+			return this.connectorRegistry.getDBConn(key);
 		}
 
 	}

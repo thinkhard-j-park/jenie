@@ -9,21 +9,17 @@ import com.mongodb.WriteConcern;
 import org.jenie.spring.data.mongodb.config.MongoDBCluster;
 import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
-import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
-public class MongoTemplateRouterSimple implements MongoTemplateRouter {
+public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 
-	private static final Logger logger = LoggerFactory.getLogger(MongoTemplateRouterSimple.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleMongoTemplateRouter.class);
 
 	private final MongoDBConnectorRegistry connectorRegistry;
 
@@ -33,30 +29,17 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 
 	private final ConcurrentHashMap<MongoTemplateKey, MongoTemplate> mongoTemplateCache = new ConcurrentHashMap<>();
 
-	public MongoTemplateRouterSimple(MongoDBConnectorRegistry connectorRegistry) {
+	public SimpleMongoTemplateRouter(MongoDBConnectorRegistry connectorRegistry) {
 		this.connectorRegistry = connectorRegistry;
 		logger.info("MongoTemplateRouterSimple is initialized");
 	}
 
 	private DBConn dbConn(String dbKey) {
 		if (!this.dbConnCache.containsKey(dbKey)) {
-			this.dbConnCache.putIfAbsent(dbKey, getDBConn(dbKey));
+			this.dbConnCache.putIfAbsent(dbKey, this.connectorRegistry.getDBConn(dbKey));
 		}
 
 		return this.dbConnCache.get(dbKey);
-	}
-
-	private DBConn getDBConn(String dbKey) {
-		for (var dbConnTemplate : this.connectorRegistry.getTemplatesList()) {
-			var query = Query.query(Criteria.where("dbKey").is(dbKey));
-			var dbConn = dbConnTemplate.findOne(query, DBConn.class);
-			if (dbConn != null && StringUtils.hasText(dbConn.getId())) {
-				return dbConn;
-			}
-
-		}
-
-		throw new DBConnNotFoundException("DBConn must not be null: " + dbKey);
 	}
 
 	private SimpleMongoClientDatabaseFactory databaseFactory(DBConn dbConn) {

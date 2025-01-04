@@ -23,18 +23,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class MongoTemplateRouterTests {
 
 	@InjectMocks
-	private MongoTemplateRouterCaffeine mongoTemplateRouter;
+	private CaffeineMongoTemplateRouter mongoTemplateRouter;
 
 	@Mock
 	private MongoDBConnectorRegistry mongoDBConnectorRegistry;
@@ -60,9 +58,8 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
 
@@ -80,8 +77,8 @@ class MongoTemplateRouterTests {
 		// given
 		var mongoTemplateKey = new MongoTemplateKey("unknown", null, null);
 
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(null);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
+		given(this.mongoDBConnectorRegistry.getDBConn(mongoTemplateKey.dbKey()))
+			.willThrow(new DBConnNotFoundException("DB conn must not be null: " + mongoTemplateKey.dbKey()));
 
 		// when, then
 		assertThatThrownBy(() -> this.mongoTemplateRouter.mongoTemplate(mongoTemplateKey.dbKey()))
@@ -100,9 +97,8 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
 
@@ -138,9 +134,8 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
 
@@ -169,9 +164,8 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
 
@@ -203,9 +197,8 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
 
@@ -239,8 +232,7 @@ class MongoTemplateRouterTests {
 		dbConn.setId("mongodb-id");
 
 		var mongoCluster = new MongoDBCluster();
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 		given(this.mongoDBConnector.getCluster()).willReturn(mongoCluster);
@@ -270,8 +262,7 @@ class MongoTemplateRouterTests {
 		dbConn.setDbName("test-db");
 		dbConn.setId("mongodb-id");
 
-		given(this.dbConnTemplate.findOne(any(Query.class), any())).willReturn(dbConn);
-		given(this.mongoDBConnectorRegistry.getTemplatesList()).willReturn(List.of(this.dbConnTemplate));
+		given(this.mongoDBConnectorRegistry.getDBConn(dbKey)).willReturn(dbConn);
 		given(this.mongoDBConnectorRegistry.getConnector(dbConn.getClusterKey())).willReturn(this.mongoDBConnector);
 		given(this.mongoDBConnector.getClient()).willReturn(this.mongoClient);
 

@@ -20,9 +20,9 @@ public class MongoTemplateRouterConfig {
 	@ConditionalOnMissingBean(MongoTemplateRouter.class)
 	public MongoTemplateRouter mongoTemplateRouter(MongoDBSetting setting, MongoDBConnectorRegistry registry) {
 		if (StringUtils.hasText(setting.getRouterType()) && setting.getRouterType().equalsIgnoreCase("simple")) {
-			return new MongoTemplateRouterSimple(registry);
+			return new SimpleMongoTemplateRouter(registry);
 		}
-		return new MongoTemplateRouterCaffeine(registry);
+		return new CaffeineMongoTemplateRouter(registry);
 	}
 
 }
