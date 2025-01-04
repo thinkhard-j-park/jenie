@@ -23,6 +23,8 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 
 	private final MongoDBConnectorRegistry connectorRegistry;
 
+	private final ConcurrentHashMap<String, DBConn> dbConnCache = new ConcurrentHashMap<>();
+
 	private final ConcurrentHashMap<String, SimpleMongoClientDatabaseFactory> databaseFactoryCache = new ConcurrentHashMap<>();
 
 	public MongoTemplateRouterSimple(MongoDBConnectorRegistry connectorRegistry) {
@@ -30,13 +32,23 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 	}
 
 	private DBConn dbConn(String dbKey) {
+		if (!this.dbConnCache.containsKey(dbKey)) {
+			this.dbConnCache.putIfAbsent(dbKey, getDBConn(dbKey));
+		}
+
+		return this.dbConnCache.get(dbKey);
+	}
+
+	private DBConn getDBConn(String dbKey) {
 		for (var dbConnTemplate : this.connectorRegistry.getTemplatesList()) {
 			var query = Query.query(Criteria.where("dbKey").is(dbKey));
 			var dbConn = dbConnTemplate.findOne(query, DBConn.class);
 			if (dbConn != null && StringUtils.hasText(dbConn.getId())) {
 				return dbConn;
 			}
+
 		}
+
 		throw new DBConnNotFoundException("DBConn must not be null: " + dbKey);
 	}
 
@@ -49,7 +61,7 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 			this.databaseFactoryCache.putIfAbsent(dbConn.getDbKey(), databaseFactory);
 		}
 
-		return databaseFactory;
+		return this.databaseFactoryCache.get(dbConn.getDbKey());
 	}
 
 	@Override
