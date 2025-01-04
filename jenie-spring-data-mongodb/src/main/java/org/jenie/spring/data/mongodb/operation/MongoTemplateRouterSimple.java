@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 public class MongoTemplateRouterSimple implements MongoTemplateRouter {
+
 	private static final Logger logger = LoggerFactory.getLogger(MongoTemplateRouterSimple.class);
 
 	private final MongoDBConnectorRegistry connectorRegistry;
