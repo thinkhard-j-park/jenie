@@ -34,7 +34,7 @@ import static org.mockito.BDDMockito.given;
 class MongoTemplateRouterTests {
 
 	@InjectMocks
-	private MongoTemplateRouter mongoTemplateRouter;
+	private MongoTemplateRouterCaffeine mongoTemplateRouter;
 
 	@Mock
 	private MongoDBConnectorRegistry mongoDBConnectorRegistry;
