@@ -39,7 +39,7 @@ public class CaffeineMongoTemplateRouter implements MongoTemplateRouter {
 
 		this.mongoTemplateCache = Caffeine.newBuilder()
 			.build(new MongoTemplateLoader(connectorRegistry, dbConnCache, databaseFactoryCache));
-		logger.info("MongoTemplateRouterCaffeine is initialized");
+		logger.info("CaffeineMongoTemplateRouter is initialized");
 	}
 
 	@Override

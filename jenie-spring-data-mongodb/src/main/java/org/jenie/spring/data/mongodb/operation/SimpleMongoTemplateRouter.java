@@ -31,7 +31,7 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 
 	public SimpleMongoTemplateRouter(MongoDBConnectorRegistry connectorRegistry) {
 		this.connectorRegistry = connectorRegistry;
-		logger.info("MongoTemplateRouterSimple is initialized");
+		logger.info("SimpleMongoTemplateRouter is initialized");
 	}
 
 	private DBConn dbConn(String dbKey) {
