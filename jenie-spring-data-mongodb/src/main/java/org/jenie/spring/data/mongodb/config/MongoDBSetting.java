@@ -51,7 +51,6 @@ public class MongoDBSetting {
 		this.routerType = routerType;
 	}
 
-
 	@Override
 	public String toString() {
 		//@formatter:off
