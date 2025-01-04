@@ -31,6 +31,8 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 
 	private final ConcurrentHashMap<String, SimpleMongoClientDatabaseFactory> databaseFactoryCache = new ConcurrentHashMap<>();
 
+	private final ConcurrentHashMap<MongoTemplateKey, MongoTemplate> mongoTemplateCache = new ConcurrentHashMap<>();
+
 	public MongoTemplateRouterSimple(MongoDBConnectorRegistry connectorRegistry) {
 		this.connectorRegistry = connectorRegistry;
 		logger.info("MongoTemplateRouterSimple is initialized");
@@ -80,18 +82,22 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 
 		var cluster = connector.getCluster();
 
-		var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
-		if (!"primary".equalsIgnoreCase(readPreference.getName())) {
-			var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
-			if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
-				replicaTagSets.addAll(taggableReadPreference.getTagSetList());
+		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
+		if (!this.mongoTemplateCache.containsKey(k)) {
+			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
+			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
+				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
+				if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
+					replicaTagSets.addAll(taggableReadPreference.getTagSetList());
+				}
+				readPreference.withTagSetList(replicaTagSets);
 			}
-			readPreference.withTagSetList(replicaTagSets);
+			template.setReadPreference(readPreference);
+			template.setWriteConcern(writeConcern);
+			this.mongoTemplateCache.putIfAbsent(k, template);
 		}
-		template.setReadPreference(readPreference);
-		template.setWriteConcern(writeConcern);
 
-		return template;
+		return this.mongoTemplateCache.get(k);
 	}
 
 	@Override
@@ -103,11 +109,16 @@ public class MongoTemplateRouterSimple implements MongoTemplateRouter {
 		var factory = databaseFactory(dbConn);
 		Assert.notNull(factory, "MongoDatabaseFactory must not be null");
 
-		var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
-		template.setReadPreference(ReadPreference.secondaryPreferred());
-		template.setWriteConcern(null);
+		var readPreference = ReadPreference.secondaryPreferred();
+		var k = new MongoTemplateKey(dbKey, readPreference, null);
+		if (!this.mongoTemplateCache.containsKey(k)) {
+			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
+			template.setReadPreference(readPreference);
+			template.setWriteConcern(null);
+			this.mongoTemplateCache.putIfAbsent(k, template);
+		}
 
-		return template;
+		return this.mongoTemplateCache.get(k);
 	}
 
 	@Override
