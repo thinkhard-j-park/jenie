@@ -5,7 +5,7 @@
 	<include resource="org/springframework/boot/logging/logback/base.xml"/>
 
 	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-		<appender-ref ref="FILE" />
+		<appender-ref ref="FILE"/>
 	</appender>
 
 	<property name="NETTY_ACCESS_LOG" value="${NETTY_ACCESS_LOG:-./logs/access.log}"/>
