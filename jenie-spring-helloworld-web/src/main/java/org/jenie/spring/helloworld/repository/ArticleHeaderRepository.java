@@ -20,7 +20,6 @@ import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -102,13 +101,6 @@ public class ArticleHeaderRepository extends MongoDBRepository {
 		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.findAndModify(Query.query(Criteria.where("_id").is(new ObjectId(id))), update,
 					FindAndModifyOptions.options().returnNew(true), ArticleHeaderEntity.class);
-	}
-
-	@Async
-	public void incViewCountAsync(String dbKey, String id, Number number) {
-		AssertHelper.validObjectId(id, "id should be valid");
-
-		this.incViewCount(dbKey, id, number);
 	}
 
 	public ArticleHeaderEntity incViewCount(String dbKey, String id, Number number) {

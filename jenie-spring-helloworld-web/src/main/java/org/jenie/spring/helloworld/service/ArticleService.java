@@ -59,7 +59,7 @@ public class ArticleService {
 		var content = contentEntity.getContent();
 
 		if (incViewCount) {
-			this.articleHeaderRepository.incViewCountAsync(service, id, 1);
+			this.articleHeaderRepository.incViewCount(service, id, 1);
 		}
 
 		return new Article(header, content);
