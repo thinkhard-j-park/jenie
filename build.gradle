@@ -81,7 +81,6 @@ configure(bootProjs) {
 configure(svcProjs) {
 	dependencies {
 		// spring
-		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 		implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
 		// test

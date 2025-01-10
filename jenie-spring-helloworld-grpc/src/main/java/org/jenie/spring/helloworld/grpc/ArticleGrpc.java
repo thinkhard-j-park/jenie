@@ -1,7 +1,6 @@
 package org.jenie.spring.helloworld.grpc;
 
 import io.grpc.stub.StreamObserver;
-import net.devh.boot.grpc.server.service.GrpcService;
 import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
@@ -15,7 +14,9 @@ import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.service.ArticleService;
 
-@GrpcService
+import org.springframework.stereotype.Service;
+
+@Service
 public class ArticleGrpc extends ArticleServiceGrpc.ArticleServiceImplBase {
 
 	private final ArticleService articleService;
