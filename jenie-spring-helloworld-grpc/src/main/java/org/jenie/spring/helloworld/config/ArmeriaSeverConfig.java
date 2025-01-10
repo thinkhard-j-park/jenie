@@ -50,7 +50,7 @@ public class ArmeriaSeverConfig {
 				.exceptionHandler(this.grpcExceptionHandler)
 				.enableUnframedRequests(true)
 				.enableHealthCheckService(true)
-				.autoCompression(true)
+				.autoCompression(this.helloworldProperties.isServerCompression())
 				.build();
 			serverBuilder.service(grpcBuilder, LoggingService.newDecorator());
 			serverBuilder.serviceUnder("/docs", new DocService());
