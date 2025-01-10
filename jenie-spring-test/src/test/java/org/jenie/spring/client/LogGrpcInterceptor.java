@@ -39,8 +39,15 @@ public class LogGrpcInterceptor implements ClientInterceptor {
 						responseListener) {
 
 					@Override
+					public void onHeaders(Metadata headers) {
+						logger.info("[{}] Headers <- {}\n{}", LogGrpcInterceptor.this.properties.getClientName(),
+								method.getFullMethodName(), headers);
+						super.onHeaders(headers);
+					}
+
+					@Override
 					public void onMessage(RespT message) {
-						logger.info("[{}] Response <- {}\n{}", LogGrpcInterceptor.this.properties.getClientName(),
+						logger.info("[{}] Message <- {}\n{}", LogGrpcInterceptor.this.properties.getClientName(),
 								method.getFullMethodName(), message);
 						super.onMessage(message);
 					}

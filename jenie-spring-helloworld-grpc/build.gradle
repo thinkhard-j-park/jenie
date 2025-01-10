@@ -2,7 +2,6 @@ version = "${jenieSpringHelloworldGrpcVersion}"
 
 dependencies {
 	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
-	implementation "org.hibernate.validator:hibernate-validator:${hibernateVersion}"
 
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	implementation 'com.linecorp.armeria:armeria-grpc'

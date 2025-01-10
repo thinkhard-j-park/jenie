@@ -18,9 +18,13 @@ public class ArmeriaSeverConfig {
 
 	private final GrpcExceptionHandler grpcExceptionHandler;
 
-	public ArmeriaSeverConfig(ArticleGrpc articleGrpc, GrpcExceptionHandler grpcExceptionHandler) {
+	private final HelloworldProperties helloworldProperties;
+
+	public ArmeriaSeverConfig(ArticleGrpc articleGrpc, GrpcExceptionHandler grpcExceptionHandler,
+			HelloworldProperties helloworldProperties) {
 		this.articlesGrpc = articleGrpc;
 		this.grpcExceptionHandler = grpcExceptionHandler;
+		this.helloworldProperties = helloworldProperties;
 	}
 
 	@Bean
@@ -31,7 +35,7 @@ public class ArmeriaSeverConfig {
 				.addService(this.articlesGrpc)
 				.exceptionHandler(this.grpcExceptionHandler)
 				.enableHealthCheckService(true)
-				.autoCompression(true)
+				.autoCompression(this.helloworldProperties.isServerCompression())
 				.build();
 			serverBuilder.service(grpcBuilder, LoggingService.newDecorator());
 		};
