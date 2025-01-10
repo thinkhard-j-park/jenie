@@ -6,6 +6,7 @@ dependencies {
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	implementation 'com.linecorp.armeria:armeria-grpc'
 	runtimeOnly 'com.linecorp.armeria:armeria-spring-boot3-actuator-starter'
+	implementation "io.netty:netty-transport-native-epoll:${nettyVersion}:linux-x86_64"
 
 	implementation(project(":jenie-spring-helloworld-web"))
 }
