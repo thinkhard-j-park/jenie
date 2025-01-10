@@ -1,12 +1,14 @@
 version = "${jenieSpringHelloworldGrpcVersion}"
 
 dependencies {
-	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
-
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
+	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
 	implementation 'com.linecorp.armeria:armeria-grpc'
 	runtimeOnly 'com.linecorp.armeria:armeria-spring-boot3-actuator-starter'
-	implementation "io.netty:netty-transport-native-epoll:${nettyVersion}:linux-x86_64"
+	implementation "org.hibernate.validator:hibernate-validator:${hibernateVersion}"
+
+	implementation platform("io.netty:netty-bom:${nettyVersion}")
+	implementation "io.netty:netty-transport-native-epoll:linux-x86_64"
 
 	implementation(project(":jenie-spring-helloworld-web"))
 }
