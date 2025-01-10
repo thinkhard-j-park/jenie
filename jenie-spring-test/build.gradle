@@ -6,8 +6,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
+	// armeria
+	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
+	implementation 'com.linecorp.armeria:armeria-grpc'
+
 	// others
-	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
 	implementation "org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}"
 
 	// jenie

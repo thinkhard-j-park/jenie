@@ -56,7 +56,8 @@ class ArticleLocalTests extends HelloworldTests {
 	void checkProperties() {
 		assertThat(this.testProperties).isNotNull();
 		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
-		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://localhost:30000");
+		assertThat(this.testProperties.getRestUrl()).isEqualTo("http://localhost:30000");
+		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://localhost:30005");
 	}
 
 	@Test
@@ -91,6 +92,15 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(createdArticle.content()).isEqualTo(articleRequest.content());
 
 		return createdArticle;
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void getLargeContent(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
+		var result = articleOperation.listArticleHeader("jenie-dev",
+				new ListArticleHeaderRequestParam("", "", 1000, SortCode.TIME_DESC.getCode()));
+		assertThat(result).isNotNull();
 	}
 
 	@ParameterizedTest

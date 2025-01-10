@@ -5,17 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "helloworld")
 public class HelloworldTestProperties {
 
-	String clientName;
+	private String clientName;
 
-	String baseUrl;
+	private String restUrl;
 
-	public String getBaseUrl() {
-		return this.baseUrl;
-	}
-
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
+	private String grpcUrl;
 
 	public String getClientName() {
 		return this.clientName;
@@ -23,6 +17,22 @@ public class HelloworldTestProperties {
 
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
+	}
+
+	public String getRestUrl() {
+		return this.restUrl;
+	}
+
+	public void setRestUrl(String restUrl) {
+		this.restUrl = restUrl;
+	}
+
+	public String getGrpcUrl() {
+		return this.grpcUrl;
+	}
+
+	public void setGrpcUrl(String grpcUrl) {
+		this.grpcUrl = grpcUrl;
 	}
 
 }
