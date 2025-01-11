@@ -18,7 +18,7 @@ jib {
 		image = 'eclipse-temurin:21'
 	}
 	to {
-		image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-grpc'
+		image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-armeria-grpc'
 		auth {
 			username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
 			password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")

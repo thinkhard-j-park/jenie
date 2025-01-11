@@ -16,6 +16,15 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        project:
+          - jenie-spring-core
+          - jenie-spring-data-mongodb
+          - jenie-spring-helloworld-common
+          - jenie-spring-helloworld-web
+          - jenie-spring-helloworld-rest
+          - jenie-spring-helloworld-armeria-grpc
     steps:
     - uses: actions/checkout@v4
 
@@ -33,33 +42,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Build and publish jenie-spring-core
-      run: ./gradlew :jenie-spring-core:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-data-mongodb
-      run: ./gradlew :jenie-spring-data-mongodb:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld-common
-      run: ./gradlew :jenie-spring-helloworld-common:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld-web
-      run: ./gradlew :jenie-spring-helloworld-web:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld-rest
-      run: ./gradlew :jenie-spring-helloworld-web-rest:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld-grpc
-      run: ./gradlew :jenie-spring-helloworld-web-grpc:publish
+    - name: Build and publish ${{ matrix.project }}
+      run: ./gradlew :${{ matrix.project }}:publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

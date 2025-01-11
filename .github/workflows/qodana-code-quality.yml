@@ -8,18 +8,27 @@ on:
       - 'releases/*' # The release branches
 
 jobs:
-  jenie-spring-core:
+  build-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       checks: write
       packages: read
+    strategy:
+      matrix:
+        project:
+          - jenie-spring-core
+          - jenie-spring-data-mongodb
+          - jenie-spring-helloworld-common
+          - jenie-spring-helloworld-web
+          - jenie-spring-helloworld-rest
+          - jenie-spring-helloworld-armeria-grpc
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
+          ref: ${{ github.event.pull_request.head.sha }} # to check out the pull request commit
+          fetch-depth: 0 # a full history is required for pull request analysis
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -27,277 +36,32 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-core:checkFormat :jenie-spring-core:checkStyleMain :jenie-spring-core:checkStyleTest
+      - name: Check Format, Style ${{ matrix.project }}
+        run: ./gradlew :${{ matrix.project }}:checkFormat :${{ matrix.project }}:checkStyleMain :${{ matrix.project }}:checkStyleTest
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Tests
-        run: ./gradlew :jenie-spring-core:test
+        run: ./gradlew :${{ matrix.project }}:test
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Archive coverage data
+      - name: Archive coverage data ${{ matrix.project }}
         uses: actions/upload-artifact@v4
         with:
-          name: jenie-spring-core_code-coverage
+          name: ${{ matrix.project }}_code-coverage
           path: .qodana/code-coverage
 
-      - name: 'Qodana jenie-spring-data-mongodb'
+      - name: 'Qodana Analysis' ${{ matrix.project }}
         uses: JetBrains/qodana-action@v2024.3
         with:
           pr-mode: false
           args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-core,
+            -e,GITHUB_ACTOR=${{ secrets.GITHUB_ACTOR }},
+            -e,GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }},
+            --source-directory,${{ matrix.project }},
             --config,qodana.yaml
-          artifact-name: jenie-spring-core
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
-
-  jenie-spring-data-mongodb:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-data-mongodb:checkFormat :jenie-spring-data-mongodb:checkStyleMain :jenie-spring-data-mongodb:checkStyleTest
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Run Tests
-        run: ./gradlew :jenie-spring-data-mongodb:test
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v4
-        with:
-          name: jenie-spring-data-mongodb_code-coverage
-          path: .qodana/code-coverage
-
-      - name: 'Qodana jenie-spring-data-mongodb'
-        uses: JetBrains/qodana-action@v2024.3
-        with:
-          pr-mode: false
-          args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-data-mongodb,
-            --config,qodana.yaml
-          artifact-name: jenie-spring-data-mongodb
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
-
-  jenie-spring-helloworld-common:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-helloworld-common:checkFormat :jenie-spring-helloworld-common:checkStyleMain :jenie-spring-helloworld-common:checkStyleTest
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Run Tests
-        run: ./gradlew :jenie-spring-helloworld-common:test
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v4
-        with:
-          name: jenie-spring-helloworld-common_code-coverage
-          path: .qodana/code-coverage
-
-      - name: 'Qodana jenie-spring-helloworld-common'
-        uses: JetBrains/qodana-action@v2024.3
-        with:
-          pr-mode: false
-          args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-helloworld-common,
-            --config,qodana.yaml
-          artifact-name: jenie-spring-helloworld-common
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
-
-  jenie-spring-helloworld-web:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-helloworld-web:checkFormat :jenie-spring-helloworld-web:checkStyleMain :jenie-spring-helloworld-web:checkStyleTest
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Run Tests
-        run: ./gradlew :jenie-spring-helloworld-web:test
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v4
-        with:
-          name: jenie-spring-helloworld-web_code-coverage
-          path: .qodana/code-coverage
-
-      - name: 'Qodana jenie-spring-helloworld-web'
-        uses: JetBrains/qodana-action@v2024.3
-        with:
-          pr-mode: false
-          args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-helloworld-web,
-            --config,qodana.yaml
-          artifact-name: jenie-spring-helloworld-web
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
-
-  jenie-spring-helloworld-rest:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-helloworld-rest:checkFormat :jenie-spring-helloworld-rest:checkStyleMain :jenie-spring-helloworld-rest:checkStyleTest
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Run Tests
-        run: ./gradlew :jenie-spring-helloworld-rest:test
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v4
-        with:
-          name: jenie-spring-helloworld-rest_code-coverage
-          path: .qodana/code-coverage
-
-      - name: 'Qodana jenie-spring-helloworld-rest'
-        uses: JetBrains/qodana-action@v2024.3
-        with:
-          pr-mode: false
-          args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-helloworld-rest,
-            --config,qodana.yaml
-          artifact-name: jenie-spring-helloworld-rest
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
-
-  jenie-spring-helloworld-grpc:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      packages: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Check Format, Style
-        run: ./gradlew :jenie-spring-helloworld-grpc:checkFormat :jenie-spring-helloworld-grpc:checkStyleMain :jenie-spring-helloworld-grpc:checkStyleTest
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Run Tests
-        run: ./gradlew :jenie-spring-helloworld-grpc:test
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v4
-        with:
-          name: jenie-spring-helloworld-grpc_code-coverage
-          path: .qodana/code-coverage
-
-      - name: 'Qodana jenie-spring-helloworld-grpc'
-        uses: JetBrains/qodana-action@v2024.3
-        with:
-          pr-mode: false
-          args: |
-            -e,GITHUB_ACTOR=${{secrets.GITHUB_ACTOR}},
-            -e,GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}},
-            --source-directory,jenie-spring-helloworld-grpc,
-            --config,qodana.yaml
-          artifact-name: jenie-spring-helloworld-grpc
+          artifact-name: ${{ matrix.project }}
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'

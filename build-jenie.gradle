@@ -3,10 +3,10 @@ def bootProjects = [
 		'jenie-spring-data-mongodb',
 		'jenie-spring-helloworld-web',
 		'jenie-spring-helloworld-rest',
-		'jenie-spring-helloworld-grpc',
+		'jenie-spring-helloworld-armeria-grpc',
 		'jenie-spring-test'
 ]
-def svcProjects = ['jenie-spring-helloworld-rest', 'jenie-spring-helloworld-grpc']
+def svcProjects = ['jenie-spring-helloworld-rest', 'jenie-spring-helloworld-armeria-grpc']
 def testProjects = ['jenie-spring-test']
 
 ext {

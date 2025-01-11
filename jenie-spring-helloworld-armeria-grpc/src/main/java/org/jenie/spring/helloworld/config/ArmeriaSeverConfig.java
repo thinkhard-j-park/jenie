@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class ArmeriaSeverConfig {
+
 	private static final Logger logger = LoggerFactory.getLogger(ArmeriaSeverConfig.class);
 
 	private final ArticleGrpc articlesGrpc;

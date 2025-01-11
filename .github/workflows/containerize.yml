@@ -19,6 +19,12 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        project:
+          - jenie-spring-helloworld-rest
+          - jenie-spring-helloworld-armeria-grpc
+
     steps:
     - uses: actions/checkout@v4
 
@@ -36,12 +42,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Publish container jenie-spring-helloworld-rest
-      run: ./gradlew :jenie-spring-helloworld-rest:jib
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Publish container jenie-spring-helloworld-grpc
-      run: ./gradlew :jenie-spring-helloworld-grpc:jib
+    - name: Publish container  ${{ matrix.project }}
+      run: ./gradlew :${{ matrix.project }}:jib
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
