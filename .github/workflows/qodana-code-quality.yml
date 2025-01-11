@@ -52,7 +52,7 @@ jobs:
           name: ${{ matrix.project }}_code-coverage
           path: .qodana/code-coverage
 
-      - name: 'Qodana Analysis' ${{ matrix.project }}
+      - name: Qodana Analysis ${{ matrix.project }}
         uses: JetBrains/qodana-action@v2024.3
         with:
           pr-mode: false
