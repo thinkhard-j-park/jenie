@@ -1,4 +1,4 @@
-version = "${jenieSpringHelloworldGrpcVersion}"
+version = "${jenieSpringHelloworldArmeriaGrpcVersion}"
 
 dependencies {
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
