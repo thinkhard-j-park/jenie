@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class ArmeriaSeverConfig {
@@ -32,33 +31,22 @@ public class ArmeriaSeverConfig {
 	}
 
 	@Bean
-	@Profile("dev")
 	public ArmeriaServerConfigurator armeriaSeverConfigConfigurator() {
 		return (serverBuilder) -> {
-			logger.info("Server autoCompression: {}", this.helloworldProperties.isServerCompression());
+			logger.info("Custom properties: {}", this.helloworldProperties);
 			var grpcService = GrpcService.builder()
 				.addService(this.articlesGrpc)
 				.exceptionHandler(this.grpcExceptionHandler)
 				.enableHealthCheckService(true)
+				.useBlockingTaskExecutor(this.helloworldProperties.isUseBlockingTaskExecutor())
 				.autoCompression(this.helloworldProperties.isServerCompression())
+				.enableUnframedRequests(this.helloworldProperties.isUseDocs())
 				.build();
 			serverBuilder.service(grpcService, LoggingService.newDecorator());
-		};
-	}
 
-	@Bean
-	@Profile("local")
-	public ArmeriaServerConfigurator armeriaSeverConfigLocal() {
-		return (serverBuilder) -> {
-			var grpcBuilder = GrpcService.builder()
-				.addService(this.articlesGrpc)
-				.exceptionHandler(this.grpcExceptionHandler)
-				.enableUnframedRequests(true)
-				.enableHealthCheckService(true)
-				.autoCompression(this.helloworldProperties.isServerCompression())
-				.build();
-			serverBuilder.service(grpcBuilder, LoggingService.newDecorator());
-			serverBuilder.serviceUnder("/docs", new DocService());
+			if (this.helloworldProperties.isUseDocs()) {
+				serverBuilder.serviceUnder("/docs", new DocService());
+			}
 		};
 	}
 
