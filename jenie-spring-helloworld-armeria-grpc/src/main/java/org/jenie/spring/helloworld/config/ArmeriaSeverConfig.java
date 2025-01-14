@@ -41,7 +41,6 @@ public class ArmeriaSeverConfig {
 				.useBlockingTaskExecutor(this.helloworldProperties.isUseBlockingTaskExecutor())
 				.autoCompression(this.helloworldProperties.isServerCompression())
 				.enableUnframedRequests(this.helloworldProperties.isUseDocs())
-				.maxRequestMessageLength(1024 * 3 * 4)
 				.build();
 			serverBuilder.service(grpcService, LoggingService.newDecorator());
 
