@@ -11,6 +11,8 @@ public class HelloworldProperties {
 
 	private boolean useDocs;
 
+	private boolean useVirtualThread;
+
 	public boolean isServerCompression() {
 		return this.serverCompression;
 	}
@@ -35,6 +37,14 @@ public class HelloworldProperties {
 		this.useDocs = useDocs;
 	}
 
+	public boolean isUseVirtualThread() {
+		return this.useVirtualThread;
+	}
+
+	public void setUseVirtualThread(boolean useVirtualThread) {
+		this.useVirtualThread = useVirtualThread;
+	}
+
 	@Override
 	public String toString() {
 		//@formatter:off
@@ -42,6 +52,7 @@ public class HelloworldProperties {
 				"serverCompression=" + this.serverCompression +
 				", useBlockingTaskExecutor=" + this.useBlockingTaskExecutor +
 				", useDocs=" + this.useDocs +
+				", useVirtualThread=" + this.useVirtualThread +
 				'}';
 		//@formatter:on
 	}

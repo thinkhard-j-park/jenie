@@ -1,5 +1,8 @@
 package org.jenie.spring.helloworld.config;
 
+import java.util.concurrent.Executors;
+
+import com.linecorp.armeria.common.util.BlockingTaskExecutor;
 import com.linecorp.armeria.server.docs.DocService;
 import com.linecorp.armeria.server.grpc.GrpcService;
 import com.linecorp.armeria.server.logging.LoggingService;
@@ -34,6 +37,7 @@ public class ArmeriaSeverConfig {
 	public ArmeriaServerConfigurator armeriaSeverConfigConfigurator() {
 		return (serverBuilder) -> {
 			logger.info("Custom properties: {}", this.helloworldProperties);
+
 			var grpcService = GrpcService.builder()
 				.addService(this.articlesGrpc)
 				.exceptionHandler(this.grpcExceptionHandler)
@@ -43,6 +47,14 @@ public class ArmeriaSeverConfig {
 				.enableUnframedRequests(this.helloworldProperties.isUseDocs())
 				.build();
 			serverBuilder.service(grpcService, LoggingService.newDecorator());
+
+			if (this.helloworldProperties.isUseVirtualThread()) {
+				var virtualThreadExecutor = Executors.newVirtualThreadPerTaskExecutor();
+				var blockingExecutor = BlockingTaskExecutor.builder()
+					.taskFunction((runnable) -> () -> virtualThreadExecutor.submit(runnable))
+					.build();
+				serverBuilder.blockingTaskExecutor(blockingExecutor, true);
+			}
 
 			if (this.helloworldProperties.isUseDocs()) {
 				serverBuilder.serviceUnder("/docs", new DocService());
