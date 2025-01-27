@@ -1,11 +1,24 @@
-version = "${jenieSpringDataMongodbVersion}"
+import io.spring.javaformat.gradle.tasks.CheckFormat
+
+version = "${jenieSpringHelloworldCommonVersion}"
 
 dependencies {
 	implementation platform("org.springframework:spring-framework-bom:${springBomVersion}")
 	implementation 'org.springframework:spring-core'
+	implementation 'org.springframework:spring-web'
 	implementation(project(":jenie-spring-core"))
 
 	testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
 	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation "org.assertj:assertj-core:${assertjVersion}"
+}
+
+tasks.withType(CheckFormat).configureEach {
+	exclude "**/grpc/**"
+	exclude "**/common/*Proto.java"
+	exclude "**/common/*Message.java"
+	exclude "**/common/*MessageOrBuilder.java"
+	exclude "**/dto/**/*Proto.java"
+	exclude "**/dto/**/*Message.java"
+	exclude "**/dto/**/*MessageOrBuilder.java"
 }

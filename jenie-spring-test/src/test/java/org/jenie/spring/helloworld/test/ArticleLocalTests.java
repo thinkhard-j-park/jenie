@@ -1,23 +1,33 @@
 package org.jenie.spring.helloworld.test;
 
 import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Stream;
 
+import io.grpc.Metadata;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import org.jenie.spring.client.Constant.Protocol;
 import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Writer;
+import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.dto.SortCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.util.ZdtUtil;
+import org.jenie.spring.helloworld.operation.ArticleOperation;
+import org.jenie.spring.helloworld.utils.ZdtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.http.ProblemDetail;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -28,6 +38,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ArticleLocalTests extends HelloworldTests {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleLocalTests.class);
+
+	private static final String TEST_BOARD_ID = "677416d6f5ef8f9e9ddf0b47";
 
 	private TestInfo testInfo;
 
@@ -40,12 +52,32 @@ class ArticleLocalTests extends HelloworldTests {
 		this.testInfo = testInfo;
 	}
 
-	private Article writeArticleAndVerify(String service, String boardId, String title, String content, Writer writer) {
-		// given
-		var articleRequest = new ArticleRequest(boardId, title, content, writer);
+	@Test
+	void checkProperties() {
+		assertThat(this.testProperties).isNotNull();
+		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
+		assertThat(this.testProperties.getRestUrl()).isEqualTo("http://localhost:30000");
+		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://localhost:30005");
+	}
 
-		// when
-		Article createdArticle = this.articleOperation.writeArticle(service, articleRequest);
+	@Test
+	void checkRestOperation() {
+		assertThat(this.articleRestOperation).isNotNull();
+	}
+
+	@Test
+	void checkGrpcOperation() {
+		assertThat(this.articleGrpcOperation).isNotNull();
+	}
+
+	static Stream<Arguments> provideProtocol() {
+		return Stream.of(Arguments.of(Protocol.rest), Arguments.of(Protocol.grpc));
+	}
+
+	private Article writeArticleAndVerify(ArticleOperation articleOperation, String service,
+			ArticleRequest articleRequest) {
+		// given, when
+		Article createdArticle = articleOperation.writeArticle(service, articleRequest);
 
 		// then
 		assertThat(createdArticle).isNotNull();
@@ -53,36 +85,41 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(createdArticle.header().id()).isNotEmpty();
 		assertThat(createdArticle.header().board()).isNotNull();
 		assertThat(createdArticle.header().state()).isEqualTo(ArticleState.Normal.getCode());
-		assertThat(createdArticle.header().board().id()).isEqualTo(boardId);
+		assertThat(createdArticle.header().board().id()).isEqualTo(articleRequest.boardId());
 		assertThat(createdArticle.header().writer()).isNotNull();
-		assertThat(createdArticle.header().writer().getWid()).isEqualTo(writer.getWid());
-		assertThat(createdArticle.header().title()).isEqualTo(title);
-		assertThat(createdArticle.content()).isEqualTo(content);
+		assertThat(createdArticle.header().writer().getWid()).isEqualTo(articleRequest.writer().getWid());
+		assertThat(createdArticle.header().title()).isEqualTo(articleRequest.title());
+		assertThat(createdArticle.content()).isEqualTo(articleRequest.content());
 
 		return createdArticle;
 	}
 
-	@Test
-	void checkProperties() {
-		assertThat(this.testProperties).isNotNull();
-		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
-		assertThat(this.testProperties.getBaseUrl()).isEqualTo("http://localhost:30000");
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void getLargeContent(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
+		var result = articleOperation.listArticleHeader("jenie-dev",
+				new ListArticleHeaderRequestParam("", "", 1000, SortCode.TIME_DESC.getCode()));
+		assertThat(result).isNotNull();
 	}
 
-	@Test
-	void getArticleHeaderById() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void getArticleHeaderById(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
+		var boardId = TEST_BOARD_ID;
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
-		var article = this.writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
+		var article = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		assertThat(article).isNotNull();
 		assertThat(article.header()).isNotNull();
 		assertThat(article.header().id()).isNotEmpty();
 
 		var articleId = article.header().id();
-		var fetchedArticleHeader = this.articleOperation.getArticleByHeader(service, articleId, true);
+		var fetchedArticleHeader = articleOperation.getArticleByHeader(service, articleId, true);
 		assertThat(fetchedArticleHeader).isNotNull();
 		assertThat(fetchedArticleHeader.id()).isEqualTo(articleId);
 		assertThat(fetchedArticleHeader.board().id()).isEqualTo(boardId);
@@ -92,20 +129,23 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticleHeader.writer().getWid()).isEqualTo(writer.getWid());
 	}
 
-	@Test
-	void viewArticle() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void viewArticle(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
+		var boardId = TEST_BOARD_ID;
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
-		var article = this.writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+		var articleRequest = new ArticleRequest(boardId, title, "content-" + zdtNow, writer);
+		var article = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		assertThat(article).isNotNull();
 		assertThat(article.header()).isNotNull();
 		assertThat(article.header().id()).isNotEmpty();
 
 		var articleId = article.header().id();
-		var fetchedArticle = this.articleOperation.viewArticle(service, articleId, true);
+		var fetchedArticle = articleOperation.viewArticle(service, articleId, true);
 		assertThat(fetchedArticle).isNotNull();
 		assertThat(fetchedArticle.header()).isNotNull();
 		assertThat(fetchedArticle.header().id()).isEqualTo(articleId);
@@ -117,17 +157,24 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticle.content()).isEqualTo(article.content());
 	}
 
+	static Stream<Arguments> provideProtocolBoardId() {
+		return Stream.of(Arguments.of(Protocol.rest, ""), Arguments.of(Protocol.rest, TEST_BOARD_ID),
+				Arguments.of(Protocol.grpc, ""), Arguments.of(Protocol.grpc, TEST_BOARD_ID));
+	}
+
 	@ParameterizedTest
-	@ValueSource(strings = { "", "test-board-id" })
-	void listArticleHeader(String targetBoardId) {
+	@MethodSource("provideProtocolBoardId")
+	void listArticleHeader(Protocol protocol, String targetBoardId) {
+		var articleOperation = articleOperation(protocol);
+
 		// 목록 보기할 데이터가 없을 수 있으므로 테스트를 위한 데이터를 생성한다.
 		var zdtNow = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
-		var boardId = "test-board-id";
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var writer = testWriter();
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, "content-" + zdtNow, writer);
 		for (int i = 0; i < 10; i++) {
-			writeArticleAndVerify(service, boardId, title, "content-" + zdtNow, writer);
+			writeArticleAndVerify(articleOperation, service, articleRequest);
 		}
 
 		// 목록보기
@@ -136,7 +183,7 @@ class ArticleLocalTests extends HelloworldTests {
 				SortCode.TIME_DESC.getCode());
 
 		// when
-		var articleHeaderList = this.articleOperation.listArticleHeader(service, listArticleHeaderRequestParam);
+		var articleHeaderList = articleOperation.listArticleHeader(service, listArticleHeaderRequestParam);
 
 		// then
 		assertThat(articleHeaderList).isNotNull();
@@ -163,8 +210,7 @@ class ArticleLocalTests extends HelloworldTests {
 				previousArticleHeader.id(), 5, SortCode.TIME_DESC.getCode());
 
 		// when
-		var moreArticleHeaderList = this.articleOperation.listArticleHeader("jenie-test",
-				listMoreArticleHeaderRequestParam);
+		var moreArticleHeaderList = articleOperation.listArticleHeader(service, listMoreArticleHeaderRequestParam);
 
 		// then
 		assertThat(moreArticleHeaderList).isNotNull();
@@ -188,32 +234,42 @@ class ArticleLocalTests extends HelloworldTests {
 			.isSortedAccordingTo(Comparator.comparing(ArticleHeader::id).reversed());
 	}
 
-	@Test
-	void writeArticle() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void writeArticle(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
 		var title = this.testInfo.getDisplayName() + "-" + zdtNow;
 		var content = "content-" + title;
-
-		this.writeArticleAndVerify("jenie-test", "test-board-id", title, content, testWriter());
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, testWriter());
+		this.writeArticleAndVerify(articleOperation, "jenie-test", articleRequest);
 	}
 
-	@Test
-	void writeArticleWithInvalidBoard() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void writeArticleWithInvalidBoard(Protocol protocol) {
+		var articleOperation = articleOperation(protocol);
 		var zdtNow = ZdtUtil.zdtNowString();
-		assertThatThrownBy(() -> this.writeArticleAndVerify("jenie-test", "unknown-board-id",
-				this.testInfo.getDisplayName() + "-" + zdtNow, "content-" + zdtNow, testWriter()))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+		var unknownBoardId = "66ef7422466e227d819e52fa";
+		var articleRequest = new ArticleRequest(unknownBoardId, this.testInfo.getDisplayName() + "-" + zdtNow,
+				"content-" + zdtNow, testWriter());
+		assertThatThrownBy(() -> this.writeArticleAndVerify(articleOperation, "jenie-test", articleRequest))
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.BOARD_NOT_FOUND));
 	}
 
-	@Test
-	void modifyArticle() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void modifyArticle(Protocol protocol) {
 		// given
+		var articleOperation = articleOperation(protocol);
 		var createdAt = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, writer);
+		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		var modifiedAt = ZdtUtil.zdtNowString();
@@ -224,7 +280,7 @@ class ArticleLocalTests extends HelloworldTests {
 		var modifyRequest = new ArticleRequest(boardId, titleToModify, contentToModify, writer);
 
 		// when
-		Article modifiedArticle = this.articleOperation.modifyArticle(service, articleId, modifyRequest);
+		Article modifiedArticle = articleOperation.modifyArticle(service, articleId, modifyRequest);
 
 		// then
 		assertThat(modifiedArticle).isNotNull();
@@ -236,30 +292,33 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(modifiedArticle.content()).isEqualTo(contentToModify);
 	}
 
-	@Test
-	void modifyArticleRollback() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void modifyArticleRollback(Protocol protocol) {
 		// given
+		var articleOperation = articleOperation(protocol);
 		var createdAt = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, "content-" + createdAt,
-				writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, "content-" + createdAt, writer);
+		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		var modifiedAt = ZdtUtil.zdtNowString();
 		var boardId = articleHeader.board().id();
 		var articleId = articleHeader.id();
 		var titleToModify = this.testInfo.getDisplayName() + "-toModify-" + modifiedAt;
-		var content = ""; // content 가 empty 인 경우는 게시글이 수정되지 않아야 한다.
+		var content = ""; // Article should not be modified if content is empty.
 		var modifyRequest = new ArticleRequest(boardId, titleToModify, content, writer);
 
 		// when
-		assertThatThrownBy(() -> this.articleOperation.modifyArticle(service, articleId, modifyRequest))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+		assertThatThrownBy(() -> articleOperation.modifyArticle(service, articleId, modifyRequest))
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.ILLEGAL_DATA));
 
 		// then
-		var fetchedArticleHeader = this.articleOperation.getArticleByHeader(service, articleId, true);
+		var fetchedArticleHeader = articleOperation.getArticleByHeader(service, articleId, true);
 		assertThat(fetchedArticleHeader).isNotNull();
 		assertThat(fetchedArticleHeader.id()).isEqualTo(articleId);
 		assertThat(fetchedArticleHeader.board().id()).isEqualTo(boardId);
@@ -268,19 +327,22 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(fetchedArticleHeader.actionDateTime().getUpdatedAt()).isNull();
 	}
 
-	@Test
-	void deleteArticle() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void deleteArticle(Protocol protocol) {
 		// given
+		var articleOperation = articleOperation(protocol);
 		var createdAt = ZdtUtil.zdtNowString();
 		var service = "jenie-test";
 		var writer = testWriter();
 		var title = this.testInfo.getDisplayName() + "-" + createdAt;
 		var content = "content-" + title;
-		var createdArticle = this.writeArticleAndVerify(service, "test-board-id", title, content, writer);
+		var articleRequest = new ArticleRequest(TEST_BOARD_ID, title, content, writer);
+		var createdArticle = this.writeArticleAndVerify(articleOperation, service, articleRequest);
 		var articleHeader = createdArticle.header();
 
 		// when
-		var articleDeleteResult = this.articleOperation.deleteArticle(service, articleHeader.id());
+		var articleDeleteResult = articleOperation.deleteArticle(service, articleHeader.id());
 
 		// then
 		assertThat(articleDeleteResult).isNotNull();
@@ -289,15 +351,44 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(articleDeleteResult.deletedAt()).isNotNull();
 	}
 
-	@Test
-	void deleteArticleWithInvalidId() {
+	@ParameterizedTest
+	@MethodSource("provideProtocol")
+	void deleteArticleWithInvalidId(Protocol protocol) {
 		// given
+		var articleOperation = articleOperation(protocol);
 		var service = "jenie-test";
 		var articleId = "unknown-id";
 
 		// when, then
-		assertThatThrownBy(() -> this.articleOperation.deleteArticle(service, articleId))
-			.isInstanceOf(HttpClientErrorException.BadRequest.class);
+		assertThatThrownBy(() -> articleOperation.deleteArticle(service, articleId))
+			.isInstanceOfAny(HttpClientErrorException.BadRequest.class, StatusRuntimeException.class)
+			.satisfies((throwable) -> verifyErrorResponse(throwable, ErrorCode.ILLEGAL_DATA));
+	}
+
+	void verifyErrorResponse(Throwable throwable, ErrorCode errorCode) {
+		if (throwable instanceof HttpClientErrorException.BadRequest badRequestException) {
+			assertThat(badRequestException).isNotNull();
+
+			var problemDetail = badRequestException.getResponseBodyAs(ProblemDetail.class);
+			assertThat(problemDetail).isNotNull();
+			assertThat(problemDetail.getTitle()).isEqualTo(errorCode.getTitle());
+			assertThat(Objects.requireNonNull(problemDetail.getProperties()).get("error-code"))
+				.isEqualTo(String.valueOf(errorCode.getCode()));
+		}
+
+		if (throwable instanceof StatusRuntimeException statusRuntimeException) {
+			Status status = statusRuntimeException.getStatus();
+			assertThat(status).isNotNull();
+			assertThat(status.getCode()).isEqualTo(errorCode.getGrpcStatus());
+
+			Metadata metadata = statusRuntimeException.getTrailers();
+			assertThat(metadata).isNotNull();
+			assertThat(metadata.get(Metadata.Key.of("title", Metadata.ASCII_STRING_MARSHALLER)))
+				.isEqualTo(errorCode.getTitle());
+			assertThat(metadata.get(Metadata.Key.of("error-code", Metadata.ASCII_STRING_MARSHALLER)))
+				.isEqualTo(String.valueOf(errorCode.getCode()));
+		}
+
 	}
 
 }

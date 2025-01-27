@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+option java_package = "org.jenie.spring.helloworld.common";
+option java_outer_classname = "ReactionProto";
+option java_multiple_files = true;
+
+message ReactionMessage {
+  sint64  view_count = 1;
+}

@@ -16,42 +16,37 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        project:
+          - jenie-spring-core
+          - jenie-spring-data-mongodb
+          - jenie-spring-helloworld-common
+          - jenie-spring-helloworld-web
+          - jenie-spring-helloworld-rest
+          - jenie-spring-helloworld-grpc
+          - jenie-spring-helloworld-armeria-grpc
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-    - name: Check Format, Style
-      run: ./gradlew :checkFormat :checkStyleMain :checkStyleTest
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Check Format, Style
+        run: ./gradlew :checkFormat :checkStyleMain :checkStyleTest
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Build and publish jenie-spring-core
-      run: ./gradlew :jenie-spring-core:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-data-mongodb
-      run: ./gradlew :jenie-spring-data-mongodb:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld-common
-      run: ./gradlew :jenie-spring-helloworld-common:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and publish jenie-spring-helloworld
-      run: ./gradlew :jenie-spring-helloworld:publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish ${{ matrix.project }}
+        run: ./gradlew :${{ matrix.project }}:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dependency-submission:
     runs-on: ubuntu-latest

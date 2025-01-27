@@ -1,0 +1,8 @@
+### Request with body
+POST http://localhost:9090/org.jenie.spring.helloworld.ArticleService/GetArticleHeaderById
+Content-Type: application/json
+
+{
+  "service": "jenie-dev",
+  "id": "66b0c4ac8dd05751efe753d6"
+}

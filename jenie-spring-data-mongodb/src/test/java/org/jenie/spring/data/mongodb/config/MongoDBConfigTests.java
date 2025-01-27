@@ -5,7 +5,6 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +36,7 @@ class MongoDBConfigTests {
 	void setUp() {
 		this.mongoDBConfig = new MongoDBConfig() {
 			@Override
-			protected @NotNull String getDatabaseName() {
+			protected String getDatabaseName() {
 				return "dbconn";
 			}
 		};

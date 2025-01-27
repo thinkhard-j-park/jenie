@@ -1,0 +1,22 @@
+version = "${jenieSpringHelloworldWebVersion}"
+
+dependencies {
+	// spring
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	// others
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+	implementation "com.google.code.findbugs:jsr305:${findBugsVersion}"
+
+	// jenie
+	api(project(":jenie-spring-core"))
+	api(project(":jenie-spring-data-mongodb"))
+	api(project(":jenie-spring-helloworld-common"))
+
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+bootJar {
+	enabled = false
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+import "org/jenie/spring/helloworld/common/action_date_time.proto";
+import "org/jenie/spring/helloworld/common/reaction.proto";
+import "org/jenie/spring/helloworld/common/writer.proto";
+import "org/jenie/spring/helloworld/dto/board/board.proto";
+
+option java_package = "org.jenie.spring.helloworld.dto.article";
+option java_outer_classname = "ArticleHeaderProto";
+option java_multiple_files = true;
+
+message ArticleHeaderMessage {
+  string id = 1;
+  BoardMessage board = 2;
+  sint32 state = 3;
+  string title = 4;
+  ReactionMessage reaction = 5;
+  WriterMessage writer = 6;
+  ActionDateTimeMessage action_date_time = 7;
+}

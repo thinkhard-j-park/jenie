@@ -1,6 +1,0 @@
-### GET listArticleHeader
-GET  http://localhost:30000/jenie-test/article/list?boardId=test-board-id&size=10&sort=0
-###
-### GET listArticleHeader
-GET  http://localhost:30000/jenie-test/article/error
-###

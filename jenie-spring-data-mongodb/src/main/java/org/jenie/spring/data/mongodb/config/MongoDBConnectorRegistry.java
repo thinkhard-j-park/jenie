@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.mongodb.client.MongoClient;
+import org.jenie.spring.data.mongodb.domain.DBConn;
+import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
 import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.util.StringUtils;
 
 public class MongoDBConnectorRegistry {
 
@@ -28,6 +33,17 @@ public class MongoDBConnectorRegistry {
 
 	public List<MongoTemplate> getTemplatesList() {
 		return this.connectors.values().stream().map(MongoDBConnector::getTemplate).toList();
+	}
+
+	public DBConn getDBConn(String key) {
+		for (var dbConnTemplate : getTemplatesList()) {
+			var query = Query.query(Criteria.where("dbKey").is(key));
+			var dbConn = dbConnTemplate.findOne(query, DBConn.class);
+			if (dbConn != null && StringUtils.hasText(dbConn.getId())) {
+				return dbConn;
+			}
+		}
+		throw new DBConnNotFoundException("DBConn must not be null: " + key);
 	}
 
 	public Map<String, MongoDBConnector> getConnectors() {

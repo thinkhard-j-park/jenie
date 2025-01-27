@@ -1,19 +1,17 @@
 version = "${jenieSpringTestVersion}"
 
-ext {
-	httpClientVersion = '5.3.1'
-	jasyptVersion = '3.0.5'
-}
-
 dependencies {
 	// spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
 
+	// armeria
+	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
+	implementation 'com.linecorp.armeria:armeria-grpc'
+
 	// others
-	implementation "org.apache.httpcomponents.client5:httpclient5:${httpClientVersion}"
+	implementation "org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}"
 
 	// jenie
 	implementation(project(':jenie-spring-helloworld-common'))

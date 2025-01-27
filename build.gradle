@@ -2,24 +2,14 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
 	id 'org.springframework.boot' apply false
-	id 'io.spring.javaformat'
+	id 'io.spring.javaformat' apply false
+	id 'com.google.protobuf' apply false
+	id 'com.google.cloud.tools.jib' apply false
 }
+
+apply from: 'build-jenie.gradle'
 
 description = "Jenie, Java Genie!"
-
-def jacocoProjects = ['jenie-spring-core', 'jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
-def bootProjects = ['jenie-spring-data-mongodb', 'jenie-spring-helloworld', 'jenie-spring-test']
-def testProjects = ['jenie-spring-test']
-def svcProjects = ['jenie-spring-helloworld']
-
-ext {
-	mainProjs = subprojects.findAll { it.name !in testProjects }
-	testProjs = subprojects.findAll { it.name in testProjects }
-	jacocoProjs = subprojects.findAll { it.name in jacocoProjects }
-	bootProjs = subprojects.findAll { it.name in bootProjects }
-	svcProjs = subprojects.findAll { it.name in svcProjects }
-	libProjs = subprojects.findAll { it.name !in svcProjects }
-}
 
 configure(allprojects) { project ->
 	apply plugin: 'java'
@@ -35,6 +25,7 @@ configure(allprojects) { project ->
 			languageVersion = JavaLanguageVersion.of(21)
 		}
 	}
+
 	idea {
 		module {
 			downloadSources = true
@@ -59,6 +50,7 @@ configure(allprojects) { project ->
 }
 
 configure(libProjs) {
+	apply plugin: 'java-library'
 	publishing {
 		publications {
 			gpr(MavenPublication) {
@@ -78,45 +70,6 @@ configure(libProjs) {
 	}
 }
 
-configure(jacocoProjs) {
-	apply plugin: 'jacoco'
-
-	jacoco {
-		setReportsDirectory(file("${rootDir}/.qodana/code-coverage"))
-	}
-
-	jacocoTestReport {
-		reports {
-			xml.required = true
-			html.required = false
-		}
-		finalizedBy 'jacocoTestCoverageVerification'
-	}
-
-	jacocoTestCoverageVerification {
-		violationRules {
-			rule {
-				enabled = true
-				element = 'CLASS'
-				// includes = []
-
-				limit {
-					counter = 'LINE'
-					value = 'COVEREDRATIO'
-					minimum = 0.00
-				}
-
-				excludes = []
-			}
-		}
-	}
-
-	test {
-		useJUnitPlatform()
-		finalizedBy 'jacocoTestReport'
-	}
-}
-
 configure(bootProjs) {
 	apply plugin: 'org.springframework.boot'
 
@@ -125,8 +78,22 @@ configure(bootProjs) {
 	}
 }
 
+configure(svcProjs) {
+	dependencies {
+		// spring
+		implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
+
+		// test
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+}
+
 configure(testProjs) {
 	test {
 		useJUnitPlatform()
 	}
 }
+
+apply from: 'build-jib.gradle'
+apply from: 'build-protobuf.gradle'
+apply from: 'build-jacoco.gradle'

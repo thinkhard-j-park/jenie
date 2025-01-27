@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+option java_package = "org.jenie.spring.helloworld.common";
+option java_outer_classname = "WriterProto";
+option java_multiple_files = true;
+
+message WriterMessage {
+  string wid = 1;
+  string name = 2;
+}
+

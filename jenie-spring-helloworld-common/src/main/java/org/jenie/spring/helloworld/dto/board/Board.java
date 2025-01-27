@@ -1,8 +1,34 @@
 package org.jenie.spring.helloworld.dto.board;
 
+import com.google.common.base.Strings;
+
 public record Board(String id, String name, String rootId, String parentId) {
 
-	public static Builder builder() {
+	public static BoardMessage toProtoMessage(Board board) {
+		if (board == null) {
+			return null;
+		}
+		return BoardMessage.newBuilder()
+			.setId(Strings.nullToEmpty(board.id()))
+			.setName(Strings.nullToEmpty(board.name()))
+			.setRootId(Strings.nullToEmpty(board.rootId()))
+			.setParentId(Strings.nullToEmpty(board.parentId()))
+			.build();
+	}
+
+	public static Board fromProtoMessage(BoardMessage protoMessage) {
+		if (protoMessage == null) {
+			return null;
+		}
+		return Board.newBuilder()
+			.id(protoMessage.getId())
+			.name(protoMessage.getName())
+			.rootId(protoMessage.getRootId())
+			.parentId(protoMessage.getParentId())
+			.build();
+	}
+
+	public static Builder newBuilder() {
 		return new Builder();
 	}
 

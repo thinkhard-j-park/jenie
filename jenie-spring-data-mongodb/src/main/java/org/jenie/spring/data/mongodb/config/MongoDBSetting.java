@@ -15,6 +15,8 @@ public class MongoDBSetting {
 
 	private String appName;
 
+	private String routerType;
+
 	private Map<String, MongoDBCluster> cluster = new HashMap<>();
 
 	public Map<String, MongoDBCluster> getCluster() {
@@ -41,13 +43,21 @@ public class MongoDBSetting {
 		this.appName = appName;
 	}
 
-	@ExcludeCodeCoverageGenerated
+	public String getRouterType() {
+		return this.routerType;
+	}
+
+	public void setRouterType(String routerType) {
+		this.routerType = routerType;
+	}
+
 	@Override
 	public String toString() {
 		//@formatter:off
 		return "MongoDBSetting{" +
 				"appName='" + this.appName + '\'' +
 				", enabled=" + this.enabled +
+				", routerType='" + this.routerType + '\'' +
 				", cluster=" + this.cluster +
 				'}';
 		//@formatter:on

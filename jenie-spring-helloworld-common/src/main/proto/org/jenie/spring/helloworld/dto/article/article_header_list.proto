@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package org.jenie.spring.helloworld;
+
+import "org/jenie/spring/helloworld/dto/article/article_header.proto";
+
+option java_package = "org.jenie.spring.helloworld.dto.article";
+option java_outer_classname = "ArticleHeaderListProto";
+option java_multiple_files = true;
+
+message ArticleHeaderListMessage {
+  repeated ArticleHeaderMessage list = 1;
+  bool has_more = 2;
+}
