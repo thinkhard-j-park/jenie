@@ -1,8 +1,15 @@
 version = "${jenieSpringDataMongodbVersion}"
 
+java {
+	registerFeature('optional') {
+		usingSourceSet sourceSets.main
+	}
+}
 dependencies {
 	// spring
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 

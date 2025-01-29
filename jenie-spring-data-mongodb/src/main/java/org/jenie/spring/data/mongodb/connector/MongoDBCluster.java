@@ -1,4 +1,4 @@
-package org.jenie.spring.data.mongodb.config;
+package org.jenie.spring.data.mongodb.connector;
 
 import java.util.Arrays;
 import java.util.Collections;

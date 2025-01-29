@@ -1,6 +1,7 @@
 def protobufProjects = ['jenie-spring-helloworld-common']
 def bootProjects = [
 		'jenie-spring-data-mongodb',
+		'jenie-spring-data-mongodb-reactive',
 		'jenie-spring-helloworld-web',
 		'jenie-spring-helloworld-rest',
 		'jenie-spring-helloworld-grpc',

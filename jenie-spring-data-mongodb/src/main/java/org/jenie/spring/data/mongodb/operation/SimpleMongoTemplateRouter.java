@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.mongodb.ReadPreference;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
-import org.jenie.spring.data.mongodb.config.MongoDBCluster;
-import org.jenie.spring.data.mongodb.config.MongoDBConnectorRegistry;
+import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
+import org.jenie.spring.data.mongodb.connector.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,23 +35,14 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 	}
 
 	private DBConn dbConn(String dbKey) {
-		if (!this.dbConnCache.containsKey(dbKey)) {
-			this.dbConnCache.putIfAbsent(dbKey, this.connectorRegistry.getDBConn(dbKey));
-		}
-
-		return this.dbConnCache.get(dbKey);
+		return this.dbConnCache.computeIfAbsent(dbKey, this.connectorRegistry::getDBConn);
 	}
 
 	private SimpleMongoClientDatabaseFactory databaseFactory(DBConn dbConn) {
 		var clusterKey = dbConn.getClusterKey();
 		var connector = this.connectorRegistry.getConnector(clusterKey);
-		var databaseFactory = this.databaseFactoryCache.get(dbConn.getDbKey());
-		if (!this.databaseFactoryCache.containsKey(dbConn.getDbKey())) {
-			databaseFactory = new SimpleMongoClientDatabaseFactory(connector.getClient(), dbConn.getDbName());
-			this.databaseFactoryCache.putIfAbsent(dbConn.getDbKey(), databaseFactory);
-		}
-
-		return this.databaseFactoryCache.get(dbConn.getDbKey());
+		return this.databaseFactoryCache.computeIfAbsent(dbConn.getDbKey(),
+				(k) -> new SimpleMongoClientDatabaseFactory(connector.getClient(), dbConn.getDbName()));
 	}
 
 	@Override
@@ -64,9 +55,8 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 		Assert.notNull(factory, "MongoDatabaseFactory must not be null");
 
 		var cluster = connector.getCluster();
-
 		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
-		if (!this.mongoTemplateCache.containsKey(k)) {
+		return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
 				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
@@ -77,10 +67,8 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 			}
 			template.setReadPreference(readPreference);
 			template.setWriteConcern(writeConcern);
-			this.mongoTemplateCache.putIfAbsent(k, template);
-		}
-
-		return this.mongoTemplateCache.get(k);
+			return template;
+		});
 	}
 
 	@Override
@@ -94,14 +82,12 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 
 		var readPreference = ReadPreference.secondaryPreferred();
 		var k = new MongoTemplateKey(dbKey, readPreference, null);
-		if (!this.mongoTemplateCache.containsKey(k)) {
+		return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 			template.setReadPreference(readPreference);
 			template.setWriteConcern(null);
-			this.mongoTemplateCache.putIfAbsent(k, template);
-		}
-
-		return this.mongoTemplateCache.get(k);
+			return template;
+		});
 	}
 
 	@Override

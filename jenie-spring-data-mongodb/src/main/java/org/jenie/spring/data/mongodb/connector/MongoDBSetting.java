@@ -1,4 +1,4 @@
-package org.jenie.spring.data.mongodb.config;
+package org.jenie.spring.data.mongodb.connector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,8 +55,8 @@ public class MongoDBSetting {
 	public String toString() {
 		//@formatter:off
 		return "MongoDBSetting{" +
-				"appName='" + this.appName + '\'' +
-				", enabled=" + this.enabled +
+				"enabled=" + this.enabled +
+				", appName='" + this.appName + '\'' +
 				", routerType='" + this.routerType + '\'' +
 				", cluster=" + this.cluster +
 				'}';

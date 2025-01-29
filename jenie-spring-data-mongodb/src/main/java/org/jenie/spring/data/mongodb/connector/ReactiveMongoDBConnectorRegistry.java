@@ -1,25 +1,24 @@
-package org.jenie.spring.data.mongodb.config;
+package org.jenie.spring.data.mongodb.connector;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mongodb.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClient;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
-import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
+import reactor.core.publisher.Mono;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.util.StringUtils;
 
-public class MongoDBConnectorRegistry {
+public class ReactiveMongoDBConnectorRegistry {
 
-	private final Map<String, MongoDBConnector> connectors = new HashMap<>();
+	private final Map<String, ReactiveMongoDBConnector> connectors = new HashMap<>();
 
-	public void addConnector(String clusterKey, MongoDBConnector mongoDBConnector) {
+	public void addConnector(String clusterKey, ReactiveMongoDBConnector mongoDBConnector) {
 		this.connectors.put(clusterKey, mongoDBConnector);
 	}
 
@@ -27,26 +26,23 @@ public class MongoDBConnectorRegistry {
 		return this.connectors.get(clusterKey).getClient();
 	}
 
-	public MongoTemplate getTemplate(String clusterKey) {
+	public ReactiveMongoTemplate getTemplate(String clusterKey) {
 		return this.connectors.get(clusterKey).getTemplate();
 	}
 
-	public List<MongoTemplate> getTemplatesList() {
-		return this.connectors.values().stream().map(MongoDBConnector::getTemplate).toList();
+	public List<ReactiveMongoTemplate> getTemplatesList() {
+		return this.connectors.values().stream().map(ReactiveMongoDBConnector::getTemplate).toList();
 	}
 
-	public DBConn getDBConn(String key) {
+	public Mono<DBConn> getDBConn(String key) {
 		for (var dbConnTemplate : getTemplatesList()) {
 			var query = Query.query(Criteria.where("dbKey").is(key));
-			var dbConn = dbConnTemplate.findOne(query, DBConn.class);
-			if (dbConn != null && StringUtils.hasText(dbConn.getId())) {
-				return dbConn;
-			}
+			return dbConnTemplate.findOne(query, DBConn.class);
 		}
 		throw new DBConnNotFoundException("DBConn must not be null: " + key);
 	}
 
-	public Map<String, MongoDBConnector> getConnectors() {
+	public Map<String, ReactiveMongoDBConnector> getConnectors() {
 		return this.connectors;
 	}
 
@@ -54,17 +50,17 @@ public class MongoDBConnectorRegistry {
 		return this.connectors.get(clusterKey).getMappingMongoConverter();
 	}
 
-	public MongoDBConnector getConnector(String clusterKey) {
+	public ReactiveMongoDBConnector getConnector(String clusterKey) {
 		return this.connectors.get(clusterKey);
 	}
 
-	@ExcludeCodeCoverageGenerated
 	@Override
 	public String toString() {
 		//@formatter:off
-		return "MongoDBConnectorRegistry{" +
+		return "ReactiveMongoDBConnectorRegistry{" +
 				"connectors=" + this.connectors +
 				'}';
-		//@formatter:to
+		//@formatter:on
 	}
+
 }

@@ -3,6 +3,9 @@ package org.jenie.spring.data.mongodb.config;
 import java.util.List;
 
 import com.mongodb.client.MongoClient;
+import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
+import org.jenie.spring.data.mongodb.connector.MongoDBConnector;
+import org.jenie.spring.data.mongodb.connector.MongoDBConnectorRegistry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

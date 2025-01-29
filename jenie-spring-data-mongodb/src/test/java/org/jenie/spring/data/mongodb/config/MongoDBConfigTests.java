@@ -5,6 +5,8 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
+import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
+import org.jenie.spring.data.mongodb.connector.MongoDBSetting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,9 +76,9 @@ class MongoDBConfigTests {
 
 		// then
 		verify(this.converterConfigurationAdapter)
-			.registerConverter(any(MongoDBConfig.ZonedDateTimeReadConverter.class));
+			.registerConverter(any(CustomConverter.ZonedDateTimeReadConverter.class));
 		verify(this.converterConfigurationAdapter)
-			.registerConverter(any(MongoDBConfig.ZonedDateTimeWriteConverter.class));
+			.registerConverter(any(CustomConverter.ZonedDateTimeWriteConverter.class));
 
 	}
 
@@ -84,7 +86,7 @@ class MongoDBConfigTests {
 	void zonedDataTimeReadConverter() {
 		var zdt = ZonedDateTime.of(2024, 10, 27, 12, 1, 2, 0, ZoneId.systemDefault());
 		var source = Date.from(zdt.toInstant());
-		var converter = new MongoDBConfig.ZonedDateTimeReadConverter();
+		var converter = new CustomConverter.ZonedDateTimeReadConverter();
 		ZonedDateTime converted = converter.convert(source);
 		assertThat(converted).isEqualTo(zdt);
 	}
@@ -92,7 +94,7 @@ class MongoDBConfigTests {
 	@Test
 	void zonedDataTimeWriteConverter() {
 		var source = ZonedDateTime.of(2024, 10, 27, 12, 1, 2, 0, ZoneId.systemDefault());
-		var converter = new MongoDBConfig.ZonedDateTimeWriteConverter();
+		var converter = new CustomConverter.ZonedDateTimeWriteConverter();
 		Date converted = converter.convert(source);
 		assertThat(converted).isNotNull();
 		assertThat(converted.toInstant()).isEqualTo(source.toInstant());
