@@ -5,6 +5,7 @@ java {
 		usingSourceSet sourceSets.main
 	}
 }
+
 dependencies {
 	// spring
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")

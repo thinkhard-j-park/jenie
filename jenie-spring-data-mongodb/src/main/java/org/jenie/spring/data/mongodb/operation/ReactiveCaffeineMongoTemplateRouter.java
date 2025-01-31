@@ -74,7 +74,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 
 		@Override
 		public @Nullable Mono<DBConn> load(String key) {
-			return this.connectorRegistry.getDBConn(key);
+			return this.connectorRegistry.getDBConn(key).cache();
 		}
 
 	}
@@ -100,7 +100,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 				var dbName = dbConn.getDbName();
 				var connector = this.connectorRegistry.getConnector(clusterKey);
 				return new SimpleReactiveMongoDatabaseFactory(connector.getClient(), dbName);
-			});
+			}).cast(ReactiveMongoDatabaseFactory.class).cache();
 
 		}
 
@@ -119,7 +119,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 			return this.databaseFactoryCache.get(key).map((factory) -> {
 				Assert.notNull(factory, "ReactiveMongoDatabaseFactory must not be null");
 				return new ReactiveMongoTransactionManager(factory);
-			});
+			}).cache();
 		}
 
 	}
@@ -160,7 +160,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 				template.setWriteConcern(writeConcern);
 
 				return template;
-			});
+			}).cache();
 		}
 
 		private void configureReadPreference(ReadPreference readPreference, MongoDBCluster cluster) {
