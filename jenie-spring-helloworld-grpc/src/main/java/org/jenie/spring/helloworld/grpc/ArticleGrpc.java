@@ -13,7 +13,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleHeaderMessage;
 import org.jenie.spring.helloworld.dto.article.ArticleMessage;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.helloworld.service.ArticleService;
+import org.jenie.spring.helloworld.service.sync.ArticleService;
 
 @GrpcService
 public class ArticleGrpc extends ArticleServiceGrpc.ArticleServiceImplBase {

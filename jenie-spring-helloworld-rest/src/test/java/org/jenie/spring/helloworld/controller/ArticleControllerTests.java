@@ -13,7 +13,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.dto.board.Board;
-import org.jenie.spring.helloworld.service.ArticleService;
+import org.jenie.spring.helloworld.service.sync.ArticleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
