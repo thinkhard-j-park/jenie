@@ -5,10 +5,8 @@ dependencies {
 	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
 	implementation 'com.linecorp.armeria:armeria-grpc'
 	implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
-	implementation "org.glassfish:jakarta.el:${jakartaELVersion}"
 	implementation platform("io.netty:netty-bom:${nettyVersion}")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-
 	implementation(project(":jenie-spring-helloworld-web"))
 }
 

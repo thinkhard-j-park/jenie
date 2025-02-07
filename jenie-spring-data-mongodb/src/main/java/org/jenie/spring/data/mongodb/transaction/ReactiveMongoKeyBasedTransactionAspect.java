@@ -54,6 +54,7 @@ public class ReactiveMongoKeyBasedTransactionAspect extends AbstractMongoKeyBase
 
 	private Mono<?> createTransactionalMono(Mono<?> mono, ReactiveTransactionManager reactiveTxnManager,
 			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
+		//TODO 이런식으로 처리 하면 동작하지 않음...
 		var txOp = TransactionalOperator.create(reactiveTxnManager, definition);
 		return txOp.transactional(mono)
 			.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Mono::error, Mono::empty));

@@ -7,12 +7,14 @@ import java.util.Map;
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.util.StringUtils;
 
 public class ReactiveMongoDBConnectorRegistry {
 
@@ -35,11 +37,19 @@ public class ReactiveMongoDBConnectorRegistry {
 	}
 
 	public Mono<DBConn> getDBConn(String key) {
-		for (var dbConnTemplate : getTemplatesList()) {
+		return Flux.fromIterable(getTemplatesList()).flatMap((dbConnTemplate) -> {
 			var query = Query.query(Criteria.where("dbKey").is(key));
 			return dbConnTemplate.findOne(query, DBConn.class);
-		}
-		throw new DBConnNotFoundException("DBConn must not be null: " + key);
+		})
+			.filter((dbConn) -> dbConn != null && StringUtils.hasText(dbConn.getId()))
+			.collectList()
+			.flatMap((dbConns) -> {
+				if (dbConns.size() != 1) {
+					return Mono.error(new DBConnNotFoundException("DBConn must be unique: " + key));
+				}
+				return Mono.just(dbConns.getFirst());
+			})
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {

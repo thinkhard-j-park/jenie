@@ -18,6 +18,8 @@ import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
 import org.jenie.spring.helloworld.repository.reactive.ReactiveArticleContentRepository;
 import org.jenie.spring.helloworld.repository.reactive.ReactiveArticleHeaderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -33,6 +35,8 @@ public class ReactiveArticleService {
 
 	private final ReactiveArticleContentRepository articleContentRepository;
 
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveArticleService.class);
+
 	public ReactiveArticleService(ReactiveBoardService boardService,
 			ReactiveArticleHeaderRepository articleHeaderRepository,
 			ReactiveArticleContentRepository articleContentRepository) {
@@ -42,7 +46,9 @@ public class ReactiveArticleService {
 	}
 
 	public Mono<ArticleHeader> getArticleHeaderById(String service, String id, boolean latest) {
-		return this.articleHeaderRepository.findArticleHeaderById(service, id, latest).map(ArticleHeaderMapper::toDto);
+		return this.articleHeaderRepository.findArticleHeaderById(service, id, latest)
+			.map(ArticleHeaderMapper::toDto)
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	public Mono<ArticleHeaderList> listArticleHeader(String service, ListArticleHeaderRequestParam param) {
@@ -50,7 +56,8 @@ public class ReactiveArticleService {
 			.flatMap((articleEntity) -> this.boardService.findBoardEntityById(service, articleEntity.getBoardId())
 				.map((boardEntity) -> ArticleHeaderMapper.toDto(articleEntity, boardEntity)))
 			.collectList()
-			.map((list) -> ArticleHeaderList.from(list, param.getSize()));
+			.map((list) -> ArticleHeaderList.from(list, param.getSize()))
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	public Mono<Article> viewArticle(String service, String id, boolean incViewCount) {
@@ -71,7 +78,8 @@ public class ReactiveArticleService {
 					}
 					return new Article(header, content);
 				});
-			});
+			})
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	@MongoKeyBasedTransactional
@@ -97,13 +105,14 @@ public class ReactiveArticleService {
 				return new Article(header, content);
 			});
 
-		});
+		}).doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	private Mono<BoardEntity> getBoardEntity(String service, String boardId) {
 		return this.boardService.findBoardEntityById(service, boardId)
 			.switchIfEmpty(Mono.error(new BoardErrors.BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND,
-					"Failed to write article because board was not found: " + service + ", " + boardId)));
+					"Failed to write article because board was not found: " + service + ", " + boardId)))
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	@MongoKeyBasedTransactional
@@ -129,7 +138,8 @@ public class ReactiveArticleService {
 				var header = ArticleHeaderMapper.toDto(modifiedArticleHeader, boardEntity);
 				var content = modifiedArticleContent.getContent();
 				return new Article(header, content);
-			});
+			})
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 	public Mono<ArticleDeleteResult> deleteArticle(String service, String id) {
@@ -138,7 +148,8 @@ public class ReactiveArticleService {
 					"There is no article to delete: " + service + ", " + id)))
 			.then(this.articleHeaderRepository.deleteArticle(service, id))
 			.map((deleted) -> new ArticleDeleteResult(deleted.getId(), deleted.getState(),
-					deleted.getActionDateTime().getDeletedAt()));
+					deleted.getActionDateTime().getDeletedAt()))
+			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
 
 }

@@ -14,6 +14,8 @@ import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.entity.SortOrder;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
 import org.jenie.spring.helloworld.exception.ReactiveAssertHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -28,6 +30,8 @@ import org.springframework.util.StringUtils;
 @ConditionalOnReactive
 @Repository
 public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
+
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveArticleHeaderRepository.class);
 
 	public ReactiveArticleHeaderRepository(ReactiveMongoTemplateRouter mongoTemplateRouter) {
 		super(mongoTemplateRouter);

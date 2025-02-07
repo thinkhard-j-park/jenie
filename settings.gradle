@@ -20,3 +20,5 @@ include 'jenie-spring-helloworld-rest'
 include 'jenie-spring-helloworld-grpc'
 include 'jenie-spring-helloworld-armeria-grpc'
 include 'jenie-spring-test'
+include 'jenie-spring-helloworld-rest-reactive'
+

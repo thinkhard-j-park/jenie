@@ -1,0 +1,22 @@
+version = "${jenieSpringHelloworldRestReactiveVersion}"
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation(project(":jenie-spring-helloworld-web"))
+}
+
+jib {
+    from {
+        image = 'eclipse-temurin:21'
+    }
+    to {
+        image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-rest-reactive'
+        auth {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+        tags = ["${version}.${new Date().format("yyyy-MM-dd-HH-mm-ss")}", 'latest']
+    }
+}

@@ -36,7 +36,13 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 	}
 
 	private Mono<DBConn> dbConn(String dbKey) {
-		return this.dbConnCache.computeIfAbsent(dbKey, (k) -> this.connectorRegistry.getDBConn(k).cache());
+//		return this.dbConnCache.computeIfAbsent(dbKey, (k) -> this.connectorRegistry.getDBConn(k).cache())
+
+		return this.connectorRegistry.getDBConn(dbKey)
+			.map((dbConn) -> {
+				logger.info("-----------------{}", dbConn);
+				return dbConn;
+			});
 	}
 
 	private SimpleReactiveMongoDatabaseFactory databaseFactory(DBConn dbConn) {

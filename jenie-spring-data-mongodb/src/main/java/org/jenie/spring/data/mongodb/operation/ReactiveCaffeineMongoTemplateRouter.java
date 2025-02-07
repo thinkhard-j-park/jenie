@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
-import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplateRouter {
 
@@ -49,7 +49,9 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 	@Override
 	public Mono<ReactiveMongoTemplate> mongoTemplate(String dbKey, ReadPreference readPreference,
 			WriteConcern writeConcern) {
-		Assert.hasText(dbKey, "dbKey must not be empty");
+		if (!StringUtils.hasText(dbKey)) {
+			return Mono.error(new IllegalArgumentException("dbKey must not be empty"));
+		}
 		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
 		return this.mongoTemplateCache.get(k);
 	}
@@ -94,7 +96,9 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 		@Override
 		public @Nullable Mono<ReactiveMongoDatabaseFactory> load(String key) {
 			return this.dbConnCache.get(key).map((dbConn) -> {
-				Assert.notNull(dbConn, "DBConn must not be null");
+				if (dbConn == null) {
+					return Mono.error(new IllegalArgumentException("DBConn must not be null"));
+				}
 
 				var clusterKey = dbConn.getClusterKey();
 				var dbName = dbConn.getDbName();
@@ -116,9 +120,11 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 
 		@Override
 		public @Nullable Mono<ReactiveMongoTransactionManager> load(String key) {
-			return this.databaseFactoryCache.get(key).map((factory) -> {
-				Assert.notNull(factory, "ReactiveMongoDatabaseFactory must not be null");
-				return new ReactiveMongoTransactionManager(factory);
+			return this.databaseFactoryCache.get(key).flatMap((factory) -> {
+				if (factory == null) {
+					return Mono.error(new IllegalArgumentException("ReactiveMongoDatabaseFactory must not be null"));
+				}
+				return Mono.just(new ReactiveMongoTransactionManager(factory));
 			}).cache();
 		}
 
