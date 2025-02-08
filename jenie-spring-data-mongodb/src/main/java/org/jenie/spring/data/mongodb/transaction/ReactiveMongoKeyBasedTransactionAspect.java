@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.jenie.spring.data.mongodb.operation.ReactiveMongoTemplateRouter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,48 +24,51 @@ public class ReactiveMongoKeyBasedTransactionAspect extends AbstractMongoKeyBase
 		this.mongoTemplateRouter = mongoTemplateRouter;
 	}
 
+	@SuppressWarnings("ReactiveStreamsUnusedPublisher")
 	@Around("@annotation(mongoKeyBasedTransactional)")
 	public Object around(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional) {
 		var dbKey = getDBKey(pjp, mongoKeyBasedTransactional);
 		var definition = createTransactionDefinition(mongoKeyBasedTransactional);
+		var returnType = ((MethodSignature) pjp.getSignature()).getMethod().getReturnType();
+		if (Mono.class.isAssignableFrom(returnType)) {
+			return this.mongoTemplateRouter.transactionManager(dbKey)
+				.flatMap(
+						(txManager) -> createTransactionalMono(pjp, txManager, definition, mongoKeyBasedTransactional));
+		}
+		else if (Flux.class.isAssignableFrom(returnType)) {
+			return this.mongoTemplateRouter.transactionManager(dbKey)
+				.flatMapMany(
+						(txManager) -> createTransactionalFlux(pjp, txManager, definition, mongoKeyBasedTransactional));
 
-		return this.mongoTemplateRouter.transactionManager(dbKey)
-			.mapNotNull((txManager) -> handleTransaction(pjp, mongoKeyBasedTransactional, txManager, definition));
+		}
+		else {
+			throw new IllegalArgumentException("Unsupported return type: " + returnType);
+		}
+
 	}
 
-	private Object handleTransaction(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional,
-			ReactiveTransactionManager reactiveTxnManager, DefaultTransactionDefinition definition) {
+	private Mono<?> createTransactionalMono(ProceedingJoinPoint pjp, ReactiveTransactionManager txManager,
+			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
+		var txOp = TransactionalOperator.create(txManager, definition);
 		try {
-			var result = pjp.proceed();
-
-			if (result instanceof Mono<?> mono) {
-				return createTransactionalMono(mono, reactiveTxnManager, definition, mongoKeyBasedTransactional);
-			}
-			else if (result instanceof Flux<?> flux) {
-				return createTransactionalFlux(flux, reactiveTxnManager, definition, mongoKeyBasedTransactional);
-			}
-
-			throw new IllegalStateException(
-					"Unsupported return type for ReactiveMongoKeyBasedTransactional: " + result.getClass());
+			return txOp.transactional((Mono<?>) pjp.proceed())
+				.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Mono::error, Mono::empty));
 		}
 		catch (Throwable err) {
-			throw new RuntimeException("Transaction processing failed", err);
+			return Mono.error(new RuntimeException(err));
 		}
 	}
 
-	private Mono<?> createTransactionalMono(Mono<?> mono, ReactiveTransactionManager reactiveTxnManager,
+	private Flux<?> createTransactionalFlux(ProceedingJoinPoint pjp, ReactiveTransactionManager txManager,
 			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
-		//TODO 이런식으로 처리 하면 동작하지 않음...
-		var txOp = TransactionalOperator.create(reactiveTxnManager, definition);
-		return txOp.transactional(mono)
-			.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Mono::error, Mono::empty));
-	}
-
-	private Flux<?> createTransactionalFlux(Flux<?> flux, ReactiveTransactionManager reactiveTxnManager,
-			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
-		var txOp = TransactionalOperator.create(reactiveTxnManager, definition);
-		return txOp.transactional(flux)
-			.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Flux::error, Flux::empty));
+		var txOp = TransactionalOperator.create(txManager, definition);
+		try {
+			return txOp.transactional((Flux<?>) pjp.proceed())
+				.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Flux::error, Flux::empty));
+		}
+		catch (Throwable err) {
+			return Flux.error(new RuntimeException(err));
+		}
 	}
 
 	private <T> T handleTransactionError(Throwable error, MongoKeyBasedTransactional transactionConfig,

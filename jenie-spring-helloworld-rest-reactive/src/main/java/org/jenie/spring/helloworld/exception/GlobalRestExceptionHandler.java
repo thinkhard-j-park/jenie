@@ -22,7 +22,7 @@ public class GlobalRestExceptionHandler {
 		var port = request.getURI().getPort();
 		var requestUri = request.getPath().pathWithinApplication().value();
 		var fullUrl = scheme + "://" + host + ((port != -1) ? ":" + port : "") + requestUri;
-		var method = request.getMethod();
+		var method = request.getMethod().name();
 		var path = exchange.getAttributeOrDefault(
 				"org.springframework.web.reactive.handler.PathPatternRouteMatcher.BEST_MATCHING_PATTERN", "");
 
