@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.service.reactive;
+package org.jenie.spring.helloworld.reactive.service;
 
 import java.time.Duration;
 
@@ -8,7 +8,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
-import org.jenie.spring.helloworld.repository.reactive.ReactiveBoardRepository;
+import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
 import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;

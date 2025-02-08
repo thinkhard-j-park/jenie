@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.repository.reactive;
+package org.jenie.spring.helloworld.reactive.repository;
 
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;

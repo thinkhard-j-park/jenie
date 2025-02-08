@@ -1,15 +1,15 @@
 package org.jenie.spring.helloworld.config;
 
-import org.jenie.spring.helloworld.annotation.ConditionalOnSync;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @ExcludeCodeCoverageGenerated
-@ConditionalOnSync
+@ConditionalOnImperative
 @Configuration
-@EnableMongoRepositories(basePackages = "org.jenie.spring.helloworld.repository.sync")
-public class SyncConfig {
+@EnableMongoRepositories(basePackages = "org.jenie.spring.helloworld.repository")
+public class AppConfig {
 
 }

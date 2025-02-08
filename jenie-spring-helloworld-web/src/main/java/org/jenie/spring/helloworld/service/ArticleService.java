@@ -1,8 +1,8 @@
-package org.jenie.spring.helloworld.service.sync;
+package org.jenie.spring.helloworld.service;
 
 import org.jenie.spring.data.mongodb.transaction.DBKey;
 import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
-import org.jenie.spring.helloworld.annotation.ConditionalOnSync;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
@@ -16,12 +16,12 @@ import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.exception.ArticleErrors;
 import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
-import org.jenie.spring.helloworld.repository.sync.ArticleContentRepository;
-import org.jenie.spring.helloworld.repository.sync.ArticleHeaderRepository;
+import org.jenie.spring.helloworld.repository.ArticleContentRepository;
+import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
 import org.springframework.stereotype.Service;
 
-@ConditionalOnSync
+@ConditionalOnImperative
 @Service
 public class ArticleService {
 

@@ -23,7 +23,7 @@ public final class AppType {
 		}
 	}
 
-	public static class SyncCondition implements Condition {
+	public static class ImperativeCondition implements Condition {
 
 		@Override
 		public boolean matches(@Nonnull ConditionContext context, @Nonnull AnnotatedTypeMetadata metadata) {

@@ -1,8 +1,8 @@
-package org.jenie.spring.helloworld.repository.sync;
+package org.jenie.spring.helloworld.repository;
 
 import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
-import org.jenie.spring.helloworld.annotation.ConditionalOnSync;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.exception.AssertHelper;
 
@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-@ConditionalOnSync
+@ConditionalOnImperative
 @Repository
 public class BoardRepository extends MongoDBRepository {
 

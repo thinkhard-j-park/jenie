@@ -24,6 +24,12 @@ public class HelloworldTestConfig {
 	}
 
 	@Bean
+	ArticleRestOperation articleRestReactiveOperation(HelloworldTestProperties testProperties) {
+		return new ArticleRestOperation(
+				HttpClient.restClient(testProperties.getClientName(), testProperties.getRestReactiveUrl()));
+	}
+
+	@Bean
 	LogGrpcInterceptor logGrpcInterceptor(HelloworldTestProperties testProperties) {
 		return new LogGrpcInterceptor(testProperties);
 	}

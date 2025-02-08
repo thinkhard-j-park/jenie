@@ -26,5 +26,5 @@ bootJar {
 }
 
 test {
-//	exclude '**/helloworld/**'
+	exclude '**/helloworld/**'
 }

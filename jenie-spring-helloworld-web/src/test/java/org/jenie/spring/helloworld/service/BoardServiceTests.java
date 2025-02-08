@@ -1,8 +1,7 @@
 package org.jenie.spring.helloworld.service;
 
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
-import org.jenie.spring.helloworld.repository.sync.BoardRepository;
-import org.jenie.spring.helloworld.service.sync.BoardService;
+import org.jenie.spring.helloworld.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

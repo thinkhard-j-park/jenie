@@ -1,10 +1,10 @@
-package org.jenie.spring.helloworld.repository.sync;
+package org.jenie.spring.helloworld.repository;
 
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
-import org.jenie.spring.helloworld.annotation.ConditionalOnSync;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.exception.AssertHelper;
 
@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-@ConditionalOnSync
+@ConditionalOnImperative
 @Repository
 public class ArticleContentRepository extends MongoDBRepository {
 

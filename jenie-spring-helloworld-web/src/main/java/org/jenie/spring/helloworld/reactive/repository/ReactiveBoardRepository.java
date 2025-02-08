@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.repository.reactive;
+package org.jenie.spring.helloworld.reactive.repository;
 
 import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.ReactiveMongoTemplateRouter;

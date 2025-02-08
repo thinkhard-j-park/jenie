@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.service.reactive;
+package org.jenie.spring.helloworld.reactive.service;
 
 import org.jenie.spring.data.mongodb.transaction.DBKey;
 import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
@@ -16,8 +16,8 @@ import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.exception.ArticleErrors;
 import org.jenie.spring.helloworld.exception.BoardErrors;
 import org.jenie.spring.helloworld.mapper.ArticleHeaderMapper;
-import org.jenie.spring.helloworld.repository.reactive.ReactiveArticleContentRepository;
-import org.jenie.spring.helloworld.repository.reactive.ReactiveArticleHeaderRepository;
+import org.jenie.spring.helloworld.reactive.repository.ReactiveArticleContentRepository;
+import org.jenie.spring.helloworld.reactive.repository.ReactiveArticleHeaderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;

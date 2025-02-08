@@ -57,6 +57,7 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(this.testProperties).isNotNull();
 		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
 		assertThat(this.testProperties.getRestUrl()).isEqualTo("http://localhost:30000");
+		assertThat(this.testProperties.getRestReactiveUrl()).isEqualTo("http://localhost:30006");
 		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://localhost:30005");
 	}
 
@@ -71,7 +72,13 @@ class ArticleLocalTests extends HelloworldTests {
 	}
 
 	static Stream<Arguments> provideProtocol() {
-		return Stream.of(Arguments.of(Protocol.rest), Arguments.of(Protocol.grpc));
+		//@formatter:off
+		return Stream.of(
+				Arguments.of(Protocol.rest),
+				Arguments.of(Protocol.restReactive)
+//				Arguments.of(Protocol.grpc)
+		);
+		//@formatter:on
 	}
 
 	private Article writeArticleAndVerify(ArticleOperation articleOperation, String service,

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import org.springframework.context.annotation.Conditional;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Conditional(AppType.SyncCondition.class)
-public @interface ConditionalOnSync {
+@Conditional(AppType.ImperativeCondition.class)
+public @interface ConditionalOnImperative {
 
 }

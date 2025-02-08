@@ -6,7 +6,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleHeader;
 import org.jenie.spring.helloworld.dto.article.ArticleHeaderList;
 import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
-import org.jenie.spring.helloworld.service.reactive.ReactiveArticleService;
+import org.jenie.spring.helloworld.reactive.service.ReactiveArticleService;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

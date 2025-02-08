@@ -9,6 +9,8 @@ public class HelloworldTestProperties {
 
 	private String restUrl;
 
+	private String restReactiveUrl;
+
 	private String grpcUrl;
 
 	public String getClientName() {
@@ -33,6 +35,14 @@ public class HelloworldTestProperties {
 
 	public void setGrpcUrl(String grpcUrl) {
 		this.grpcUrl = grpcUrl;
+	}
+
+	public String getRestReactiveUrl() {
+		return this.restReactiveUrl;
+	}
+
+	public void setRestReactiveUrl(String restReactiveUrl) {
+		this.restReactiveUrl = restReactiveUrl;
 	}
 
 }

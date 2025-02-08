@@ -4,8 +4,8 @@
 
 	<springProfile name="local">
 		<logger name="org.springframework" level="INFO"/>
-		<logger name="org.springframework.data.mongodb" level="DEBUG"/>
-		<root level="DEBUG">
+		<logger name="org.springframework.data.mongodb" level="INFO"/>
+		<root level="INFO">
 			<appender-ref ref="ASYNC_FILE"/>
 			<appender-ref ref="CONSOLE"/>
 		</root>

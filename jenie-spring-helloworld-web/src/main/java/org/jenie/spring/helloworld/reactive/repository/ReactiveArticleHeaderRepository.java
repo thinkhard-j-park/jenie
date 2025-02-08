@@ -1,4 +1,4 @@
-package org.jenie.spring.helloworld.repository.reactive;
+package org.jenie.spring.helloworld.reactive.repository;
 
 import java.time.ZonedDateTime;
 

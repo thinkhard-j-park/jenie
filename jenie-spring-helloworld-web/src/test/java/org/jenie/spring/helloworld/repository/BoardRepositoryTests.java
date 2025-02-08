@@ -3,7 +3,6 @@ package org.jenie.spring.helloworld.repository;
 import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
-import org.jenie.spring.helloworld.repository.sync.BoardRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

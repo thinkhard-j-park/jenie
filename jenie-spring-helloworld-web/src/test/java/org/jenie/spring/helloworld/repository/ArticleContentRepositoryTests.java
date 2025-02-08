@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.exception.CommonErrors;
-import org.jenie.spring.helloworld.repository.sync.ArticleContentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
