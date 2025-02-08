@@ -21,7 +21,6 @@ import org.jenie.spring.helloworld.reactive.repository.ReactiveArticleHeaderRepo
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.stereotype.Service;
 
@@ -67,17 +66,17 @@ public class ReactiveArticleService {
 			.flatMap((t2) -> {
 				var headerEntity = t2.getT1();
 				var contentEntity = t2.getT2();
-				return this.boardService.findBoardEntityById(service, headerEntity.getBoardId()).map((boardEntity) -> {
-					var header = ArticleHeaderMapper.toDto(headerEntity, boardEntity);
-					var content = contentEntity.getContent();
+				return this.boardService.findBoardEntityById(service, headerEntity.getBoardId())
+					.flatMap((boardEntity) -> {
+						var header = ArticleHeaderMapper.toDto(headerEntity, boardEntity);
+						var content = contentEntity.getContent();
 
-					if (incViewCount) {
-						this.articleHeaderRepository.incViewCount(service, id, 1)
-							.subscribeOn(Schedulers.boundedElastic())
-							.subscribe();
-					}
-					return new Article(header, content);
-				});
+						if (incViewCount) {
+							return this.articleHeaderRepository.incViewCount(service, id, 1)
+								.then(Mono.just(new Article(header, content)));
+						}
+						return Mono.just(new Article(header, content));
+					});
 			})
 			.doOnError((error) -> logger.error(error.getMessage(), error));
 	}
