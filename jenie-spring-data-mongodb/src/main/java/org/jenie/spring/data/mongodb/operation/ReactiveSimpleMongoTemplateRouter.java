@@ -59,6 +59,7 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 			var cluster = connector.getCluster();
 			var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
 			return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
+				logger.warn("Cache - mongoTemplate: {} was called", k);
 				var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
 				if (!"primary".equalsIgnoreCase(readPreference.getName())) {
 					var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
@@ -86,6 +87,7 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 			var readPreference = ReadPreference.secondaryPreferred();
 			var k = new MongoTemplateKey(dbKey, readPreference, null);
 			return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
+				logger.warn("Cache - mongoTemplate: {} was called", k);
 				var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
 				template.setReadPreference(readPreference);
 				template.setWriteConcern(null);

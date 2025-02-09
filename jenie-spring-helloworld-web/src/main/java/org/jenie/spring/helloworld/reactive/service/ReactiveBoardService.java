@@ -9,6 +9,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 @ConditionalOnReactive
 @Service
 public class ReactiveBoardService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveBoardService.class);
 
 	private static final int TTL_MINUTES = 10;
 
@@ -40,9 +44,9 @@ public class ReactiveBoardService {
 		}
 
 		@Override
-		public @Nullable Mono<BoardEntity> load(BoardKey boardKey) throws Exception {
-			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id())
-				.cache(Duration.ofMinutes(TTL_MINUTES));
+		public @Nullable Mono<BoardEntity> load(BoardKey boardKey) {
+			logger.warn("Cache - boardKey:{}", boardKey);
+			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id()).cache();
 		}
 
 	}

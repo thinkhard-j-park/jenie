@@ -7,6 +7,8 @@ import java.util.Map;
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.jenie.spring.data.mongodb.domain.DBConn;
 import org.jenie.spring.data.mongodb.exception.DBConnNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,6 +19,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
 public class ReactiveMongoDBConnectorRegistry {
+
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveMongoDBConnectorRegistry.class);
 
 	private final Map<String, ReactiveMongoDBConnector> connectors = new HashMap<>();
 
@@ -37,6 +41,7 @@ public class ReactiveMongoDBConnectorRegistry {
 	}
 
 	public Mono<DBConn> getDBConn(String key) {
+		logger.warn("Cache - getDBConn: {} was called", key);
 		return Flux.fromIterable(getTemplatesList()).flatMap((dbConnTemplate) -> {
 			var query = Query.query(Criteria.where("dbKey").is(key));
 			return dbConnTemplate.findOne(query, DBConn.class);
@@ -49,7 +54,8 @@ public class ReactiveMongoDBConnectorRegistry {
 				}
 				return Mono.just(dbConns.getFirst());
 			})
-			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)))
+			.doOnSuccess((dbConn) -> logger.warn("DBAccess - getDBConn: {} was called", dbConn));
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {

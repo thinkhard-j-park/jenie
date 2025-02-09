@@ -5,6 +5,8 @@ import org.jenie.spring.data.mongodb.operation.ReactiveMongoTemplateRouter;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.exception.ReactiveAssertHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReactiveBoardRepository extends ReactiveMongoDBRepository {
 
+	private static final Logger logger = LoggerFactory.getLogger(ReactiveBoardRepository.class);
+
 	public ReactiveBoardRepository(ReactiveMongoTemplateRouter mongoTemplateRouter) {
 		super(mongoTemplateRouter);
 	}
@@ -22,7 +26,8 @@ public class ReactiveBoardRepository extends ReactiveMongoDBRepository {
 	public Mono<BoardEntity> findBoardById(String dbKey, String id) {
 		return ReactiveAssertHelper.validObjectId(id, "id should be valid")
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
-			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class));
+			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class))
+			.doOnSuccess((boardEntity) -> logger.warn("DBAccess - findBoardById: {}", boardEntity));
 
 	}
 
