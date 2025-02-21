@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.ReactiveMongoTemplateRouter;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
-import org.jenie.spring.helloworld.exception.ReactiveAssertHelper;
+import org.jenie.spring.helloworld.exception.AssertHelper;
 import reactor.core.publisher.Mono;
 
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -24,19 +24,19 @@ public class ReactiveArticleContentRepository extends ReactiveMongoDBRepository 
 	}
 
 	public Mono<ArticleContentEntity> insert(String dbKey, ArticleContentEntity content) {
-		return Mono
-			.zip(ReactiveAssertHelper.notNull(content, "ArticleContentEntity is required"),
-					ReactiveAssertHelper.validObjectId(content.getId(), "ArticleContentEntity id should be valid"),
-					ReactiveAssertHelper.hasText(content.getContent(), "content is required"))
-			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
+		AssertHelper.notNull(content, "ArticleContentEntity is required");
+		AssertHelper.validObjectId(content.getId(), "ArticleContentEntity id should be valid");
+		AssertHelper.hasText(content.getContent(), "content is required");
+
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.flatMap((t) -> t.insert(content));
 	}
 
 	public Mono<ArticleContentEntity> modifyArticleContent(String dbKey, String articleId, String content) {
-		return Mono
-			.zip(ReactiveAssertHelper.validObjectId(articleId, "id should be provided"),
-					ReactiveAssertHelper.hasText(content, "content is required"))
-			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
+		AssertHelper.validObjectId(articleId, "id should be provided");
+		AssertHelper.hasText(content, "content is required");
+
+		return this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY)
 			.flatMap((t) -> {
 				var query = Query.query(Criteria.where("_id").is(new ObjectId(articleId)));
 				var update = Update.update("content", content);
@@ -46,8 +46,9 @@ public class ReactiveArticleContentRepository extends ReactiveMongoDBRepository 
 	}
 
 	public Mono<ArticleContentEntity> findArticleContentById(String dbKey, String id) {
-		return ReactiveAssertHelper.validObjectId(id, "id should be provided")
-			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
+		AssertHelper.validObjectId(id, "id should be provided");
+
+		return this.mongoTemplateRouter.mongoTemplate(dbKey)
 			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))),
 					ArticleContentEntity.class));
 	}
