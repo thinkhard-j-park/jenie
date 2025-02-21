@@ -47,16 +47,16 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 
 	@Override
 	public MongoTemplate mongoTemplate(String dbKey, ReadPreference readPreference, WriteConcern writeConcern) {
-		var dbConn = dbConn(dbKey);
-
-		var clusterKey = dbConn.getClusterKey();
-		var connector = this.connectorRegistry.getConnector(clusterKey);
-		var factory = databaseFactory(dbConn);
-		Assert.notNull(factory, "MongoDatabaseFactory must not be null");
-
-		var cluster = connector.getCluster();
 		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
+
 		return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
+			var dbConn = dbConn(dbKey);
+			var clusterKey = dbConn.getClusterKey();
+			var connector = this.connectorRegistry.getConnector(clusterKey);
+			var factory = databaseFactory(dbConn);
+			Assert.notNull(factory, "MongoDatabaseFactory must not be null");
+
+			var cluster = connector.getCluster();
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
 				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
@@ -73,16 +73,16 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 
 	@Override
 	public MongoTemplate mongoTemplate(String dbKey) {
-		var dbConn = dbConn(dbKey);
-
-		var clusterKey = dbConn.getClusterKey();
-		var connector = this.connectorRegistry.getConnector(clusterKey);
-		var factory = databaseFactory(dbConn);
-		Assert.notNull(factory, "MongoDatabaseFactory must not be null");
-
 		var readPreference = ReadPreference.secondaryPreferred();
 		var k = new MongoTemplateKey(dbKey, readPreference, null);
+
 		return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
+			var dbConn = dbConn(dbKey);
+			var clusterKey = dbConn.getClusterKey();
+			var connector = this.connectorRegistry.getConnector(clusterKey);
+			var factory = databaseFactory(dbConn);
+			Assert.notNull(factory, "MongoDatabaseFactory must not be null");
+
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
 			template.setReadPreference(readPreference);
 			template.setWriteConcern(null);

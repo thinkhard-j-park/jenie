@@ -56,6 +56,10 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 	@Override
 	public Mono<ReactiveMongoTemplate> mongoTemplate(String dbKey, ReadPreference readPreference,
 			WriteConcern writeConcern) {
+		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
+		if (this.mongoTemplateCache.containsKey(k)) {
+			return Mono.just(this.mongoTemplateCache.get(k));
+		}
 
 		return dbConn(dbKey).map((dbConn) -> {
 			var clusterKey = dbConn.getClusterKey();
@@ -64,42 +68,43 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 			Assert.notNull(factory, "ReactiveMongoDatabaseFactory must not be null");
 
 			var cluster = connector.getCluster();
-			var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
-			return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
-				logger.warn("Cache - mongoTemplate: {} was called", k);
-				var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
-				if (!"primary".equalsIgnoreCase(readPreference.getName())) {
-					var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
-					if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
-						replicaTagSets.addAll(taggableReadPreference.getTagSetList());
-					}
-					readPreference.withTagSetList(replicaTagSets);
+			logger.warn("Cache - mongoTemplate: {} was called", k);
+			var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
+			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
+				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
+				if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
+					replicaTagSets.addAll(taggableReadPreference.getTagSetList());
 				}
-				template.setReadPreference(readPreference);
-				template.setWriteConcern(writeConcern);
-				return template;
-			});
-		});
+				readPreference.withTagSetList(replicaTagSets);
+			}
+			template.setReadPreference(readPreference);
+			template.setWriteConcern(writeConcern);
+			this.mongoTemplateCache.putIfAbsent(k, template);
 
+			return template;
+		});
 	}
 
 	@Override
 	public Mono<ReactiveMongoTemplate> mongoTemplate(String dbKey) {
+		var readPreference = ReadPreference.secondaryPreferred();
+		var k = new MongoTemplateKey(dbKey, readPreference, null);
+		if (this.mongoTemplateCache.containsKey(k)) {
+			return Mono.just(this.mongoTemplateCache.get(k));
+		}
+
 		return dbConn(dbKey).map((dbConn) -> {
+			logger.warn("Cache - mongoTemplate: {} was called", k);
 			var clusterKey = dbConn.getClusterKey();
 			var connector = this.connectorRegistry.getConnector(clusterKey);
 			var factory = databaseFactory(dbConn);
 			Assert.notNull(factory, "ReactiveMongoDatabaseFactory must not be null");
 
-			var readPreference = ReadPreference.secondaryPreferred();
-			var k = new MongoTemplateKey(dbKey, readPreference, null);
-			return this.mongoTemplateCache.computeIfAbsent(k, (key) -> {
-				logger.warn("Cache - mongoTemplate: {} was called", k);
-				var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
-				template.setReadPreference(readPreference);
-				template.setWriteConcern(null);
-				return template;
-			});
+			var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
+			template.setReadPreference(readPreference);
+			template.setWriteConcern(null);
+			this.mongoTemplateCache.putIfAbsent(k, template);
+			return template;
 		});
 	}
 
