@@ -24,7 +24,7 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 
 	private final ReactiveMongoDBConnectorRegistry connectorRegistry;
 
-	private final ConcurrentHashMap<String, Mono<DBConn>> dbConnCache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, DBConn> dbConnCache = new ConcurrentHashMap<>();
 
 	private final ConcurrentHashMap<String, SimpleReactiveMongoDatabaseFactory> databaseFactoryCache = new ConcurrentHashMap<>();
 
@@ -36,7 +36,14 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 	}
 
 	private Mono<DBConn> dbConn(String dbKey) {
-		return this.dbConnCache.computeIfAbsent(dbKey, (k) -> this.connectorRegistry.getDBConn(k).cache());
+		if (this.dbConnCache.containsKey(dbKey)) {
+			return Mono.just(this.dbConnCache.get(dbKey));
+		}
+
+		return this.connectorRegistry.getDBConn(dbKey).map((dbConn) -> {
+			this.dbConnCache.putIfAbsent(dbKey, dbConn);
+			return dbConn;
+		});
 	}
 
 	private SimpleReactiveMongoDatabaseFactory databaseFactory(DBConn dbConn) {
