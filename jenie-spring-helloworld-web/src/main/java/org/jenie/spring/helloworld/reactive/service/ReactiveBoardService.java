@@ -2,10 +2,8 @@ package org.jenie.spring.helloworld.reactive.service;
 
 import java.time.Duration;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
@@ -23,32 +21,26 @@ public class ReactiveBoardService {
 
 	private static final int TTL_MINUTES = 10;
 
-	private final LoadingCache<BoardKey, Mono<BoardEntity>> boardCache;
+	private final Cache<BoardKey, BoardEntity> boardCache;
+
+	private final ReactiveBoardRepository boardRepository;
 
 	public ReactiveBoardService(ReactiveBoardRepository boardRepository) {
-		this.boardCache = Caffeine.newBuilder()
-			.expireAfterWrite(Duration.ofMinutes(TTL_MINUTES))
-			.build(new BoardLoader(boardRepository));
+		this.boardRepository = boardRepository;
+		this.boardCache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(TTL_MINUTES)).build();
 	}
 
 	public Mono<BoardEntity> findBoardEntityById(String service, String id) {
-		return this.boardCache.get(new BoardKey(service, id));
-	}
-
-	static class BoardLoader implements CacheLoader<BoardKey, Mono<BoardEntity>> {
-
-		private final ReactiveBoardRepository boardRepository;
-
-		BoardLoader(ReactiveBoardRepository boardRepository) {
-			this.boardRepository = boardRepository;
+		var boardKey = new BoardKey(service, id);
+		var result = this.boardCache.getIfPresent(boardKey);
+		if (result != null) {
+			return Mono.just(result);
 		}
 
-		@Override
-		public @Nullable Mono<BoardEntity> load(BoardKey boardKey) {
-			logger.warn("Cache - boardKey:{}", boardKey);
-			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id()).cache();
-		}
-
+		return this.boardRepository.findBoardById(service, id).map((boardEntity) -> {
+			this.boardCache.put(boardKey, boardEntity);
+			return boardEntity;
+		});
 	}
 
 	record BoardKey(String dbKey, String id) {
