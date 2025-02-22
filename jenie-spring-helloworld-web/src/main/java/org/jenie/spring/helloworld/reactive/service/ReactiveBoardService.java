@@ -1,9 +1,7 @@
 package org.jenie.spring.helloworld.reactive.service;
 
-import java.time.Duration;
+import java.util.concurrent.ConcurrentHashMap;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
@@ -21,24 +19,23 @@ public class ReactiveBoardService {
 
 	private static final int TTL_MINUTES = 10;
 
-	private final Cache<String, BoardEntity> boardCache;
+	private final ConcurrentHashMap<String, BoardEntity> boardCache;
 
 	private final ReactiveBoardRepository boardRepository;
 
 	public ReactiveBoardService(ReactiveBoardRepository boardRepository) {
 		this.boardRepository = boardRepository;
-		this.boardCache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(TTL_MINUTES)).build();
+		this.boardCache = new ConcurrentHashMap<>();
 	}
 
 	public Mono<BoardEntity> findBoardEntityById(String service, String id) {
 		var boardKey = service + "_" + id;
-		var result = this.boardCache.getIfPresent(boardKey);
-		if (result != null) {
-			return Mono.just(result);
+		if (this.boardCache.containsKey(boardKey)) {
+			return Mono.just(this.boardCache.get(boardKey));
 		}
 
 		return this.boardRepository.findBoardById(service, id).map((boardEntity) -> {
-			this.boardCache.put(boardKey, boardEntity);
+			this.boardCache.putIfAbsent(boardKey, boardEntity);
 			return boardEntity;
 		});
 	}
