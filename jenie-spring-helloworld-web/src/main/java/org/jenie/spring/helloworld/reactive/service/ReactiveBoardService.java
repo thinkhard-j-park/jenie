@@ -21,7 +21,7 @@ public class ReactiveBoardService {
 
 	private static final int TTL_MINUTES = 10;
 
-	private final Cache<BoardKey, BoardEntity> boardCache;
+	private final Cache<String, BoardEntity> boardCache;
 
 	private final ReactiveBoardRepository boardRepository;
 
@@ -31,7 +31,7 @@ public class ReactiveBoardService {
 	}
 
 	public Mono<BoardEntity> findBoardEntityById(String service, String id) {
-		var boardKey = new BoardKey(service, id);
+		var boardKey = service + "_" + id;
 		var result = this.boardCache.getIfPresent(boardKey);
 		if (result != null) {
 			return Mono.just(result);
@@ -41,9 +41,6 @@ public class ReactiveBoardService {
 			this.boardCache.put(boardKey, boardEntity);
 			return boardEntity;
 		});
-	}
-
-	record BoardKey(String dbKey, String id) {
 	}
 
 }
