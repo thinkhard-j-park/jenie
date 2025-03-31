@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="base.xml"/>
+	<springProfile name="local">
+		<logger name="org.springframework" level="INFO"/>
+		<logger name="org.springframework.data.mongodb" level="DEBUG"/>
+		<root level="INFO">
+			<appender-ref ref="ASYNC_FILE"/>
+			<appender-ref ref="CONSOLE"/>
+		</root>
+	</springProfile>
+
+	<springProfile name="dev">
+		<logger name="org.springframework" level="WARN"/>
+		<logger name="org.jenie" level="INFO"/>
+		<root level="WARN">
+			<appender-ref ref="ASYNC_FILE"/>
+			<appender-ref ref="CONSOLE"/>
+		</root>
+	</springProfile>
+</configuration>

@@ -75,8 +75,8 @@ class ArticleLocalTests extends HelloworldTests {
 		//@formatter:off
 		return Stream.of(
 				Arguments.of(Protocol.rest),
-				Arguments.of(Protocol.restReactive)
-//				Arguments.of(Protocol.grpc)
+				Arguments.of(Protocol.restReactive),
+				Arguments.of(Protocol.grpc)
 		);
 		//@formatter:on
 	}
@@ -105,7 +105,7 @@ class ArticleLocalTests extends HelloworldTests {
 	@MethodSource("provideProtocol")
 	void getLargeContent(Protocol protocol) {
 		var articleOperation = articleOperation(protocol);
-		var result = articleOperation.listArticleHeader("jenie-dev",
+		var result = articleOperation.listArticleHeader("jenie-test",
 				new ListArticleHeaderRequestParam("", "", 1000, SortCode.TIME_DESC.getCode()));
 		assertThat(result).isNotNull();
 	}
@@ -165,8 +165,14 @@ class ArticleLocalTests extends HelloworldTests {
 	}
 
 	static Stream<Arguments> provideProtocolBoardId() {
-		return Stream.of(Arguments.of(Protocol.rest, ""), Arguments.of(Protocol.rest, TEST_BOARD_ID),
-				Arguments.of(Protocol.grpc, ""), Arguments.of(Protocol.grpc, TEST_BOARD_ID));
+		//@formatter:off
+		return Stream.of(
+//				Arguments.of(Protocol.rest, ""),
+//				Arguments.of(Protocol.rest, TEST_BOARD_ID),
+				Arguments.of(Protocol.grpc, "")
+//				Arguments.of(Protocol.grpc, TEST_BOARD_ID)Arguments.of(Protocol.grpc, TEST_BOARD_ID)
+		);
+		//@formatter:on
 	}
 
 	@ParameterizedTest

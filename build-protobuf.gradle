@@ -1,10 +1,21 @@
 configure(protobufProjs) {
+	apply plugin: 'idea'
 	apply plugin: 'com.google.protobuf'
+
+	java {
+		registerFeature('optional') {
+			usingSourceSet sourceSets.main
+		}
+	}
+
 	dependencies {
 		implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
 		implementation "io.grpc:grpc-protobuf:${grpcVersion}"
 		implementation "io.grpc:grpc-stub:${grpcVersion}"
 		compileOnly "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
+
+		optionalImplementation 'org.springframework:spring-webflux'
+		optionalImplementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 	}
 	protobuf {
 		protoc {
@@ -14,12 +25,14 @@ configure(protobufProjs) {
 			grpc {
 				artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
 			}
+			reactor {
+				artifact = "com.salesforce.servicelibs:reactor-grpc:${reactiveGrpcVersion}"
+			}
 		}
 		generateProtoTasks {
-			all().each { task ->
-				task.plugins {
-					grpc {}
-				}
+			ofSourceSet("main")*.plugins {
+				grpc {}
+				reactor {}
 			}
 		}
 	}
