@@ -13,6 +13,8 @@ public class HelloworldTestProperties {
 
 	private String grpcUrl;
 
+	private String grpcReactiveUrl;
+
 	public String getClientName() {
 		return this.clientName;
 	}
@@ -43,6 +45,14 @@ public class HelloworldTestProperties {
 
 	public void setRestReactiveUrl(String restReactiveUrl) {
 		this.restReactiveUrl = restReactiveUrl;
+	}
+
+	public String getGrpcReactiveUrl() {
+		return this.grpcReactiveUrl;
+	}
+
+	public void setGrpcReactiveUrl(String grpcReactiveUrl) {
+		this.grpcReactiveUrl = grpcReactiveUrl;
 	}
 
 }
