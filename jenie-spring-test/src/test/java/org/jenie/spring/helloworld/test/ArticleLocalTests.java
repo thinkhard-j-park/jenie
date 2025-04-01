@@ -58,8 +58,10 @@ class ArticleLocalTests extends HelloworldTests {
 		assertThat(this.testProperties.getClientName()).isEqualTo("helloworld-local");
 		assertThat(this.testProperties.getRestUrl()).isEqualTo("http://localhost:30000");
 		assertThat(this.testProperties.getRestReactiveUrl()).isEqualTo("http://localhost:30007");
-		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://localhost:30005");
+		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://localhost:30006");
 		assertThat(this.testProperties.getGrpcReactiveUrl()).isEqualTo("http://localhost:30008");
+		assertThat(this.testProperties.getGrpcArmeriaUrl()).isEqualTo("http://localhost:30005");
+		assertThat(this.testProperties.getGrpcArmeriaReactiveUrl()).isEqualTo("http://localhost:30009");
 	}
 
 	@Test
@@ -78,7 +80,9 @@ class ArticleLocalTests extends HelloworldTests {
 				Arguments.of(Protocol.rest),
 				Arguments.of(Protocol.restReactive),
 				Arguments.of(Protocol.grpc),
-				Arguments.of(Protocol.grpcReactive)
+				Arguments.of(Protocol.grpcReactive),
+				Arguments.of(Protocol.grpcArmeria),
+				Arguments.of(Protocol.grpcArmeriaReactive)
 		);
 		//@formatter:on
 	}
@@ -171,10 +175,21 @@ class ArticleLocalTests extends HelloworldTests {
 		return Stream.of(
 				Arguments.of(Protocol.rest, ""),
 				Arguments.of(Protocol.rest, TEST_BOARD_ID),
+
+				Arguments.of(Protocol.restReactive, ""),
+				Arguments.of(Protocol.restReactive, TEST_BOARD_ID),
+
 				Arguments.of(Protocol.grpc, ""),
 				Arguments.of(Protocol.grpc, TEST_BOARD_ID),
+
 				Arguments.of(Protocol.grpcReactive, ""),
-				Arguments.of(Protocol.grpcReactive, TEST_BOARD_ID)
+				Arguments.of(Protocol.grpcReactive, TEST_BOARD_ID),
+
+				Arguments.of(Protocol.grpcArmeria, ""),
+				Arguments.of(Protocol.grpcArmeria, TEST_BOARD_ID),
+
+				Arguments.of(Protocol.grpcArmeriaReactive, ""),
+				Arguments.of(Protocol.grpcArmeriaReactive, TEST_BOARD_ID)
 		);
 		//@formatter:on
 	}

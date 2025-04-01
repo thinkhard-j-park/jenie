@@ -4,7 +4,7 @@ public class Constant {
 
 	public enum Protocol {
 
-		rest, restReactive, grpc, grpcReactive
+		rest, restReactive, grpc, grpcReactive, grpcArmeria, grpcArmeriaReactive
 
 	}
 

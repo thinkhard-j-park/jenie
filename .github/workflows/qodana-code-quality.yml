@@ -27,6 +27,7 @@ jobs:
           - jenie-spring-helloworld-grpc
           - jenie-spring-helloworld-grpc-reactive
           - jenie-spring-helloworld-armeria-grpc
+          - jenie-spring-helloworld-armeria-grpc-reactive
     steps:
       - uses: actions/checkout@v4
         with:

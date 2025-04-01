@@ -58,4 +58,26 @@ public class HelloworldTestConfig {
 		return new ArticleGrpcReactiveOperation(grpcClient);
 	}
 
+	@Bean
+	ArticleGrpcOperation articleGrpcArmeriaOperation(HelloworldTestProperties testProperties,
+			LogGrpcInterceptor logGrpcInterceptor) {
+		var grpcClient = GrpcClients.builder(testProperties.getGrpcArmeriaUrl())
+			.serializationFormat(GrpcSerializationFormats.PROTO)
+			.decorator(LoggingClient.newDecorator())
+			.intercept(logGrpcInterceptor)
+			.build(ArticleServiceGrpc.ArticleServiceBlockingStub.class);
+		return new ArticleGrpcOperation(grpcClient);
+	}
+
+	@Bean
+	ArticleGrpcReactiveOperation articleGrpcArmeriaReactiveOperation(HelloworldTestProperties testProperties,
+			LogGrpcInterceptor logGrpcInterceptor) {
+ 		var grpcClient = GrpcClients.builder(testProperties.getGrpcArmeriaReactiveUrl())
+			.serializationFormat(GrpcSerializationFormats.PROTO)
+			.decorator(LoggingClient.newDecorator())
+			.intercept(logGrpcInterceptor)
+			.build(ReactorArticleServiceGrpc.ReactorArticleServiceStub.class);
+		return new ArticleGrpcReactiveOperation(grpcClient);
+	}
+
 }

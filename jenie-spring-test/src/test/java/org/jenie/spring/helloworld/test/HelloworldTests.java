@@ -29,12 +29,20 @@ public abstract class HelloworldTests {
 	@Autowired
 	protected ArticleGrpcReactiveOperation articleGrpcReactiveOperation;
 
+	@Autowired
+	protected ArticleGrpcOperation articleGrpcArmeriaOperation;
+
+	@Autowired
+	protected ArticleGrpcReactiveOperation articleGrpcArmeriaReactiveOperation;
+
 	protected ArticleOperation articleOperation(Protocol protocol) {
 		return switch (protocol) {
 			case rest -> this.articleRestOperation;
 			case restReactive -> this.articleRestReactiveOperation;
 			case grpc -> this.articleGrpcOperation;
 			case grpcReactive -> this.articleGrpcReactiveOperation;
+			case grpcArmeria -> this.articleGrpcArmeriaOperation;
+			case grpcArmeriaReactive -> this.articleGrpcArmeriaReactiveOperation;
 			default -> throw new IllegalArgumentException("unsupported protocol: " + protocol);
 		};
 	}

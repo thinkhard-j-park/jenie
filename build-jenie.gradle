@@ -8,6 +8,7 @@ def bootProjects = [
 		'jenie-spring-helloworld-grpc',
 		'jenie-spring-helloworld-grpc-reactive',
 		'jenie-spring-helloworld-armeria-grpc',
+		'jenie-spring-helloworld-armeria-grpc-reactive',
 		'jenie-spring-test'
 ]
 def svcProjects = [
@@ -15,7 +16,8 @@ def svcProjects = [
 		'jenie-spring-helloworld-rest-reactive',
 		'jenie-spring-helloworld-grpc',
 		'jenie-spring-helloworld-grpc-reactive',
-		'jenie-spring-helloworld-armeria-grpc'
+		'jenie-spring-helloworld-armeria-grpc',
+		'jenie-spring-helloworld-armeria-grpc-reactive'
 ]
 def testProjects = ['jenie-spring-test']
 

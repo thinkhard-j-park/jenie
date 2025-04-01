@@ -15,6 +15,10 @@ public class HelloworldTestProperties {
 
 	private String grpcReactiveUrl;
 
+	private String grpcArmeriaUrl;
+
+	private String grpcArmeriaReactiveUrl;
+
 	public String getClientName() {
 		return this.clientName;
 	}
@@ -53,6 +57,22 @@ public class HelloworldTestProperties {
 
 	public void setGrpcReactiveUrl(String grpcReactiveUrl) {
 		this.grpcReactiveUrl = grpcReactiveUrl;
+	}
+
+	public String getGrpcArmeriaReactiveUrl() {
+		return this.grpcArmeriaReactiveUrl;
+	}
+
+	public void setGrpcArmeriaReactiveUrl(String grpcArmeriaReactiveUrl) {
+		this.grpcArmeriaReactiveUrl = grpcArmeriaReactiveUrl;
+	}
+
+	public String getGrpcArmeriaUrl() {
+		return this.grpcArmeriaUrl;
+	}
+
+	public void setGrpcArmeriaUrl(String grpcArmeriaUrl) {
+		this.grpcArmeriaUrl = grpcArmeriaUrl;
 	}
 
 }

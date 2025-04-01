@@ -1,12 +1,11 @@
-version = "${jenieSpringHelloworldArmeriaGrpcVersion}"
-
+version = "${jenieSpringHelloworldArmeriaGrpcReactiveVersion}"
 dependencies {
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
-	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
+	implementation 'com.linecorp.armeria:armeria-spring-boot3-webflux-starter'
 	implementation 'com.linecorp.armeria:armeria-grpc'
-	implementation "io.projectreactor:reactor-core:${projectReactorVersion}"
+	implementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 
-	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
 	implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
 
@@ -18,7 +17,7 @@ jib {
 		image = 'eclipse-temurin:21'
 	}
 	to {
-		image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-armeria-grpc'
+		image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-armeria-grpc-reactive'
 		auth {
 			username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
 			password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
