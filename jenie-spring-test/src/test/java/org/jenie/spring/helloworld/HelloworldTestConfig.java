@@ -72,7 +72,7 @@ public class HelloworldTestConfig {
 	@Bean
 	ArticleGrpcReactiveOperation articleGrpcArmeriaReactiveOperation(HelloworldTestProperties testProperties,
 			LogGrpcInterceptor logGrpcInterceptor) {
- 		var grpcClient = GrpcClients.builder(testProperties.getGrpcArmeriaReactiveUrl())
+		var grpcClient = GrpcClients.builder(testProperties.getGrpcArmeriaReactiveUrl())
 			.serializationFormat(GrpcSerializationFormats.PROTO)
 			.decorator(LoggingClient.newDecorator())
 			.intercept(logGrpcInterceptor)
