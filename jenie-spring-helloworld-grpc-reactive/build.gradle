@@ -3,7 +3,6 @@ version = "${jenieSpringHelloworldGrpcReactiveVersion}"
 dependencies {
 	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 
 	implementation(project(":jenie-spring-helloworld-web"))

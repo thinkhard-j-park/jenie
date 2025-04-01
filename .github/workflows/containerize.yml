@@ -25,6 +25,7 @@ jobs:
           - jenie-spring-helloworld-rest
           - jenie-spring-helloworld-rest-reactive
           - jenie-spring-helloworld-grpc
+          - jenie-spring-helloworld-grpc-reactive
           - jenie-spring-helloworld-armeria-grpc
 
     steps:
