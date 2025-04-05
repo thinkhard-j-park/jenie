@@ -6,11 +6,13 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.repository.BoardRepository;
 
 import org.springframework.stereotype.Service;
 
+@ConditionalOnImperative
 @Service
 public class BoardService {
 

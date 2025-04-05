@@ -1,6 +1,7 @@
 version = "${jenieSpringHelloworldRestVersion}"
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation(project(":jenie-spring-helloworld-web"))

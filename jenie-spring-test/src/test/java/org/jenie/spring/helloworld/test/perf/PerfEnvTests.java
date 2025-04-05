@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.bson.types.ObjectId;
-import org.jenie.spring.data.mongodb.config.MongoDBSetting;
+import org.jenie.spring.data.mongodb.connector.MongoDBSetting;
 import org.jenie.spring.helloworld.HelloworldPerfConfig;
 import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;

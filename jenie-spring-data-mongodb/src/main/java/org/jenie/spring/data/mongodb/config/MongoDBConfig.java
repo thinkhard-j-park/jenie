@@ -1,12 +1,11 @@
 package org.jenie.spring.data.mongodb.config;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
+import org.jenie.spring.data.mongodb.connector.MongoDBConnector;
+import org.jenie.spring.data.mongodb.connector.MongoDBConnectorRegistry;
+import org.jenie.spring.data.mongodb.connector.MongoDBSetting;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.MongoConfigurationSupport;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
@@ -35,26 +34,8 @@ public abstract class MongoDBConfig extends MongoConfigurationSupport {
 	@Override
 	protected void configureConverters(
 			MongoCustomConversions.MongoConverterConfigurationAdapter converterConfigurationAdapter) {
-		converterConfigurationAdapter.registerConverter(new ZonedDateTimeReadConverter());
-		converterConfigurationAdapter.registerConverter(new ZonedDateTimeWriteConverter());
-	}
-
-	static class ZonedDateTimeReadConverter implements Converter<Date, ZonedDateTime> {
-
-		@Override
-		public ZonedDateTime convert(Date source) {
-			return source.toInstant().atZone(ZoneId.systemDefault());
-		}
-
-	}
-
-	static class ZonedDateTimeWriteConverter implements Converter<ZonedDateTime, Date> {
-
-		@Override
-		public Date convert(ZonedDateTime source) {
-			return Date.from(source.toInstant());
-		}
-
+		converterConfigurationAdapter.registerConverter(new CustomConverter.ZonedDateTimeReadConverter());
+		converterConfigurationAdapter.registerConverter(new CustomConverter.ZonedDateTimeWriteConverter());
 	}
 
 }

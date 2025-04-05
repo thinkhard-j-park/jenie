@@ -7,6 +7,7 @@ import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import org.bson.types.ObjectId;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.common.ActionDateTime;
 import org.jenie.spring.helloworld.common.ArticleState;
 import org.jenie.spring.helloworld.common.Writer;
@@ -23,6 +24,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+@ConditionalOnImperative
 @Repository
 public class ArticleHeaderRepository extends MongoDBRepository {
 

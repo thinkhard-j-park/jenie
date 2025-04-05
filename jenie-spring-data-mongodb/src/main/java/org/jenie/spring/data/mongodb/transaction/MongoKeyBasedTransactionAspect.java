@@ -1,26 +1,15 @@
 package org.jenie.spring.data.mongodb.transaction;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.jenie.spring.data.mongodb.operation.MongoTemplateRouter;
 
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 @Aspect
-@Component
-public class MongoKeyBasedTransactionAspect {
+public class MongoKeyBasedTransactionAspect extends AbstractMongoKeyBasedTransactionalAspect {
 
 	private final MongoTemplateRouter mongoTemplateRouter;
 
@@ -28,55 +17,13 @@ public class MongoKeyBasedTransactionAspect {
 		this.mongoTemplateRouter = mongoTemplateRouter;
 	}
 
-	String getDBKey(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional) {
-		MethodSignature signature = (MethodSignature) pjp.getSignature();
-		Method method = signature.getMethod();
-
-		Object[] args = pjp.getArgs();
-
-		for (int i = 0; i < method.getParameterAnnotations().length; i++) {
-			for (int j = 0; j < method.getParameterAnnotations()[i].length; j++) {
-				if (method.getParameterAnnotations()[i][j] instanceof DBKey) {
-					var annotatedDBKey = args[i].toString();
-					if (ObjectUtils.isEmpty(annotatedDBKey)) {
-						throw new IllegalArgumentException("@DBKey parameter was found. It should not be empty");
-					}
-					return annotatedDBKey;
-				}
-			}
-		}
-
-		var dbKey = mongoKeyBasedTransactional.key();
-
-		var expr = mongoKeyBasedTransactional.expr();
-		if (StringUtils.hasText(expr)) {
-			var parser = new SpelExpressionParser();
-			var context = new StandardEvaluationContext();
-			Parameter[] parameters = method.getParameters();
-			for (int i = 0; i < parameters.length; i++) {
-				context.setVariable(parameters[i].getName(), args[i]);
-			}
-			dbKey = parser.parseExpression(expr).getValue(context, String.class);
-		}
-
-		if (ObjectUtils.isEmpty(dbKey)) {
-			throw new IllegalArgumentException("dbKey parameter is empty");
-		}
-		return dbKey;
-	}
-
 	@Around("@annotation(mongoKeyBasedTransactional)")
 	public Object around(ProceedingJoinPoint pjp, MongoKeyBasedTransactional mongoKeyBasedTransactional)
 			throws Throwable {
 		var dbKey = getDBKey(pjp, mongoKeyBasedTransactional);
+		var definition = createTransactionDefinition(mongoKeyBasedTransactional);
+
 		PlatformTransactionManager tm = this.mongoTemplateRouter.transactionManager(dbKey);
-
-		DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
-		definition.setPropagationBehavior(mongoKeyBasedTransactional.propagation().value());
-		definition.setIsolationLevel(mongoKeyBasedTransactional.isolation().value());
-		definition.setTimeout(mongoKeyBasedTransactional.timeout());
-		definition.setReadOnly(mongoKeyBasedTransactional.readOnly());
-
 		TransactionStatus status = tm.getTransaction(definition);
 
 		try {
@@ -85,22 +32,10 @@ public class MongoKeyBasedTransactionAspect {
 			return result;
 		}
 		catch (Throwable ex) {
-			boolean shouldRollback = true;
+			boolean shouldRollback = !isNoRollbackError(ex, mongoKeyBasedTransactional.noRollbackFor());
 
-			for (Class<? extends Throwable> noRollbackForClass : mongoKeyBasedTransactional.noRollbackFor()) {
-				if (noRollbackForClass.isInstance(ex)) {
-					shouldRollback = false;
-					break;
-				}
-			}
-
-			if (shouldRollback) {
-				for (Class<? extends Throwable> rollbackForClass : mongoKeyBasedTransactional.rollbackFor()) {
-					if (rollbackForClass.isInstance(ex)) {
-						tm.rollback(status);
-						throw ex;
-					}
-				}
+			if (isRollbackError(ex, mongoKeyBasedTransactional.rollbackFor())) {
+				shouldRollback = true;
 			}
 
 			if (shouldRollback) {

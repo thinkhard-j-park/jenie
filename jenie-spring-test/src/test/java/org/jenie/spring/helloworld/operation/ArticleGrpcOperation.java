@@ -17,10 +17,10 @@ import org.jenie.spring.helloworld.grpc.WriteArticleRequestMessage;
 
 public class ArticleGrpcOperation implements ArticleOperation {
 
-	private final ArticleServiceGrpc.ArticleServiceBlockingStub blockingStub;
+	private final ArticleServiceGrpc.ArticleServiceBlockingStub stub;
 
-	public ArticleGrpcOperation(ArticleServiceGrpc.ArticleServiceBlockingStub blockingStub) {
-		this.blockingStub = blockingStub;
+	public ArticleGrpcOperation(ArticleServiceGrpc.ArticleServiceBlockingStub stub) {
+		this.stub = stub;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setContent(articleRequest.content())
 			.setWriter(Writer.toProtoMessage(articleRequest.writer()))
 			.build();
-		var articleMessage = this.blockingStub.writeArticle(requestMessage);
+		var articleMessage = this.stub.writeArticle(requestMessage);
 		return Article.fromProtoMessage(articleMessage);
 	}
 
@@ -45,7 +45,7 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setSize(param.getSize())
 			.setSort(param.getSort())
 			.build();
-		var articleHeaderListMessage = this.blockingStub.listArticleHeader(requestMessage);
+		var articleHeaderListMessage = this.stub.listArticleHeader(requestMessage);
 		return ArticleHeaderList.fromProtoMessage(articleHeaderListMessage);
 	}
 
@@ -59,7 +59,7 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setContent(modifyRequest.content())
 			.setWriter(Writer.toProtoMessage(modifyRequest.writer()))
 			.build();
-		var article = this.blockingStub.modifyArticle(requestMessage);
+		var article = this.stub.modifyArticle(requestMessage);
 		return Article.fromProtoMessage(article);
 	}
 
@@ -70,7 +70,7 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setId(articleId)
 			.setIncViewCount(incViewCount)
 			.build();
-		var articleMessage = this.blockingStub.viewArticle(requestMessage);
+		var articleMessage = this.stub.viewArticle(requestMessage);
 		return Article.fromProtoMessage(articleMessage);
 	}
 
@@ -81,14 +81,14 @@ public class ArticleGrpcOperation implements ArticleOperation {
 			.setId(articleId)
 			.setLatest(latest)
 			.build();
-		var articleHeaderMessage = this.blockingStub.getArticleHeaderById(requestMessage);
+		var articleHeaderMessage = this.stub.getArticleHeaderById(requestMessage);
 		return ArticleHeader.fromProtoMessage(articleHeaderMessage);
 	}
 
 	@Override
 	public ArticleDeleteResult deleteArticle(String service, String articleId) {
 		var requestMessage = DeleteArticleRequestMessage.newBuilder().setService(service).setId(articleId).build();
-		var deleteResultMessage = this.blockingStub.deleteArticle(requestMessage);
+		var deleteResultMessage = this.stub.deleteArticle(requestMessage);
 		return ArticleDeleteResult.fromProtoMessage(deleteResultMessage);
 	}
 

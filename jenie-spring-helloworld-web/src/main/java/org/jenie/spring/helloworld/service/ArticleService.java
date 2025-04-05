@@ -2,6 +2,7 @@ package org.jenie.spring.helloworld.service;
 
 import org.jenie.spring.data.mongodb.transaction.DBKey;
 import org.jenie.spring.data.mongodb.transaction.MongoKeyBasedTransactional;
+import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.helloworld.dto.article.Article;
 import org.jenie.spring.helloworld.dto.article.ArticleDeleteResult;
@@ -20,6 +21,7 @@ import org.jenie.spring.helloworld.repository.ArticleHeaderRepository;
 
 import org.springframework.stereotype.Service;
 
+@ConditionalOnImperative
 @Service
 public class ArticleService {
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mongodb.Tag;
 import com.mongodb.TagSet;
+import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
