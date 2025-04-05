@@ -15,7 +15,13 @@ A reusable module for shared functionality.
 ### Jenie Spring Helloworld
 A backend server project that experiments with server-side technologies like Servlet, Webflux, Rest, gRPC, MSA, Service Mesh, etc.
 - [jenie-spring-helloworld-common](jenie-spring-helloworld-common/README.md)
-- [jenie-spring-helloworld](jenie-spring-helloworld/README.md)
+- [jenie-spring-helloworld-web](jenie-spring-helloworld-web/README.md)
+- jenie-spring-helloworld-rest: rest server
+- jenie-spring-helloworld-rest-reactive: reactive rest server.
+- jenie-spring-helloworld-grpc: grpc server using [grpc-spring](https://github.com/grpc-ecosystem/grpc-spring).
+- jenie-spring-helloworld-grpc-reactive: reactive grpc server using [grpc-spring](https://github.com/grpc-ecosystem/grpc-spring).
+- jenie-spring-helloworld-armeria-grpc: grpc server using [armeria](https://armeria.dev).
+- jenie-spring-helloworld-armeria-grpc-reactive: reactive grpc server using [armeria](https://armeria.dev).
 
 ### Jenie Spring Test
 This project contains a suite of integration tests for modules.
