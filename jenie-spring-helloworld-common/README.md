@@ -1,3 +1,3 @@
 # Jenie Spring Helloworld Common
-This project provides common components used by both jenie-spring-helloworld and jenie-spring-helloworld-webflux projects,
+This project provides common components shared across jenie-spring-helloworld-xxx projects,
 including dto, protobuf, shared objects, etc.
