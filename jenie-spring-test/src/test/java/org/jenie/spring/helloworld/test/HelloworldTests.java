@@ -7,6 +7,7 @@ import org.jenie.spring.helloworld.operation.ArticleGrpcOperation;
 import org.jenie.spring.helloworld.operation.ArticleGrpcReactiveOperation;
 import org.jenie.spring.helloworld.operation.ArticleOperation;
 import org.jenie.spring.helloworld.operation.ArticleRestOperation;
+import org.jenie.spring.helloworld.operation.HelloGrpcOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,9 @@ public abstract class HelloworldTests {
 
 	@Autowired
 	protected ArticleGrpcReactiveOperation articleGrpcArmeriaReactiveOperation;
+
+	@Autowired
+	protected HelloGrpcOperation helloGrpcArmeriaOperation;
 
 	protected ArticleOperation articleOperation(Protocol protocol) {
 		return switch (protocol) {
