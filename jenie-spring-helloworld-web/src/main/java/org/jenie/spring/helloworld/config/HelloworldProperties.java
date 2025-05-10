@@ -13,6 +13,8 @@ public class HelloworldProperties {
 
 	private boolean useVirtualThread;
 
+	private boolean useGrpcJsonTranscoder;
+
 	public boolean isServerCompression() {
 		return this.serverCompression;
 	}
@@ -45,6 +47,14 @@ public class HelloworldProperties {
 		this.useVirtualThread = useVirtualThread;
 	}
 
+	public boolean isUseGrpcJsonTranscoder() {
+		return this.useGrpcJsonTranscoder;
+	}
+
+	public void setUseGrpcJsonTranscoder(boolean useGrpcJsonTranscoder) {
+		this.useGrpcJsonTranscoder = useGrpcJsonTranscoder;
+	}
+
 	@Override
 	public String toString() {
 		//@formatter:off
@@ -53,6 +63,7 @@ public class HelloworldProperties {
 				", useBlockingTaskExecutor=" + this.useBlockingTaskExecutor +
 				", useDocs=" + this.useDocs +
 				", useVirtualThread=" + this.useVirtualThread +
+				", useGrpcJsonTranscoder=" + this.useGrpcJsonTranscoder +
 				'}';
 		//@formatter:on
 	}

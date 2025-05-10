@@ -6,6 +6,7 @@ import com.linecorp.armeria.server.logging.LoggingService;
 import com.linecorp.armeria.spring.ArmeriaServerConfigurator;
 import org.jenie.spring.helloworld.exception.GrpcExceptionHandler;
 import org.jenie.spring.helloworld.grpc.ArticleGrpc;
+import org.jenie.spring.helloworld.grpc.HelloGrpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +20,16 @@ public class ArmeriaSeverConfig {
 
 	private final ArticleGrpc articlesGrpc;
 
+	private final HelloGrpc healthGrpc;
+
 	private final GrpcExceptionHandler grpcExceptionHandler;
 
 	private final HelloworldProperties helloworldProperties;
 
-	public ArmeriaSeverConfig(ArticleGrpc articleGrpc, GrpcExceptionHandler grpcExceptionHandler,
+	public ArmeriaSeverConfig(ArticleGrpc articleGrpc, HelloGrpc helloGrpc, GrpcExceptionHandler grpcExceptionHandler,
 			HelloworldProperties helloworldProperties) {
 		this.articlesGrpc = articleGrpc;
+		this.healthGrpc = helloGrpc;
 		this.grpcExceptionHandler = grpcExceptionHandler;
 		this.helloworldProperties = helloworldProperties;
 	}
@@ -37,11 +41,13 @@ public class ArmeriaSeverConfig {
 
 			var grpcService = GrpcService.builder()
 				.addService(this.articlesGrpc)
+				.addService(this.healthGrpc)
 				.exceptionHandler(this.grpcExceptionHandler)
 				.enableHealthCheckService(true)
 				.useBlockingTaskExecutor(this.helloworldProperties.isUseBlockingTaskExecutor())
 				.autoCompression(this.helloworldProperties.isServerCompression())
 				.enableUnframedRequests(this.helloworldProperties.isUseDocs())
+				.enableHttpJsonTranscoding(this.helloworldProperties.isUseGrpcJsonTranscoder())
 				.build();
 			serverBuilder.service(grpcService, LoggingService.newDecorator());
 
