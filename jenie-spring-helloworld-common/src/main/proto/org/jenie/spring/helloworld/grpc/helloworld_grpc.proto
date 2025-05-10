@@ -11,9 +11,9 @@ option java_multiple_files = true;
 service HelloService {
   rpc GetHello(GetHelloRequestMessage) returns (HelloMessage) {
     option (google.api.http) = {
-      get: "v1/hello"
+      get: "/v1/hello"
       additional_bindings {
-        get: "v2/hello"
+        get: "/v2/hello"
       }
     };
   };
