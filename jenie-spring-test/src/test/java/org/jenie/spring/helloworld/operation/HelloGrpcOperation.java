@@ -16,4 +16,9 @@ public class HelloGrpcOperation {
 		return this.stub.getHello(requestMessage).getMessage();
 	}
 
+	public String connectHello(String message) {
+		var requestMessage = GetHelloRequestMessage.newBuilder().setMessage(message).build();
+		return this.stub.getConnectHello(requestMessage).getMessage();
+	}
+
 }
