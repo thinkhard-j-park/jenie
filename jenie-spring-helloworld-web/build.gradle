@@ -10,6 +10,8 @@ dependencies {
 	// spring
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+	optionalImplementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
+	optionalImplementation 'com.linecorp.armeria:armeria'
 
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'

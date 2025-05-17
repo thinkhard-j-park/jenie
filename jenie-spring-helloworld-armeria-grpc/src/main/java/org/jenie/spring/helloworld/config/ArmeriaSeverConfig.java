@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ArmeriaSeverConfig {
+public class ArmeriaSeverConfig implements ArmeriaServerBuilder {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArmeriaSeverConfig.class);
 
@@ -54,6 +54,7 @@ public class ArmeriaSeverConfig {
 			if (this.helloworldProperties.isUseDocs()) {
 				serverBuilder.serviceUnder("/docs", new DocService());
 			}
+			serverBuilder.accessLogWriter(accessLogWriter(), true);
 		};
 	}
 
