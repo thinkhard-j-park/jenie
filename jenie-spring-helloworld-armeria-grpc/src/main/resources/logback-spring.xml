@@ -12,12 +12,12 @@
 
     <springProfile name="local">
         <logger name="org.springframework" level="INFO"/>
-        <logger name="org.springframework.data.mongodb" level="DEBUG"/>
+        <logger name="org.springframework.data.mongodb" level="DEBUG" />
     </springProfile>
 
     <springProfile name="dev">
-        <logger name="org.springframework" level="WARN"/>
-        <logger name="org.jenie" level="INFO"/>
+        <logger name="org.springframework" level="WARN" />
+        <logger name="org.jenie" level="INFO" />
         <root level="WARN"/>
     </springProfile>
 </configuration>
