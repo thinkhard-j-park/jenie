@@ -17,6 +17,14 @@ service HelloService {
       }
     };
   };
+  rpc GetConnectHello(GetHelloRequestMessage) returns (HelloMessage) {
+    option (google.api.http) = {
+      get: "/v1/connect/hello"
+      additional_bindings {
+        get: "/v2/connect/hello"
+      }
+    };
+  };
 }
 
 message GetHelloRequestMessage {
