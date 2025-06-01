@@ -2,7 +2,7 @@
 <configuration>
     <include resource="org/jenie/spring/base.xml"/>
     <logger name="com.linecorp.armeria.logging.access" level="INFO" additivity="false">
-        <appender-ref ref="NETTY_ACCESS_LOG_FILE"/>
+        <appender-ref ref="ACCESS_LOG_FILE"/>
     </logger>
 
     <root level="INFO">

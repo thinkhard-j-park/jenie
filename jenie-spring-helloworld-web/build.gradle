@@ -12,6 +12,7 @@ dependencies {
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	optionalImplementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	optionalImplementation 'com.linecorp.armeria:armeria'
+	optionalImplementation("io.projectreactor.netty:reactor-netty-http")
 
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'
