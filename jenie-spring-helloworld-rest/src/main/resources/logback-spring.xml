@@ -6,12 +6,12 @@
         <appender-ref ref="CONSOLE"/>
     </root>
     <springProfile name="local">
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.springframework.data.mongodb" level="DEBUG"/>
+        <logger name="org.springframework" level="INFO" additivity="false"/>
+        <logger name="org.springframework.data.mongodb" level="DEBUG" additivity="false"/>
     </springProfile>
     <springProfile name="dev">
-        <logger name="org.springframework" level="WARN"/>
-        <logger name="org.jenie" level="INFO"/>
+        <logger name="org.springframework" level="WARN" additivity="false"/>
+        <logger name="org.jenie" level="INFO" additivity="false"/>
         <root level="WARN">
             <appender-ref ref="ASYNC_FILE"/>
             <appender-ref ref="CONSOLE"/>
