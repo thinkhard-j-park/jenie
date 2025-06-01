@@ -11,7 +11,7 @@
     </root>
 
     <springProfile name="local">
-        <logger name="org.springframework" level="INFO"  additivity="false"/>
+        <logger name="org.springframework" level="INFO" additivity="false"/>
         <logger name="org.springframework.data.mongodb" level="DEBUG" additivity="false"/>
     </springProfile>
 
