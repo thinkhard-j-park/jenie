@@ -41,4 +41,8 @@ public final class ZdtUtil {
 		return ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 	}
 
+	public static String zdtNowString(String pattern) {
+		return ZonedDateTime.now().format(DateTimeFormatter.ofPattern(pattern));
+	}
+
 }

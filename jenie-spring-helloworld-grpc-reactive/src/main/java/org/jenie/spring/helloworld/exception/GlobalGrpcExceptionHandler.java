@@ -3,26 +3,31 @@ package org.jenie.spring.helloworld.exception;
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.StatusException;
-import net.devh.boot.grpc.server.advice.GrpcAdvice;
-import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 
-@GrpcAdvice
-public class GlobalGrpcExceptionHandler {
+import org.springframework.grpc.server.exception.GrpcExceptionHandler;
+import org.springframework.stereotype.Component;
 
-	@GrpcExceptionHandler(AbstractException.class)
-	public StatusException handleGrpcException(AbstractException ex) {
-		var errorCode = ex.getErrorCode();
-		var grpcStatus = errorCode.getGrpcStatus();
-		Status status = grpcStatus.toStatus().withDescription(ex.getMessage()).withCause(ex);
-		var metaData = new Metadata();
+@Component
+public class GlobalGrpcExceptionHandler implements GrpcExceptionHandler {
 
-		Metadata.Key<String> keyTitle = Metadata.Key.of("title", Metadata.ASCII_STRING_MARSHALLER);
-		metaData.put(keyTitle, errorCode.getTitle());
+	@Override
+	public StatusException handleException(Throwable exception) {
+		if (exception instanceof AbstractException ex) {
+			var errorCode = ex.getErrorCode();
+			var grpcStatus = errorCode.getGrpcStatus();
+			Status status = grpcStatus.toStatus().withDescription(ex.getMessage()).withCause(ex);
+			var metaData = new Metadata();
 
-		Metadata.Key<String> keyErrorCode = Metadata.Key.of("error-code", Metadata.ASCII_STRING_MARSHALLER);
-		metaData.put(keyErrorCode, String.valueOf(errorCode.getCode()));
+			Metadata.Key<String> keyTitle = Metadata.Key.of("title", Metadata.ASCII_STRING_MARSHALLER);
+			metaData.put(keyTitle, errorCode.getTitle());
 
-		return status.asException(metaData);
+			Metadata.Key<String> keyErrorCode = Metadata.Key.of("error-code", Metadata.ASCII_STRING_MARSHALLER);
+			metaData.put(keyErrorCode, String.valueOf(errorCode.getCode()));
+
+			return status.asException(metaData);
+		}
+
+		return new StatusException(Status.INTERNAL.withDescription(exception.getMessage()).withCause(exception));
 	}
 
 }

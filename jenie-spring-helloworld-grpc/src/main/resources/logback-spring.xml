@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/jenie/spring/base.xml"/>
+    <logger name="org.jenie.spring.helloworld.log.access.SpringGrpcAccessLogInterceptor" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS_LOG_FILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="ASYNC_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
     <springProfile name="local">
         <logger name="org.springframework" level="INFO"/>
-        <logger name="org.springframework.data.mongodb" level="DEBUG"/>
-        <root level="INFO">
-            <appender-ref ref="ASYNC_FILE"/>
-            <appender-ref ref="CONSOLE"/>
-        </root>
     </springProfile>
+
     <springProfile name="dev">
         <logger name="org.springframework" level="WARN"/>
         <logger name="org.jenie" level="INFO"/>

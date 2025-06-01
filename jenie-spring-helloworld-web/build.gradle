@@ -7,15 +7,17 @@ java {
 }
 
 dependencies {
-	// spring
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	optionalImplementation("io.projectreactor.netty:reactor-netty-http")
 	optionalImplementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	optionalImplementation 'com.linecorp.armeria:armeria'
 
-	// others
+	// spring-grpc
+	optionalImplementation "io.grpc:grpc-netty-shaded:${grpcNettyShadedVersion}"
+	optionalImplementation "com.google.protobuf:protobuf-java:${protobufJavaVersion}"
 
+	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'
 	implementation "com.google.code.findbugs:jsr305:${findBugsVersion}"
 

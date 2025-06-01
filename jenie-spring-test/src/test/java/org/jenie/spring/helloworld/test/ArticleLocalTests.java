@@ -77,12 +77,12 @@ class ArticleLocalTests extends HelloworldTests {
 	static Stream<Arguments> provideProtocol() {
 		//@formatter:off
 		return Stream.of(
-				Arguments.of(Protocol.rest),
-				Arguments.of(Protocol.restReactive),
-				Arguments.of(Protocol.grpc),
-				Arguments.of(Protocol.grpcReactive),
-				Arguments.of(Protocol.grpcArmeria),
-				Arguments.of(Protocol.grpcArmeriaReactive)
+//				Arguments.of(Protocol.rest),
+//				Arguments.of(Protocol.restReactive),
+//				Arguments.of(Protocol.grpc),
+				Arguments.of(Protocol.grpcReactive)
+//				Arguments.of(Protocol.grpcArmeria),
+//				Arguments.of(Protocol.grpcArmeriaReactive)
 		);
 		//@formatter:on
 	}

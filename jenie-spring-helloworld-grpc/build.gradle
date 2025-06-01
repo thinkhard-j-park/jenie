@@ -1,7 +1,19 @@
 version = "${jenieSpringHelloworldGrpcVersion}"
 
+repositories {
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
 dependencies {
-	implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootStarter}"
+	implementation platform("org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}")
+	implementation "org.springframework.grpc:spring-grpc-spring-boot-starter"
+	implementation 'io.grpc:grpc-netty-shaded'
+	modules {
+		module("io.grpc:grpc-netty") {
+			replacedBy("io.grpc:grpc-netty-shaded", "Use Netty shaded instead of regular Netty")
+		}
+	}
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation(project(":jenie-spring-helloworld-web"))
 }

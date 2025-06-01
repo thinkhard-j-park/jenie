@@ -1,0 +1,21 @@
+package org.jenie.spring.helloworld.config;
+
+import io.grpc.ServerInterceptor;
+import org.jenie.spring.helloworld.log.access.SpringGrpcAccessLogInterceptor;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.grpc.server.GlobalServerInterceptor;
+
+@Configuration
+public class ServerConfig {
+
+	@Bean
+	@Order(100)
+	@GlobalServerInterceptor
+	ServerInterceptor accessLogInterceptor() {
+		return new SpringGrpcAccessLogInterceptor();
+	}
+
+}
