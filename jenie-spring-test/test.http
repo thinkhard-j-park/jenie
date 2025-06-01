@@ -1,0 +1,19 @@
+# test grpc transcoder
+GET http://192.168.0.14:30080/v1/hello?message=hi
+
+
+### grpc ingress gw
+GRPC grpc://192.168.0.14:30080/org.jenie.spring.helloworld.HelloService/GetHello
+
+{
+  "message": "gRPC"
+}
+
+
+### grpc nodeport
+GRPC grpc://192.168.0.14:30005/org.jenie.spring.helloworld.HelloService/GetHello
+
+{
+  "message": "gRPC"
+}
+

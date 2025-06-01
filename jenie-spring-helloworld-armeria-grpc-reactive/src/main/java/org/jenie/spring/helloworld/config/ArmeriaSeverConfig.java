@@ -6,6 +6,7 @@ import com.linecorp.armeria.server.logging.LoggingService;
 import com.linecorp.armeria.spring.ArmeriaServerConfigurator;
 import org.jenie.spring.helloworld.exception.GrpcExceptionHandler;
 import org.jenie.spring.helloworld.grpc.ArticleGrpc;
+import org.jenie.spring.helloworld.log.access.ArmeriaAccessLogCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ArmeriaSeverConfig implements ArmeriaServerBuilder {
+public class ArmeriaSeverConfig implements ArmeriaAccessLogCustomizer {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArmeriaSeverConfig.class);
 

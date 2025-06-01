@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/jenie/spring/base.xml"/>
-
     <logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
-        <appender-ref ref="NETTY_ACCESS_ASYNC_FILE"/>
+        <appender-ref ref="ACCESS_LOG_FILE"/>
     </logger>
 
     <root level="INFO">
@@ -12,13 +11,15 @@
     </root>
 
     <springProfile name="local">
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.springframework.data.mongodb" level="DEBUG" />
+        <logger name="org.springframework" level="INFO" additivity="false"/>
+        <logger name="org.springframework.data.mongodb" level="INFO" additivity="false"/>
     </springProfile>
-
     <springProfile name="dev">
-        <logger name="org.springframework" level="WARN" />
-        <logger name="org.jenie" level="INFO" />
-        <root level="WARN"/>
+        <logger name="org.springframework" level="WARN" additivity="false"/>
+        <logger name="org.jenie" level="INFO" additivity="false"/>
+        <root level="WARN">
+            <appender-ref ref="ASYNC_FILE"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
     </springProfile>
 </configuration>

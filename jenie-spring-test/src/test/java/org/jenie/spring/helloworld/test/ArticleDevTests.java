@@ -17,4 +17,10 @@ public class ArticleDevTests extends HelloworldTests {
 		assertThat(this.testProperties.getGrpcUrl()).isEqualTo("http://192.168.0.14:30005");
 	}
 
+	@Test
+	void hello() {
+		var message = this.helloGrpcArmeriaOperation.hello("grpc-test");
+		assertThat(message).isEqualTo("Hello! grpc-test");
+	}
+
 }
