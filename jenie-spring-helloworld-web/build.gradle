@@ -12,6 +12,7 @@ dependencies {
 	optionalImplementation("io.projectreactor.netty:reactor-netty-http")
 	optionalImplementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	optionalImplementation 'com.linecorp.armeria:armeria'
+	implementation("org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}")
 
 	// spring-grpc
 	optionalImplementation "io.grpc:grpc-netty-shaded:${grpcNettyShadedVersion}"

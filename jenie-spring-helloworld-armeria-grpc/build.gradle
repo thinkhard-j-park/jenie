@@ -5,7 +5,6 @@ dependencies {
 	implementation 'com.linecorp.armeria:armeria-spring-boot3-starter'
 	implementation 'com.linecorp.armeria:armeria-grpc'
 	implementation "io.projectreactor:reactor-core:${projectReactorVersion}"
-
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
 	implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
