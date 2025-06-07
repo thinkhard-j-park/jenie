@@ -80,9 +80,6 @@ configure(bootProjs) {
 
 configure(svcProjs) {
 	dependencies {
-		// spring
-		implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
-
 		// test
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	}
