@@ -46,7 +46,7 @@ The application accesses the 'dbconn' database of the cluster configured with th
 | mongodb.setting.app-name                    | Application name connecting to MongoDB | -                                                         |
 | mongodb.setting.cluster.${clusterKey}.hosts | MongoDB connection address           | e.g. mongodb.setting.cluster.dckr.host[0]=localhost:27017 | 
 
-- For detailed options, refer to [MongoDBSetting](src/main/java/org/jenie/spring/data/mongodb/config/MongoDBSetting.java).
+- For detailed options, refer to [MongoDBSetting](src/main/java/org/jenie/spring/data/mongodb/connector/MongoDBSetting.java).
 
 ## Usage Example
 
