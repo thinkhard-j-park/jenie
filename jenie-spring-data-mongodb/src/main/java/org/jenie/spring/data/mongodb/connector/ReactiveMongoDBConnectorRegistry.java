@@ -41,7 +41,6 @@ public class ReactiveMongoDBConnectorRegistry {
 	}
 
 	public Mono<DBConn> getDBConn(String key) {
-		logger.warn("Cache - getDBConn: {} was called", key);
 		return Flux.fromIterable(getTemplatesList()).flatMap((dbConnTemplate) -> {
 			var query = Query.query(Criteria.where("dbKey").is(key));
 			return dbConnTemplate.findOne(query, DBConn.class);

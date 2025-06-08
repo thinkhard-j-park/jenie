@@ -95,7 +95,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 
 		@Override
 		public @Nullable Mono<ReactiveMongoDatabaseFactory> load(String key) {
-			return this.dbConnCache.get(key).map((dbConn) -> {
+			return this.dbConnCache.get(key).flatMap((dbConn) -> {
 				if (dbConn == null) {
 					return Mono.error(new IllegalArgumentException("DBConn must not be null"));
 				}
@@ -103,7 +103,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 				var clusterKey = dbConn.getClusterKey();
 				var dbName = dbConn.getDbName();
 				var connector = this.connectorRegistry.getConnector(clusterKey);
-				return new SimpleReactiveMongoDatabaseFactory(connector.getClient(), dbName);
+				return Mono.just(new SimpleReactiveMongoDatabaseFactory(connector.getClient(), dbName));
 			}).cast(ReactiveMongoDatabaseFactory.class).cache();
 
 		}
