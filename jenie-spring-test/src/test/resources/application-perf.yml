@@ -1,0 +1,13 @@
+mongodb:
+  setting:
+    enabled: true
+    app-name: jenie-spring-test
+    cluster:
+      dev:
+        hosts:
+          - ENC(maTPz9OuaT+YwqAiiwlV0Ig4EVfvetrDw4ZRST8XTFDOaHHUtQuo9pX80wufFDHSWKoZwyBlw2QSUZgToumDUg==)
+          - ENC(9DLk3b9eKRK7879DftPL9yNn39cA9yTCXT/f/v8c92HMuq0RK0LRzVKWSzjWm7U1cRxc5d6N4GOP5jJWy+wOEQ==)
+          - ENC(EG9k4b9QQ0yc/Mt1/zWT5pYsOBfIEk0tVIBMKTngVZZNeRnD+9YfYY6JjwbiQCwOEk+nrpN56aeZiD7/HXoa9w==)
+        user: ENC(8REbgXGAWryxCMdlr9gXcC1WsHtpEnHAweJU+bTwm+ljmR8o0Zd+ih/rNKSQI8Ha)
+        password: ENC(XY9T43OG9qXTLiVqqLWay6YYocxvmxGTsraR0ifNQf+8dxsyCo3bvbHaMHe0Wtnc)
+        min-size: 2

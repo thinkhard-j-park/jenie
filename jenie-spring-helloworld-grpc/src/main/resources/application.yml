@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: jenie-spring-helloworld-grpc
+  grpc:
+    server:
+      port: 30006
+
+mongodb:
+  setting:
+    enabled: true
+    app-name: jenie-spring-helloworld-grpc
+
+logging:
+  config: classpath:logback-spring.xml

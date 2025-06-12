@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: jenie-spring-helloworld-armeria-grpc-reactive
+server:
+  port: 30009
+armeria:
+  ports:
+    - port: 30009
+  enable-metrics: false
+mongodb:
+  setting:
+    enabled: true
+    app-name: jenie-spring-helloworld-armeria-grpc-reactive

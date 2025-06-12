@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: jenie-spring-helloworld-armeria-grpc
+  main:
+    web-application-type: none
+armeria:
+  ports:
+    - port: 30005
+  enable-metrics: false
+mongodb:
+  setting:
+    enabled: true
+    app-name: jenie-spring-helloworld-armeria-grpc

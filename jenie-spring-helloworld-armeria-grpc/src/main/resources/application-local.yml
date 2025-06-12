@@ -1,0 +1,17 @@
+mongodb:
+  setting:
+    cluster:
+      local:
+        hosts:
+          - ENC(3ecd3a2da61eda7d0875156c728cbdc917aacdae964d5ce926ce1ce7789b15d4)
+        min-size: 2
+    router-type: simple
+
+helloworld:
+  server-compression: false
+  use-blocking-task-executor: true
+  use-docs: true
+  connect-hello-url: gproto+http://localhost:30005
+  crypto:
+    password: jenie
+    salt: c73afbb57eb418d9

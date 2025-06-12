@@ -1,0 +1,18 @@
+mongodb:
+  setting:
+    cluster:
+      dev:
+        hosts:
+          - ${MONGO_HOST_0}
+          - ${MONGO_HOST_1}
+          - ${MONGO_HOST_2}
+        user: ${MONGO_USER}
+        password: ${MONGO_PASS}
+        min-size: 2
+    router-type: ${MONGO_ROUTER_TYPE}
+
+helloworld:
+  use-virtual-thread: ${VIRTUAL_THREAD}
+  crypto:
+    password: ${CRYPTO_PASS}
+    salt: ${CRYPTO_SALT}
