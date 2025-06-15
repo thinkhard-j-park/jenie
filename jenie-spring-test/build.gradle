@@ -1,3 +1,7 @@
+plugins {
+	id "me.champeau.jmh" version "${jmhPluginVersion}"
+}
+
 version = "${jenieSpringTestVersion}"
 
 dependencies {
@@ -20,6 +24,14 @@ dependencies {
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// jmh
+	implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
+	implementation "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+}
+
+jmh {
+	resultsFile = project.file("${project.projectDir}/jmh/results.txt")
 }
 
 bootJar {
@@ -27,5 +39,5 @@ bootJar {
 }
 
 test {
-//	exclude '**/helloworld/**'
+	exclude '**/helloworld/**'
 }

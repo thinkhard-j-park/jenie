@@ -71,6 +71,10 @@ public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String t
 }
 ```
 
+#### SimpleMongoTemplateRouter vs CaffeineMongoTemplateRouter
+- [Java Microbenchmark Harness Result](../jenie-spring-test/jmh/results.txt)
+- [MongoTemplateRouterBenchmark.java](../jenie-spring-test/src/test/java/org/jenie/spring/helloworld/test/jmh/MongoTemplateRouterBenchmark.java)
+
 ### Transaction
 
 MongoDB transactions work only on replica sets or sharded clusters. For more details, refer to [MongoDB Official Document](https://www.mongodb.com/docs/manual/core/transactions). 
