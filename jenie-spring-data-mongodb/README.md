@@ -72,8 +72,16 @@ public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String t
 ```
 
 #### SimpleMongoTemplateRouter vs CaffeineMongoTemplateRouter
-- [Java Microbenchmark Harness Result](../jenie-spring-test/jmh/results.txt)
-- [MongoTemplateRouterBenchmark.java](../jenie-spring-test/src/test/java/org/jenie/spring/helloworld/test/jmh/MongoTemplateRouterBenchmark.java)
+- In a high-concurrency benchmark with 16 competing threads, `CaffeineMongoTemplateRouter` demonstrated superior performance in all scenarios.
+
+| Benchmark Scenario | `SimpleMongoTemplateRouter` | `CaffeineMongoTemplateRouter` | Performance Advantage |
+| :--- | :--- | :--- | :--- |
+| **Cache Hit** | `372 ns/op` | **`305 ns/op`** | Caffeine is **22%** faster |
+| **Cache Miss** | `82,395 ns/op` | **`62,839 ns/op`** | Caffeine is **31%** faster |
+
+- [See the full JMH benchmark results](../jenie-spring-test/jmh/results.txt)
+- [See the benchmark source code](../jenie-spring-test/src/test/java/org/jenie/spring/helloworld/test/jmh/MongoTemplateRouterBenchmark.java)
+
 
 ### Transaction
 
