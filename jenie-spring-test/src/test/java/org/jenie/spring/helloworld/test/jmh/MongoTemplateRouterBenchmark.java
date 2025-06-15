@@ -89,7 +89,7 @@ public class MongoTemplateRouterBenchmark {
 
 			given(mockDbConn.getClusterKey()).willReturn("cluster1");
 			given(mockDbConn.getDbName()).willReturn("test-db");
-			given(mockDbConn.getDbKey()).willReturn("testDB");
+			given(mockDbConn.getDbKey()).willReturn("test-db");
 
 			given(mockConnector.getClient()).willReturn(mockClient);
 			given(mockConnector.getMappingMongoConverter()).willReturn(mappingMongoConverter);
