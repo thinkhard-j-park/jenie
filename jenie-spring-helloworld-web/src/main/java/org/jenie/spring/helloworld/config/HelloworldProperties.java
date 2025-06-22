@@ -15,6 +15,8 @@ public class HelloworldProperties {
 
 	private boolean useGrpcJsonTranscoder;
 
+	private boolean enableAccessLog;
+
 	private String connectHelloUrl;
 
 	public boolean isServerCompression() {
@@ -65,6 +67,14 @@ public class HelloworldProperties {
 		this.connectHelloUrl = connectHelloUrl;
 	}
 
+	public boolean isEnableAccessLog() {
+		return this.enableAccessLog;
+	}
+
+	public void setEnableAccessLog(boolean enableAccessLog) {
+		this.enableAccessLog = enableAccessLog;
+	}
+
 	@Override
 	public String toString() {
 		//@formatter:off
@@ -75,6 +85,7 @@ public class HelloworldProperties {
 				", useDocs=" + this.useDocs +
 				", useVirtualThread=" + this.useVirtualThread +
 				", useGrpcJsonTranscoder=" + this.useGrpcJsonTranscoder +
+				", enableAccessLog=" + this.enableAccessLog +
 				'}';
 		//@formatter:on
 	}

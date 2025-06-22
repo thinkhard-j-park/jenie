@@ -1,7 +1,6 @@
 server:
   compression:
     enabled: ${COMPRESSION}
-
 mongodb:
   setting:
     cluster:
@@ -16,8 +15,8 @@ mongodb:
         max-size: ${MONGO_POOL_MAX}
         max-connecting: ${MONGO_MAX_CONN}
     router-type: ${MONGO_ROUTER_TYPE}
-
 helloworld:
   crypto:
     password: ${CRYPTO_PASS}
     salt: ${CRYPTO_SALT}
+  enable-access-log: ${ACCESS_LOG}

@@ -11,10 +11,15 @@ import org.springframework.http.client.ReactorResourceFactory;
 public class ServerConfig implements ReactorNettyAccessLogCustomizer {
 
 	@Bean
-	public NettyReactiveWebServerFactory nettyWebServerCustomizer(ReactorResourceFactory resourceFactory) {
+	public NettyReactiveWebServerFactory nettyWebServerCustomizer(ReactorResourceFactory resourceFactory,
+			HelloworldProperties properties) {
 		NettyReactiveWebServerFactory serverFactory = new NettyReactiveWebServerFactory();
 		serverFactory.setResourceFactory(resourceFactory);
-		serverFactory.addServerCustomizers(accessLogCustomizer());
+
+		if (properties.isEnableAccessLog()) {
+			serverFactory.addServerCustomizers(accessLogCustomizer());
+		}
+
 		return serverFactory;
 
 	}
