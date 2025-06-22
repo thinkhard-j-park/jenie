@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Import;
 
 @ExcludeCodeCoverageGenerated
 @EnableConfigurationProperties(MongoDBSetting.class)
-@Import({ ExcludeSpringDefaultMongoAutoConfiguration.class })
 @AutoConfiguration
 public class MongoDBAutoConfig {
 
