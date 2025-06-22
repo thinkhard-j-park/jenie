@@ -24,7 +24,7 @@ A backend server project that experiments with server-side technologies like Ser
 - jenie-spring-helloworld-armeria-grpc-reactive: reactive grpc server using [armeria](https://armeria.dev), [reactive-grpc](https://github.com/salesforce/reactive-grpc).
 
 ### Jenie Spring Test
-This project contains a suite of integration tests for modules.
+This project contains a suite of integration tests, benchmark, performance results for modules.
 - [jenie-spring-test](jenie-spring-test/README.md)
 
 
