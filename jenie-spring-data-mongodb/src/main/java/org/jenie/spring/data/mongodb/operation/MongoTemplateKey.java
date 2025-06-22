@@ -1,5 +1,6 @@
 package org.jenie.spring.data.mongodb.operation;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.mongodb.ReadPreference;
@@ -11,10 +12,10 @@ import com.mongodb.WriteConcern;
 public record MongoTemplateKey(String dbKey, ReadPreference readPreference, WriteConcern writeConcern, String key) {
 
 	public MongoTemplateKey(String dbKey, ReadPreference readPreference, WriteConcern writeConcern) {
-		this(dbKey, null, null, generateKey(dbKey, readPreference, writeConcern));
+		this(dbKey, readPreference, writeConcern, generateKey(dbKey, readPreference, writeConcern));
 	}
 
-	private static String generateKey(String dbKey, ReadPreference readPreference, WriteConcern writeConcern) {
+	public static String generateKey(String dbKey, ReadPreference readPreference, WriteConcern writeConcern) {
 		var sb = new StringBuilder(dbKey);
 		sb.append("|");
 		if (readPreference != null) {
@@ -36,6 +37,24 @@ public record MongoTemplateKey(String dbKey, ReadPreference readPreference, Writ
 				.append(writeConcern.getWTimeout(TimeUnit.MILLISECONDS));
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		MongoTemplateKey other = (MongoTemplateKey) obj;
+		return this.key.equals(other.key);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.key);
 	}
 
 }
