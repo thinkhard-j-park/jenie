@@ -31,7 +31,7 @@ dependencies {
 }
 
 jmh {
-	resultsFile = project.file("${project.projectDir}/jmh/results.txt")
+	resultsFile = project.file("${project.projectDir}/report/jmh/results.txt")
 }
 
 bootJar {
