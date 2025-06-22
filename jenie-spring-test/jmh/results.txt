@@ -1,5 +1,5 @@
 Benchmark                                       Mode  Cnt      Score      Error  Units
-MongoTemplateRouterBenchmark.caffeineCacheHit   avgt   40    305.147 ±    0.599  ns/op
-MongoTemplateRouterBenchmark.caffeineCacheMiss  avgt   40  62839.760 ± 4221.898  ns/op
-MongoTemplateRouterBenchmark.simpleCacheHit     avgt   40    372.733 ±   16.150  ns/op
-MongoTemplateRouterBenchmark.simpleCacheMiss    avgt   40  82395.801 ± 6728.194  ns/op
+MongoTemplateRouterBenchmark.caffeineCacheHit   avgt   40    305.365 ±    0.565  ns/op
+MongoTemplateRouterBenchmark.caffeineCacheMiss  avgt   40  61047.089 ± 3960.932  ns/op
+MongoTemplateRouterBenchmark.simpleCacheHit     avgt   40    357.151 ±    8.794  ns/op
+MongoTemplateRouterBenchmark.simpleCacheMiss    avgt   40  74459.974 ± 5954.743  ns/op
