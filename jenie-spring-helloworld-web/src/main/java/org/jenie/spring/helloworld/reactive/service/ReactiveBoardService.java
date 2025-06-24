@@ -45,7 +45,6 @@ public class ReactiveBoardService {
 
 		@Override
 		public @Nullable Mono<BoardEntity> load(BoardKey boardKey) {
-			logger.warn("Cache - boardKey:{}", boardKey);
 			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id()).cache();
 		}
 

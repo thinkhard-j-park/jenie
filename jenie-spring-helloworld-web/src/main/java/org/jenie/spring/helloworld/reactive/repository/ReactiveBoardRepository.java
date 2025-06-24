@@ -26,8 +26,7 @@ public class ReactiveBoardRepository extends ReactiveMongoDBRepository {
 	public Mono<BoardEntity> findBoardById(String dbKey, String id) {
 		return ReactiveAssertHelper.validObjectId(id, "id should be valid")
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
-			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class))
-			.doOnSuccess((boardEntity) -> logger.warn("DBAccess - findBoardById: {}", boardEntity));
+			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class));
 
 	}
 
