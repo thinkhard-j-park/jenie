@@ -39,10 +39,11 @@ public class SimpleMongoTemplateRouter implements MongoTemplateRouter {
 	}
 
 	private SimpleMongoClientDatabaseFactory databaseFactory(DBConn dbConn) {
-		var clusterKey = dbConn.getClusterKey();
-		var connector = this.connectorRegistry.getConnector(clusterKey);
-		return this.databaseFactoryCache.computeIfAbsent(dbConn.getDbKey(),
-				(k) -> new SimpleMongoClientDatabaseFactory(connector.getClient(), dbConn.getDbName()));
+		return this.databaseFactoryCache.computeIfAbsent(dbConn.getDbKey(), (k) -> {
+			var clusterKey = dbConn.getClusterKey();
+			var connector = this.connectorRegistry.getConnector(clusterKey);
+			return new SimpleMongoClientDatabaseFactory(connector.getClient(), dbConn.getDbName());
+		});
 	}
 
 	@Override
