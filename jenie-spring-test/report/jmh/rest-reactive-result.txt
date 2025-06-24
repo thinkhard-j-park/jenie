@@ -1,0 +1,5 @@
+Benchmark                                                       Mode  Cnt      Score      Error  Units
+ReactiveMongoTemplateRouterBenchmark.reactiveCaffeineCacheHit   avgt   40    448.099 ±   19.248  ns/op
+ReactiveMongoTemplateRouterBenchmark.reactiveCaffeineCacheMiss  avgt   40  79372.961 ± 6159.730  ns/op
+ReactiveMongoTemplateRouterBenchmark.reactiveSimpleCacheHit     avgt   40    460.706 ±    7.512  ns/op
+ReactiveMongoTemplateRouterBenchmark.reactiveSimpleCacheMiss    avgt   40  66817.871 ± 4956.992  ns/op
