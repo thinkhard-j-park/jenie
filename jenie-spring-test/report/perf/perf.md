@@ -41,5 +41,5 @@ All tests were executed at least three times.
 | jenie-spring-helloworld-rest-reactive  | 2 core, 2 Gi | -              | 480    | 1420 | 2   | 1.34 Gi |
 
 ## Detail Reports
-- [Rest server - servlet performance test with virtual thread](./rest/rest.md)
-- [Rest server - webflux performance test](./rest/rest-reactive.md)
+- [Servlet server rest performance test with virtual thread](./rest/rest.md)
+- [Webflux server rest performance test](./rest/rest-reactive.md)
