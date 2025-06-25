@@ -1,7 +1,7 @@
 # Performance test result
 
 - For the test environment, refer to [this document](../perf.md).
-- Measure the performance of the jenie-spring-helloworld-rest server in k8s envrionment.
+- Measure the performance of the jenie-spring-helloworld-rest server in k8s environment.
 - Used [CaffeineMongoTemplateRouter](../../../../jenie-spring-data-mongodb/src/main/java/org/jenie/spring/data/mongodb/operation/CaffeineMongoTemplateRouter.java)
 
 ## Thresholds
