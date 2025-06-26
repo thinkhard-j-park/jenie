@@ -1,8 +1,6 @@
 armeria:
   access-log:
     type: ${ACCESS_LOG_TYPE}
-#  worker-group: ${WORKER_GROUP}
-  blocking-task-executor: ${BLOCKING_TASK_EXECUTOR}
 mongodb:
   setting:
     cluster:
