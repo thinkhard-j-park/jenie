@@ -1,6 +1,7 @@
 armeria:
   access-log:
     type: ${ACCESS_LOG_TYPE}
+  worker-group: ${WORKER_GROUP}
 mongodb:
   setting:
     cluster:
