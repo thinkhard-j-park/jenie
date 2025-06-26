@@ -9,6 +9,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
 	// armeria
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
@@ -24,6 +25,7 @@ dependencies {
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
 
 	// jmh
 	implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
@@ -31,7 +33,7 @@ dependencies {
 }
 
 jmh {
-	resultsFile = project.file("${project.projectDir}/report/jmh/results.txt")
+	resultsFile = project.file("${project.projectDir}/report/jmh/result.txt")
 }
 
 bootJar {

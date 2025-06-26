@@ -53,8 +53,7 @@ public class ReactiveMongoDBConnectorRegistry {
 				}
 				return Mono.just(dbConns.getFirst());
 			})
-			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)))
-			.doOnSuccess((dbConn) -> logger.warn("DBAccess - getDBConn: {} was called", dbConn));
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {

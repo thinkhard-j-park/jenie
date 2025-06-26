@@ -4,7 +4,7 @@ This project contains integration test cases and related utilities for the inter
 Unit tests for each module are managed within their respective module, not here.
 
 ## Benchmark
-- [SimpleMongoTemplateRouter vs CaffeineMongoTemplateRouter benchmark result](./report/jmh/results.txt)
+- [SimpleMongoTemplateRouter vs CaffeineMongoTemplateRouter benchmark result](report/jmh/rest-result.txt)
 
 ## Performance test result
 - [Performance test environment](./report/perf/perf.md)
