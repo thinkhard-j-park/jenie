@@ -11,7 +11,9 @@ mongodb:
           - ${MONGO_HOST_2}
         user: ${MONGO_USER}
         password: ${MONGO_PASS}
-        min-size: 2
+        min-size: ${MONGO_POOL_MIN}
+        max-size: ${MONGO_POOL_MAX}
+        max-connecting: ${MONGO_MAX_CONN}
     router-type: ${MONGO_ROUTER_TYPE}
 
 helloworld:

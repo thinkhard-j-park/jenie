@@ -55,7 +55,9 @@ public class ArmeriaSeverConfig implements ArmeriaAccessLogCustomizer {
 			if (this.helloworldProperties.isUseDocs()) {
 				serverBuilder.serviceUnder("/docs", new DocService());
 			}
-			serverBuilder.accessLogWriter(accessLogWriter(), true);
+			if (this.helloworldProperties.isEnableAccessLog()) {
+				serverBuilder.accessLogWriter(accessLogWriter(), true);
+			}
 		};
 	}
 
