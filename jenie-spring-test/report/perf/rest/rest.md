@@ -1,4 +1,4 @@
-# Performance test result
+# Performance test result - jenie-spring-helloworld-rest
 
 - For the test environment, refer to [this document](../perf.md).
 - Measure the performance of the jenie-spring-helloworld-rest server in k8s environment.
