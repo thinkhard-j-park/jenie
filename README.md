@@ -45,8 +45,8 @@ The comprehensive details of the testing methodology and environment are documen
 | jenie-spring-helloworld-armeria-grpc  | 2 core, 2 Gi                         | -              | 590    | 1780 | 2   | 1340 Mi |
 | jenie-spring-helloworld-armeria-grpc  | 2 core, 2 Gi                         | enabled        | 630    | 1910 | 2   | 1360 Mi |
 
-- [Servlet REST API Performance Report](./jenie-spring-test/report/perf/rest/rest.md)
-- [Webflux REST API Performance Report](./jenie-spring-test/report/perf/rest/rest-reactive.md)
+- [Spring MVC REST API Performance Report](./jenie-spring-test/report/perf/rest/rest.md)
+- [Spring Webflux REST API Performance Report](./jenie-spring-test/report/perf/rest/rest-reactive.md)
 - [Armeria gRPC Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc.md)
 
 
