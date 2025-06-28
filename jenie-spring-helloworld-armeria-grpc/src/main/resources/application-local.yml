@@ -15,3 +15,4 @@ helloworld:
   crypto:
     password: jenie
     salt: c73afbb57eb418d9
+  enable-access-log: false

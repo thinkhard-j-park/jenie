@@ -6,7 +6,7 @@
 
 ## Thresholds
 
-- error rate < 0.01
+- error rate < 0
 - p(95) < 1000 ms
 
 ## Summary

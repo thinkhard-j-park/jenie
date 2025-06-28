@@ -24,8 +24,20 @@ A backend server project that experiments with server-side technologies like Ser
 - jenie-spring-helloworld-armeria-grpc-reactive: reactive grpc server using [armeria](https://armeria.dev), [reactive-grpc](https://github.com/salesforce/reactive-grpc).
 
 ### Jenie Spring Test
-This project contains a suite of integration tests, benchmark, performance results for modules.
-- [jenie-spring-test](jenie-spring-test/README.md)
+[jenie-spring-test](jenie-spring-test/README.md) contains a suite of integration tests, benchmark, performance results for modules.
+
+#### Performance Test Summary
+| app                                    | pod resource | virtual thread | iter/s | tps  | cpu  | memory  |
+|:---------------------------------------|:-------------|:---------------|:-------|:-----|:-----|:--------|
+| jenie-spring-helloworld-rest           | 1 core, 1 Gi | -              | 250    | 754  | 1    | 900 Mi  |
+| jenie-spring-helloworld-rest           | 1 core, 1 Gi | enabled        | 280    | 840  | 0.87 | 612 Mi  |
+| jenie-spring-helloworld-rest-reactive  | 1 core, 1 Gi | -              | 210    | 630  | 1   | 530 Mi  |
+| jenie-spring-helloworld-rest           | 2 core, 2 Gi | -              | 490    | 1460 | 2    | 1400 Mi |
+| jenie-spring-helloworld-rest           | 2 core, 2 Gi | enabled        | 550    | 1650 | 1.71 | 1910 Mi |
+| jenie-spring-helloworld-rest-reactive  | 2 core, 2 Gi | -              | 480    | 1420 | 2   | 1.34 Gi |
+
+- [Servlet REST API Performance Report](./jenie-spring-test/report/perf/rest/rest.md)
+- [Webflux REST API Performance Report](./jenie-spring-test/report/perf/rest/rest-reactive.md)
 
 
 ## Coding Style, Formatting
