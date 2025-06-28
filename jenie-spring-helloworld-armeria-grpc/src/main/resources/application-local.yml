@@ -10,8 +10,10 @@ mongodb:
 helloworld:
   server-compression: false
   use-blocking-task-executor: true
+  use-virtual-thread: true
   use-docs: true
   connect-hello-url: gproto+http://localhost:30005
   crypto:
     password: jenie
     salt: c73afbb57eb418d9
+  enable-access-log: false
