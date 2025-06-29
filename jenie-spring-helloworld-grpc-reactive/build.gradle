@@ -9,6 +9,7 @@ dependencies {
 	implementation platform("org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}")
 	implementation "org.springframework.grpc:spring-grpc-spring-boot-starter"
 	implementation 'io.grpc:grpc-netty-shaded'
+	implementation 'io.grpc:grpc-services'
 	modules {
 		module("io.grpc:grpc-netty") {
 			replacedBy("io.grpc:grpc-netty-shaded", "Use Netty shaded instead of regular Netty")

@@ -4,7 +4,6 @@ spring:
   grpc:
     server:
       port: 30006
-
 mongodb:
   setting:
     enabled: true
