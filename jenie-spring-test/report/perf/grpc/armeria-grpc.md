@@ -15,12 +15,12 @@
 - In a 2-core pod, enabling virtual threads significantly boosted throughput from 590 to 630 iter/s, demonstrating a clear benefit. 
 - However, in a 1-core environment, enabling virtual threads for the gRPC server did not increase throughput, slightly reducing it instead. This occurs because gRPC's Protobuf serialization is CPU-intensive, making the application CPU-bound under tight resource constraints. Virtual threads primarily optimize I/O-bound workloads, so they offer no advantage when the main performance bottleneck is CPU computation.
 
-| pod resource | virtual thread | iter/s | req/s | cpu | memory  |
-|:-------------|:---------------|:-------|:------|:----|:--------|
-| 1 core, 1 Gi | -              | 290    | 880   | 1   | 467 Mi  |
-| 1 core, 1 Gi | enabled        | 270    | 800   | 1   | 537 Mi  |
-| 2 core, 2 Gi | -              | 590    | 1780  | 2   | 1340 Mi |
-| 2 core, 2 Gi | enabled        | 630    | 1910  | 2   | 1360 Mi |
+| pod resource | virtual thread | iter/s | req/s | avg    | p95    | p99    | cpu | memory  |
+|:-------------|:---------------|:-------|:------|:-------|:-------|:-------|:----|:--------|
+| 1 core, 1 Gi | -              | 290    | 880   | 140 ms | 393 ms | 527 ms | 1   | 467 Mi  |
+| 1 core, 1 Gi | enabled        | 270    | 800   | 244 ms | 891 ms | 1120 ms | 1   | 537 Mi  |
+| 2 core, 2 Gi | -              | 590    | 1780  | 100 ms | 209 ms | 286 ms | 2   | 1340 Mi |
+| 2 core, 2 Gi | enabled        | 630    | 1910  | 181 ms | 405 ms | 521 ms | 2   | 1360 Mi |
 
 ## 1 core, 1 Gi, -Xms700M -Xmx700M, -Dcom.linecorp.armeria.numCommonWorkers=2 -Dcom.linecorp.armeria.numCommonBlockingTaskThreads=10
 ```

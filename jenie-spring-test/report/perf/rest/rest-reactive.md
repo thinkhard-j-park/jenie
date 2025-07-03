@@ -17,10 +17,10 @@
 - The significant increase in worker threads was key to better handling the I/O-bound workload by enabling greater parallelism. 
 - The results highlight that for reactive applications, tuning the ioWorkerCount is critical to fully leverage hardware resources and achieve optimal performance.
 
-| pod resource | virtual thread | iter/s | req/s | cpu | memory  |
-|:-------------|:---------------|:-------|:------|:----|:--------|
-| 1 core, 1 Gi | -              | 210    | 630   | 1   | 530 Mi  |
-| 2 core, 2 Gi | -              | 480    | 1420  | 2   | 1.34 Gi |
+| pod resource | virtual thread | iter/s | req/s | avg    | p95    | p99    |  cpu | memory  |
+|:-------------|:---------------|:-------|:------|:-------|:-------|:-------|:-----|:--------|
+| 1 core, 1 Gi | -              | 210    | 630   | 193 ms | 526 ms | 840 ms | 1   | 530 Mi  |
+| 2 core, 2 Gi | -              | 480    | 1420  | 75 ms  | 229 ms | 424 ms | 2   | 1.34 Gi |
 
 ## Webflux with virtual thread
 - Although not included in the test report, the results showed that enabling virtual threads in WebFlux actually led to performance degradation.
