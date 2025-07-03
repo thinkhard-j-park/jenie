@@ -8,7 +8,6 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.mongodb.ReadPreference;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
 import org.jenie.spring.data.mongodb.connector.ReactiveMongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
@@ -20,6 +19,7 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplateRouter {

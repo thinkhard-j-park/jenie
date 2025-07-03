@@ -5,7 +5,6 @@ import java.time.Duration;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
@@ -13,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @ConditionalOnReactive

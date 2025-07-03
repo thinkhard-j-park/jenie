@@ -8,7 +8,6 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.mongodb.ReadPreference;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
 import org.jenie.spring.data.mongodb.connector.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
@@ -19,6 +18,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 public class CaffeineMongoTemplateRouter implements MongoTemplateRouter {
