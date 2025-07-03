@@ -79,7 +79,8 @@ public ArticleHeaderEntity modifyArticleHeader(String dbKey, String id, String t
 | **Cache Hit** | `372 ns/op` | **`305 ns/op`** | Caffeine is **22%** faster |
 | **Cache Miss** | `82,395 ns/op` | **`62,839 ns/op`** | Caffeine is **31%** faster |
 
-- [See the full JMH benchmark results](../jenie-spring-test/jmh/results.txt)
+- [See the full JMH benchmark results](../jenie-spring-test/report/jmh/result.txt)
+- [See the full JMH benchmark results of reactive](../jenie-spring-test/report/jmh/reactive-result.txt)
 - [See the benchmark source code](../jenie-spring-test/src/test/java/org/jenie/spring/helloworld/test/jmh/MongoTemplateRouterBenchmark.java)
 
 
