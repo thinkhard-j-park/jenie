@@ -2,7 +2,7 @@
 
 - For the test environment, refer to [this document](../perf.md).
 - Measure the performance of the jenie-spring-helloworld-rest-reactive server in k8s environment.
-- Used [CaffeineMongoTemplateRouter](../../../../jenie-spring-data-mongodb/src/main/java/org/jenie/spring/data/mongodb/operation/CaffeineMongoTemplateRouter.java)
+- Used [ReactiveCaffeineMongoTemplateRouter](../../../../jenie-spring-data-mongodb/src/main/java/org/jenie/spring/data/mongodb/operation/ReactiveCaffeineMongoTemplateRouter.java)
 
 ## Thresholds
 
