@@ -15,10 +15,10 @@
 - Adding a second core resolved this bottleneck, improving the p(95) response time by over 7x (from 699ms to 90ms).
 
 
-| pod resource | virtual thread | iter/s | req/s | cpu | memory  |
-|:-------------|:---------------|:-------|:------|:----|:--------|
-| 1 core, 1 Gi | -              | 290    | 860   | 1   | 537 Mi  |
-| 2 core, 2 Gi | -              | 560    | 1690  | 2   | 1360 Mi |
+| pod resource | virtual thread | iter/s | req/s | avg    | p95    | p99    | cpu | memory  |
+|:-------------|:---------------|:-------|:------|:-------|:-------|:-------|:----|:--------|
+| 1 core, 1 Gi | -              | 290    | 860   | 255 ms | 698 ms | 883 ms | 1   | 537 Mi  |
+| 2 core, 2 Gi | -              | 560    | 1690  | 26 ms  | 90 ms  | 109 ms | 2   | 1360 Mi |
 
 ## Reactive gRPC with virtual thread
 - Virtual threads caused performance degradation because they added unnecessary thread context switching overhead to an already optimized non-blocking reactive stack (Armeria + Spring Data MongoDB Reactive).

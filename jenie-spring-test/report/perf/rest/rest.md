@@ -15,12 +15,12 @@
 - This disparity arises because once the thread-blocking bottleneck is resolved, overall system performance becomes limited by other factors like CPU capacity or the backend database's throughput.
 
 
-| pod resource | virtual thread | iter/s | req/s | cpu  | memory  |
-|:-------------|:---------------|:-------|:------|:-----|:--------|
-| 1 core, 1 Gi | -              | 250    | 754   | 1    | 900 Mi  |
-| 1 core, 1 Gi | enabled        | 280    | 840   | 0.87 | 612 Mi  |
-| 2 core, 2 Gi | -              | 490    | 1460  | 2    | 1400 Mi |
-| 2 core, 2 Gi | enabled        | 550    | 1650  | 1.71 | 1910 Mi |
+| pod resource | virtual thread | iter/s | req/s | avg    | p95    | p99    | cpu  | memory  |
+|:-------------|:---------------|:-------|:------|:-------|:-------|:-------|:-----|:--------|
+| 1 core, 1 Gi | -              | 250    | 754   | 109 ms | 250 ms | 353 ms | 1    | 900 Mi  |
+| 1 core, 1 Gi | enabled        | 280    | 840   | 5 ms   | 6 ms   | 61 ms  | 0.87 | 612 Mi  |
+| 2 core, 2 Gi | -              | 490    | 1460  | 54 ms  | 154 ms | 188 ms | 2    | 1400 Mi |
+| 2 core, 2 Gi | enabled        | 550    | 1650  | 3.9 ms | 5 ms   | 28 ms  | 1.71 | 1910 Mi |
 
 ## 1 core, 1 Gi, -Xms700M -Xmx700M
 
