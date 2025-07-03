@@ -46,22 +46,25 @@ A backend server project that experiments with server-side technologies like Ser
 
 #### gRPC Performance Test Summary
 
-| app                                           | pod resource | virtual thread | iter/s | req/s   | avg     | p95 | p99      |
-|:----------------------------------------------|:-------------|:---------------|:-------|:--------|:--------|:----|:---------|
-| jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi | -              | 290    | 880     | 140 ms  | 393 ms | 527 ms   |
-| jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi | enabled        | 270    | 800     | 244 ms  | 891 ms | 1120 ms  |
-| jenie-spring-helloworld-armeria-grpc-reactive | 1 core, 1 Gi | -              | 290    | 860     | 255 ms  | 698 ms | 883 ms   |
-| jenie-spring-helloworld-grpc                  | 1 core, 1 Gi | -              | 290    | 850     | 236 ms | 515 ms | 799 ms   |
-| jenie-spring-helloworld-grpc                  | 1 core, 1 Gi | enabled        | 290    | 850     | 358 ms | 757 ms | 884 ms   |
-| jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi | -              | 590    | 1780    | 100 ms  | 209 ms | 286 ms   |
-| jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi | enabled        | 630    | 1910    | 181 ms  | 405 ms | 521 ms   |
-| jenie-spring-helloworld-armeria-grpc-reactive | 2 core, 2 Gi | -              | 560    | 1690    | 26 ms   | 90 ms  | 109 ms   |
-| jenie-spring-helloworld-grpc                  | 2 core, 2 Gi | -              | 670    | 1970  | 150 ms | 387 ms | 515 ms   |
-| jenie-spring-helloworld-grpc                  | 2 core, 2 Gi | enabled        | 670    | 1950  | 164 ms | 397 ms | 529 ms   |
+| app                                           | pod resource   | virtual thread | iter/s | req/s | avg    | p95    | p99     |
+|:----------------------------------------------|:---------------|:---------------|:-------|:------|:-------|:-------|:--------|
+| jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi   | -              | 290    | 880   | 140 ms | 393 ms | 527 ms  |
+| jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi   | enabled        | 270    | 800   | 244 ms | 891 ms | 1120 ms |
+| jenie-spring-helloworld-armeria-grpc-reactive | 1 core, 1 Gi   | -              | 290    | 860   | 255 ms | 698 ms | 883 ms  |
+| jenie-spring-helloworld-grpc                  | 1 core, 1 Gi   | -              | 290    | 850   | 236 ms | 515 ms | 799 ms  |
+| jenie-spring-helloworld-grpc                  | 1 core, 1 Gi   | enabled        | 290    | 850   | 358 ms | 757 ms | 884 ms  |
+| jenie-spring-helloworld-grpc-reactive         | 1 core, 1 Gi   | -              | 280    | 840   | 108 ms | 291 ms | 402 ms  |
+| jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi   | -              | 590    | 1780  | 100 ms | 209 ms | 286 ms  |
+| jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi   | enabled        | 630    | 1910  | 181 ms | 405 ms | 521 ms  |
+| jenie-spring-helloworld-armeria-grpc-reactive | 2 core, 2 Gi   | -              | 560    | 1690  | 26 ms  | 90 ms  | 109 ms  |
+| jenie-spring-helloworld-grpc                  | 2 core, 2 Gi   | -              | 670    | 1970  | 150 ms | 387 ms | 515 ms  |
+| jenie-spring-helloworld-grpc                  | 2 core, 2 Gi   | enabled        | 670    | 1950  | 164 ms | 397 ms | 529 ms  |
+| jenie-spring-helloworld-grpc-reactive         | 2 core, 2 Gi   | -              | 620    | 1870  | 400 ms | 813 ms | 1000 ms |
 
 - [Armeria gRPC Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc.md)
 - [Armeria gRPC Reactive Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc-reactive.md)
 - [Spring gRPC Performance Report](./jenie-spring-test/report/perf/grpc/spring-grpc.md)
+- [Spring gRPC Reactive Performance Report](./jenie-spring-test/report/perf/grpc/spring-grpc-reactive.md)
 
 
 ## Coding Style, Formatting
