@@ -46,8 +46,8 @@ A backend server project that experiments with server-side technologies like Ser
 
 #### gRPC Performance Test Summary
 
-| app                                           | pod resource   | virtual thread | iter/s | req/s | avg (ms) | p95 (ms) | p99 (ms)    |
-|:----------------------------------------------|:---------------|:---------------|:-------|:------|:---------|:---------|:--------|
+| app                                           | pod resource   | virtual thread | iter/s | req/s | avg (ms) | p95 (ms) | p99 (ms) |
+|:----------------------------------------------|:---------------|:---------------|:-------|:------|:---------|:---------|:-----|
 | jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi   | -              | 290    | 880   | 140      | 393      | 527  |
 | jenie-spring-helloworld-armeria-grpc          | 1 core, 1 Gi   | enabled        | 270    | 800   | 244      | 891      | 1120 |
 | jenie-spring-helloworld-armeria-grpc-reactive | 1 core, 1 Gi   | -              | 290    | 860   | 255      | 698      | 883  |
@@ -56,10 +56,10 @@ A backend server project that experiments with server-side technologies like Ser
 | jenie-spring-helloworld-grpc-reactive         | 1 core, 1 Gi   | -              | 280    | 840   | 108      | 291      | 402  |
 | jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi   | -              | 590    | 1780  | 100      | 209      | 286  |
 | jenie-spring-helloworld-armeria-grpc          | 2 core, 2 Gi   | enabled        | 630    | 1910  | 181      | 405      | 521  |
-| jenie-spring-helloworld-armeria-grpc-reactive | 2 core, 2 Gi   | -              | 560    | 1690  | 26       | 90       | 109  |
+| jenie-spring-helloworld-armeria-grpc-reactive | 2 core, 2 Gi   | -              | 520    | 1560  | 27       | 89       | 108  |
 | jenie-spring-helloworld-grpc                  | 2 core, 2 Gi   | -              | 670    | 1970  | 150      | 387      | 515  |
 | jenie-spring-helloworld-grpc                  | 2 core, 2 Gi   | enabled        | 670    | 1950  | 164      | 397      | 529  |
-| jenie-spring-helloworld-grpc-reactive         | 2 core, 2 Gi   | -              | 620    | 1870  | 400      | 813      | 1000  |
+| jenie-spring-helloworld-grpc-reactive         | 2 core, 2 Gi   | -              | 620    | 1870  | 400      | 813      | 1000 |
 
 - [Armeria gRPC Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc.md)
 - [Armeria gRPC Reactive Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc-reactive.md)

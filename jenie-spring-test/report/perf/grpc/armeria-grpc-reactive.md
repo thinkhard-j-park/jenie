@@ -10,15 +10,17 @@
 - p(95) < 1000 ms
 
 ## Summary
-- The application demonstrated excellent scalability, with throughput nearly doubling when CPU and memory resources were doubled.
-- The 1-core environment was clearly CPU-bound, which resulted in high response latency under load.
-- Adding a second core resolved this bottleneck, improving the p(95) response time by over 7x (from 699ms to 90ms).
+
+- The Armeria gRPC reactive implementation achieves 520 iterations/s with excellent latency characteristics and maintains consistent performance across different resource configurations.
+- It demonstrates excellent resource utilization efficiency, achieving nearly 9x better average latency and 7.8x better p95 latency in the 2-core configuration while maintaining consistent throughput scaling characteristics.
 
 
-| pod resource | virtual thread | iter/s | req/s | avg    | p95    | p99    | cpu | memory  |
-|:-------------|:---------------|:-------|:------|:-------|:-------|:-------|:----|:--------|
-| 1 core, 1 Gi | -              | 290    | 860   | 255 ms | 698 ms | 883 ms | 1   | 537 Mi  |
-| 2 core, 2 Gi | -              | 560    | 1690  | 26 ms  | 90 ms  | 109 ms | 2   | 1360 Mi |
+
+
+| pod resource | virtual thread | iter/s       | req/s | avg    | p95    | p99    | cpu | memory  |
+|:-------------|:---------------|:-------------|:-----|:-------|:-------|:-------|:----|:--------|
+| 1 core, 1 Gi | -              | 290          | 860  | 255 ms | 698 ms | 883 ms | 1   | 537 Mi  |
+| 2 core, 2 Gi | -              | 520          |  1560  | 27 ms  | 89 ms  | 108 ms | 2   | 1350 Mi |
 
 ## Reactive gRPC with virtual thread
 - Virtual threads caused performance degradation because they added unnecessary thread context switching overhead to an already optimized non-blocking reactive stack (Armeria + Spring Data MongoDB Reactive).
@@ -62,8 +64,6 @@ rampingStress ✓ [======================================] 0000/0665 VUs  15m0s 
 
 ## 2 core, 2 Gi, -Xms1700M -Xmx1700M
 ```
-helloworld@thinkhard:~/gitrepo/loops/k6/jenie$ k6 run -o experimental-prometheus-rw perf-stress-grpc-armeria-reactive.js
-
          /\      Grafana   /‾‾/
     /\  /  \     |\  __   /  /
    /  \/    \    | |/ /  /   ‾‾\
@@ -75,24 +75,24 @@ helloworld@thinkhard:~/gitrepo/loops/k6/jenie$ k6 run -o experimental-prometheus
         output: Prometheus remote write (http://192.168.0.14:9090/api/v1/write)
 
      scenarios: (100.00%) 1 scenario, 5000 max VUs, 15m30s max duration (incl. graceful stop):
-              * rampingStress: Up to 560.00 iterations/s for 15m0s over 2 stages (maxVUs: 100-5000, gracefulStop: 30s)
+              * rampingStress: Up to 520.00 iterations/s for 15m0s over 2 stages (maxVUs: 100-5000, gracefulStop: 30s)
 
 
      ✓ status is OK
 
-   ✓ checks...............: 100.00% 1257987 out of 1257987
-     data_received........: 4.6 GB  5.1 MB/s
-     data_sent............: 224 MB  249 kB/s
-     dropped_iterations...: 670     0.744355/s
-   ✓ grpc_req_duration....: avg=26.4ms   min=758.58µs med=8.95ms   max=1.59s p(90)=83.53ms  p(95)=90.24ms  p(99)=109.2ms  count=1257987
-     grpc_reqs............: 1257987 1397.59623/s
-     grpc_success_reqs....: 1257987 1397.59623/s
-     iteration_duration...: avg=114.75ms min=3.62ms   med=110.18ms max=2.44s p(90)=192.32ms p(95)=229.67ms p(99)=382.47ms count=419329
-     iterations...........: 419329  465.86541/s
-     vus..................: 55      min=0                  max=300
-     vus_max..............: 328     min=100                max=328
+   ✓ checks...............: 100.00% 1169247 out of 1169247
+     data_received........: 4.3 GB  4.7 MB/s
+     data_sent............: 209 MB  232 kB/s
+     dropped_iterations...: 250     0.277744/s
+   ✓ grpc_req_duration....: avg=27.11ms  min=815.28µs med=10.92ms  max=470.96ms p(90)=81.58ms  p(95)=89.32ms  p(99)=108.27ms count=1169247
+     grpc_reqs............: 1169247 1299.004387/s
+     grpc_success_reqs....: 1169247 1299.004387/s
+     iteration_duration...: avg=117.73ms min=3.75ms   med=114.17ms max=1.22s    p(90)=199.65ms p(95)=249.17ms p(99)=403.5ms  count=389749
+     iterations...........: 389749  433.001462/s
+     vus..................: 89      min=0                  max=175
+     vus_max..............: 190     min=100                max=190
 
 
-running (15m00.1s), 0000/0328 VUs, 419329 complete and 0 interrupted iterations
-rampingStress ✓ [======================================] 0000/0328 VUs  15m0s  560.00 iters/s
+running (15m00.1s), 0000/0190 VUs, 389749 complete and 0 interrupted iterations
+rampingStress ✓ [======================================] 0000/0190 VUs  15m0s  520.00 iters/s
 ```
