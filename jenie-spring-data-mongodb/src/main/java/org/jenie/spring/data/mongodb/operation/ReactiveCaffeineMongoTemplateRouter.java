@@ -79,6 +79,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 
 		@Override
 		public @NonNull CompletableFuture<? extends DBConn> asyncLoad(@NonNull String key, @NonNull Executor executor) {
+			logger.warn("Read from db, key: {}", key);
 			return this.connectorRegistry.getDBConn(key).toFuture();
 		}
 
