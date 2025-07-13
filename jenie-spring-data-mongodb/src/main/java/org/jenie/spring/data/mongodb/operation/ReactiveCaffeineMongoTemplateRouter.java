@@ -1,10 +1,12 @@
 package org.jenie.spring.data.mongodb.operation;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.mongodb.ReadPreference;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
@@ -19,29 +21,30 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
-import org.springframework.lang.Nullable;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplateRouter {
 
 	private static final Logger logger = LoggerFactory.getLogger(ReactiveCaffeineMongoTemplateRouter.class);
 
-	private final LoadingCache<String, Mono<ReactiveMongoTransactionManager>> transactionManagerCache;
+	private final AsyncLoadingCache<String, ReactiveMongoTransactionManager> transactionManagerCache;
 
-	private final LoadingCache<MongoTemplateKey, Mono<ReactiveMongoTemplate>> mongoTemplateCache;
+	private final AsyncLoadingCache<MongoTemplateKey, ReactiveMongoTemplate> mongoTemplateCache;
 
 	public ReactiveCaffeineMongoTemplateRouter(ReactiveMongoDBConnectorRegistry connectorRegistry) {
-		LoadingCache<String, Mono<DBConn>> dbConnCache = Caffeine.newBuilder()
-			.build(new ReactiveCaffeineMongoTemplateRouter.DBConnLoader(connectorRegistry));
+		AsyncLoadingCache<String, DBConn> dbConnCache = Caffeine.newBuilder()
+			.buildAsync(new ReactiveCaffeineMongoTemplateRouter.DBConnLoader(connectorRegistry));
 
-		LoadingCache<String, Mono<ReactiveMongoDatabaseFactory>> databaseFactoryCache = Caffeine.newBuilder()
-			.build(new ReactiveCaffeineMongoTemplateRouter.MongoDatabaseFactoryLoader(connectorRegistry, dbConnCache));
+		AsyncLoadingCache<String, ReactiveMongoDatabaseFactory> databaseFactoryCache = Caffeine.newBuilder()
+			.buildAsync(
+					new ReactiveCaffeineMongoTemplateRouter.MongoDatabaseFactoryLoader(connectorRegistry, dbConnCache));
 
 		this.transactionManagerCache = Caffeine.newBuilder()
-			.build(new ReactiveCaffeineMongoTemplateRouter.MongoTransactionManagerLoader(databaseFactoryCache));
+			.buildAsync(new ReactiveCaffeineMongoTemplateRouter.MongoTransactionManagerLoader(databaseFactoryCache));
 
 		this.mongoTemplateCache = Caffeine.newBuilder()
-			.build(new ReactiveCaffeineMongoTemplateRouter.MongoTemplateLoader(connectorRegistry, dbConnCache,
+			.buildAsync(new ReactiveCaffeineMongoTemplateRouter.MongoTemplateLoader(connectorRegistry, dbConnCache,
 					databaseFactoryCache));
 		logger.info("CaffeineReactiveMongoTemplateRouter is initialized");
 	}
@@ -53,7 +56,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 			return Mono.error(new IllegalArgumentException("dbKey must not be empty"));
 		}
 		var k = new MongoTemplateKey(dbKey, readPreference, writeConcern);
-		return this.mongoTemplateCache.get(k);
+		return Mono.fromFuture(this.mongoTemplateCache.get(k));
 	}
 
 	@Override
@@ -63,10 +66,10 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 
 	@Override
 	public Mono<ReactiveMongoTransactionManager> transactionManager(String dbKey) {
-		return this.transactionManagerCache.get(dbKey);
+		return Mono.fromFuture(this.transactionManagerCache.get(dbKey));
 	}
 
-	static class DBConnLoader implements CacheLoader<String, Mono<DBConn>> {
+	static class DBConnLoader implements AsyncCacheLoader<String, DBConn> {
 
 		private final ReactiveMongoDBConnectorRegistry connectorRegistry;
 
@@ -75,98 +78,93 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 		}
 
 		@Override
-		public @Nullable Mono<DBConn> load(String key) {
-			return this.connectorRegistry.getDBConn(key).cache();
+		public @NonNull CompletableFuture<? extends DBConn> asyncLoad(@NonNull String key, @NonNull Executor executor) {
+			return this.connectorRegistry.getDBConn(key).toFuture();
 		}
 
 	}
 
-	static class MongoDatabaseFactoryLoader implements CacheLoader<String, Mono<ReactiveMongoDatabaseFactory>> {
+	static class MongoDatabaseFactoryLoader implements AsyncCacheLoader<String, ReactiveMongoDatabaseFactory> {
 
 		private final ReactiveMongoDBConnectorRegistry connectorRegistry;
 
-		private final LoadingCache<String, Mono<DBConn>> dbConnCache;
+		private final AsyncLoadingCache<String, DBConn> dbConnCache;
 
 		MongoDatabaseFactoryLoader(ReactiveMongoDBConnectorRegistry connectorRegistry,
-				LoadingCache<String, Mono<DBConn>> dbConnCache) {
+				AsyncLoadingCache<String, DBConn> dbConnCache) {
 			this.connectorRegistry = connectorRegistry;
 			this.dbConnCache = dbConnCache;
 		}
 
 		@Override
-		public @Nullable Mono<ReactiveMongoDatabaseFactory> load(String key) {
-			return this.dbConnCache.get(key).flatMap((dbConn) -> {
-				if (dbConn == null) {
-					return Mono.error(new IllegalArgumentException("DBConn must not be null"));
-				}
-
-				var clusterKey = dbConn.getClusterKey();
-				var dbName = dbConn.getDbName();
-				var connector = this.connectorRegistry.getConnector(clusterKey);
-				return Mono.just(new SimpleReactiveMongoDatabaseFactory(connector.getClient(), dbName));
-			}).cast(ReactiveMongoDatabaseFactory.class).cache();
-
+		public @NonNull CompletableFuture<? extends ReactiveMongoDatabaseFactory> asyncLoad(@NonNull String key,
+				@NonNull Executor executor) throws Exception {
+			return this.dbConnCache.get(key).thenApply((dbConn) -> {
+				var connector = this.connectorRegistry.getConnector(dbConn.getClusterKey());
+				return new SimpleReactiveMongoDatabaseFactory(connector.getClient(), dbConn.getDbName());
+			});
 		}
 
 	}
 
-	static class MongoTransactionManagerLoader implements CacheLoader<String, Mono<ReactiveMongoTransactionManager>> {
+	static class MongoTransactionManagerLoader implements AsyncCacheLoader<String, ReactiveMongoTransactionManager> {
 
-		private final LoadingCache<String, Mono<ReactiveMongoDatabaseFactory>> databaseFactoryCache;
+		private final AsyncLoadingCache<String, ReactiveMongoDatabaseFactory> databaseFactoryCache;
 
-		MongoTransactionManagerLoader(LoadingCache<String, Mono<ReactiveMongoDatabaseFactory>> databaseFactoryCache) {
+		MongoTransactionManagerLoader(AsyncLoadingCache<String, ReactiveMongoDatabaseFactory> databaseFactoryCache) {
 			this.databaseFactoryCache = databaseFactoryCache;
 		}
 
 		@Override
-		public @Nullable Mono<ReactiveMongoTransactionManager> load(String key) {
-			return this.databaseFactoryCache.get(key).flatMap((factory) -> {
-				if (factory == null) {
-					return Mono.error(new IllegalArgumentException("ReactiveMongoDatabaseFactory must not be null"));
-				}
-				return Mono.just(new ReactiveMongoTransactionManager(factory));
-			}).cache();
+		public @NonNull CompletableFuture<ReactiveMongoTransactionManager> asyncLoad(@NonNull String key,
+				@NonNull Executor executor) {
+			return this.databaseFactoryCache.get(key).thenApply(ReactiveMongoTransactionManager::new);
 		}
 
 	}
 
-	static class MongoTemplateLoader implements CacheLoader<MongoTemplateKey, Mono<ReactiveMongoTemplate>> {
+	static class MongoTemplateLoader implements AsyncCacheLoader<MongoTemplateKey, ReactiveMongoTemplate> {
 
 		private final ReactiveMongoDBConnectorRegistry connectorRegistry;
 
-		private final LoadingCache<String, Mono<DBConn>> dbConnCache;
+		private final AsyncLoadingCache<String, DBConn> dbConnCache;
 
-		private final LoadingCache<String, Mono<ReactiveMongoDatabaseFactory>> databaseFactoryCache;
+		private final AsyncLoadingCache<String, ReactiveMongoDatabaseFactory> databaseFactoryCache;
 
 		MongoTemplateLoader(ReactiveMongoDBConnectorRegistry connectorRegistry,
-				LoadingCache<String, Mono<DBConn>> dbConnCache,
-				LoadingCache<String, Mono<ReactiveMongoDatabaseFactory>> databaseFactoryCache) {
+				AsyncLoadingCache<String, DBConn> dbConnCache,
+				AsyncLoadingCache<String, ReactiveMongoDatabaseFactory> databaseFactoryCache) {
 			this.connectorRegistry = connectorRegistry;
 			this.dbConnCache = dbConnCache;
 			this.databaseFactoryCache = databaseFactoryCache;
 		}
 
 		@Override
-		public @Nullable Mono<ReactiveMongoTemplate> load(MongoTemplateKey key) {
-			return Mono.zip(this.dbConnCache.get(key.dbKey()), this.databaseFactoryCache.get(key.dbKey())).map((t2) -> {
-				var dbConn = t2.getT1();
-				var factory = t2.getT2();
+		public @NonNull CompletableFuture<ReactiveMongoTemplate> asyncLoad(@NonNull MongoTemplateKey key,
+				@NonNull Executor executor) {
+			var dbKey = key.dbKey();
 
+			CompletableFuture<DBConn> dbConnFuture = this.dbConnCache.get(dbKey);
+			CompletableFuture<ReactiveMongoDatabaseFactory> factoryFuture = this.databaseFactoryCache.get(dbKey);
+
+			return dbConnFuture.thenCombine(factoryFuture, (dbConn, factory) -> {
 				var clusterKey = dbConn.getClusterKey();
 				var connector = this.connectorRegistry.getConnector(clusterKey);
 
 				var cluster = connector.getCluster();
 				var writeConcern = (key.writeConcern() == null) ? cluster.writeConcern() : key.writeConcern();
 
-				var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
+				var converter = connector.getMappingMongoConverter();
+				var template = new ReactiveMongoTemplate(factory, converter);
+
 				if (key.readPreference() != null) {
 					configureReadPreference(key.readPreference(), cluster);
 					template.setReadPreference(key.readPreference());
 				}
-				template.setWriteConcern(writeConcern);
 
+				template.setWriteConcern(writeConcern);
 				return template;
-			}).cache();
+			});
 		}
 
 		private void configureReadPreference(ReadPreference readPreference, MongoDBCluster cluster) {
