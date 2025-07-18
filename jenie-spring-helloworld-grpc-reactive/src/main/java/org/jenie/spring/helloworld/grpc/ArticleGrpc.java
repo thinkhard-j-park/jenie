@@ -13,6 +13,7 @@ import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.reactive.service.ReactiveArticleService;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,15 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 	@Override
 	public Mono<ArticleHeaderMessage> getArticleHeaderById(GetArticleHeaderByIdRequestMessage request) {
 		return this.articleService.getArticleHeaderById(request.getService(), request.getId(), request.getLatest())
-			.map(ArticleHeader::toProtoMessage);
+			.map(ArticleHeader::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 	@Override
 	public Mono<ArticleMessage> viewArticle(ViewArticleRequestMessage request) {
 		return this.articleService.viewArticle(request.getService(), request.getId(), request.getIncViewCount())
-			.map(Article::toProtoMessage);
+			.map(Article::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 	@Override
@@ -42,7 +45,9 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 		var service = request.getService();
 		var param = new ListArticleHeaderRequestParam(request.getBoardId(), request.getPrevArticleId(),
 				request.getSize(), request.getSort());
-		return this.articleService.listArticleHeader(service, param).map(ArticleHeaderList::toProtoMessage);
+		return this.articleService.listArticleHeader(service, param)
+			.map(ArticleHeaderList::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 	@Override
@@ -50,7 +55,9 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 		var articleRequest = new ArticleRequest(request.getBoardId(), request.getTitle(), request.getContent(),
 				Writer.fromProtoMessage(request.getWriter()));
 
-		return this.articleService.writeArticle(request.getService(), articleRequest).map(Article::toProtoMessage);
+		return this.articleService.writeArticle(request.getService(), articleRequest)
+			.map(Article::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 	@Override
@@ -59,13 +66,15 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 				Writer.fromProtoMessage(request.getWriter()));
 
 		return this.articleService.modifyArticle(request.getService(), request.getId(), articleRequest)
-			.map(Article::toProtoMessage);
+			.map(Article::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 	@Override
 	public Mono<ArticleDeleteResultMessage> deleteArticle(DeleteArticleRequestMessage request) {
 		return this.articleService.deleteArticle(request.getService(), request.getId())
-			.map(ArticleDeleteResult::toProtoMessage);
+			.map(ArticleDeleteResult::toProtoMessage)
+			.publishOn(Schedulers.boundedElastic());
 	}
 
 }
