@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
@@ -53,7 +54,8 @@ public class ReactiveMongoDBConnectorRegistry {
 				}
 				return Mono.just(dbConns.getFirst());
 			})
-			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)))
+			.subscribeOn(Schedulers.boundedElastic());
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {
