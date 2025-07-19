@@ -30,6 +30,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 	public Mono<ArticleHeaderMessage> getArticleHeaderById(GetArticleHeaderByIdRequestMessage request) {
 		return this.articleService.getArticleHeaderById(request.getService(), request.getId(), request.getLatest())
 			.map(ArticleHeader::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
@@ -37,6 +38,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 	public Mono<ArticleMessage> viewArticle(ViewArticleRequestMessage request) {
 		return this.articleService.viewArticle(request.getService(), request.getId(), request.getIncViewCount())
 			.map(Article::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
@@ -47,6 +49,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 				request.getSize(), request.getSort());
 		return this.articleService.listArticleHeader(service, param)
 			.map(ArticleHeaderList::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
@@ -57,6 +60,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 
 		return this.articleService.writeArticle(request.getService(), articleRequest)
 			.map(Article::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
@@ -67,6 +71,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 
 		return this.articleService.modifyArticle(request.getService(), request.getId(), articleRequest)
 			.map(Article::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
@@ -74,6 +79,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 	public Mono<ArticleDeleteResultMessage> deleteArticle(DeleteArticleRequestMessage request) {
 		return this.articleService.deleteArticle(request.getService(), request.getId())
 			.map(ArticleDeleteResult::toProtoMessage)
+			.subscribeOn(Schedulers.boundedElastic())
 			.publishOn(Schedulers.boundedElastic());
 	}
 
