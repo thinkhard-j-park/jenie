@@ -3,6 +3,7 @@ package org.jenie.spring.data.mongodb.connector;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.jenie.spring.data.mongodb.domain.DBConn;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
@@ -47,15 +47,12 @@ public class ReactiveMongoDBConnectorRegistry {
 			return dbConnTemplate.findOne(query, DBConn.class);
 		})
 			.filter((dbConn) -> dbConn != null && StringUtils.hasText(dbConn.getId()))
-			.collectList()
-			.flatMap((dbConns) -> {
-				if (dbConns.size() != 1) {
-					return Mono.error(new DBConnNotFoundException("DBConn must be unique: " + key));
-				}
-				return Mono.just(dbConns.getFirst());
-			})
-			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)))
-			.subscribeOn(Schedulers.boundedElastic());
+			.single()
+			.onErrorMap(NoSuchElementException.class,
+					(noSuchElementException) -> new DBConnNotFoundException("DBConn not found: " + key))
+			.onErrorMap(IndexOutOfBoundsException.class,
+					(indexOutOfBoundsException) -> new DBConnNotFoundException("DBConn must be unique: " + key))
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {

@@ -13,12 +13,11 @@ import org.jenie.spring.helloworld.common.Writer;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.entity.SortOrder;
 import org.jenie.spring.helloworld.entity.article.ArticleHeaderEntity;
-import org.jenie.spring.helloworld.exception.ReactiveAssertHelper;
+import org.jenie.spring.helloworld.exception.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -48,7 +47,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 	 * @return data read from the database.
 	 */
 	public Mono<ArticleHeaderEntity> findArticleHeaderById(String dbKey, String id, boolean latest) {
-		return ReactiveAssertHelper.validObjectId(id, "id should be valid").then(Mono.defer(() -> {
+		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be valid")).then(Mono.defer(() -> {
 			var readPreference = latest ? ReadPreference.primary() : ReadPreference.secondaryPreferred();
 			return this.mongoTemplateRouter.mongoTemplate(dbKey, readPreference, null);
 		}))
@@ -57,7 +56,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 	}
 
 	public Mono<Writer> findArticleWriterById(String dbKey, String id) {
-		return ReactiveAssertHelper.validObjectId(id, "id should be valid")
+		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be valid"))
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
 			.flatMap((t) -> {
 				var query = Query.query(Criteria.where("_id").is(new ObjectId(id)));
@@ -96,20 +95,20 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 	}
 
 	private Mono<ArticleHeaderEntity> validateHeader(ArticleHeaderEntity header) {
-		return Mono
-			.zip(ReactiveAssertHelper.hasText(header.getBoardId(), "boardId is required"),
-					ReactiveAssertHelper.hasText(header.getTitle(), "title is required"),
-					ReactiveAssertHelper.notNull(header.getWriter(), "writer is required"),
-					ReactiveAssertHelper.hasText(header.getWriter().getWid(), "writerId is required"),
-					ReactiveAssertHelper.hasText(header.getWriter().getName(), "writerName is required"))
-			.then(Mono.just(header))
-			.subscribeOn(Schedulers.boundedElastic());
+		return Mono.fromRunnable(() -> {
+			AssertHelper.hasText(header.getBoardId(), "boardId is required");
+			AssertHelper.hasText(header.getTitle(), "title is required");
+			AssertHelper.notNull(header.getWriter(), "writer is required");
+			AssertHelper.hasText(header.getWriter().getWid(), "writerId is required");
+			AssertHelper.hasText(header.getWriter().getName(), "writerName is required");
+		}).then(Mono.just(header));
 	}
 
 	public Mono<ArticleHeaderEntity> modifyArticleHeader(String dbKey, String id, String title) {
-		return Mono
-			.zip(ReactiveAssertHelper.validObjectId(id, "id should be valid"),
-					ReactiveAssertHelper.hasText(title, "title is required"))
+		return Mono.fromRunnable(() -> {
+			AssertHelper.validObjectId(id, "id should be valid");
+			AssertHelper.hasText(title, "title is required");
+		})
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
 			.flatMap((t) -> {
 				var query = Query.query(Criteria.where("_id").is(new ObjectId(id)));
@@ -122,7 +121,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 	}
 
 	public Mono<ArticleHeaderEntity> incViewCount(String dbKey, String id, Number number) {
-		return ReactiveAssertHelper.validObjectId(id, "id should be valid")
+		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be valid"))
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
 			.flatMap((t) -> {
 				var query = Query.query(Criteria.where("_id").is(new ObjectId(id)));
@@ -134,7 +133,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 	}
 
 	public Mono<ArticleHeaderEntity> deleteArticle(String dbKey, String id) {
-		return ReactiveAssertHelper.validObjectId(id, "id should be valid")
+		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be valid"))
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
 			.flatMap((t) -> {
 				var query = Query.query(Criteria.where("_id").is(new ObjectId(id)));
