@@ -13,6 +13,7 @@ import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,9 @@ public class ReactiveBoardService {
 		@Override
 		public @NonNull CompletableFuture<? extends BoardEntity> asyncLoad(@NonNull BoardKey boardKey,
 				@NonNull Executor executor) {
-			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id()).toFuture();
+			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id())
+				.subscribeOn(Schedulers.boundedElastic())
+				.toFuture();
 		}
 
 	}

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
@@ -52,7 +53,8 @@ public class ReactiveMongoDBConnectorRegistry {
 					(noSuchElementException) -> new DBConnNotFoundException("DBConn not found: " + key))
 			.onErrorMap(IndexOutOfBoundsException.class,
 					(indexOutOfBoundsException) -> new DBConnNotFoundException("DBConn must be unique: " + key))
-			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
+			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)))
+			.subscribeOn(Schedulers.boundedElastic());
 	}
 
 	public Map<String, ReactiveMongoDBConnector> getConnectors() {
