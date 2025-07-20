@@ -13,7 +13,6 @@ import org.jenie.spring.helloworld.dto.article.ArticleRequest;
 import org.jenie.spring.helloworld.dto.article.ListArticleHeaderRequestParam;
 import org.jenie.spring.helloworld.reactive.service.ReactiveArticleService;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.stereotype.Service;
 
@@ -43,8 +42,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 		var service = request.getService();
 		var param = new ListArticleHeaderRequestParam(request.getBoardId(), request.getPrevArticleId(),
 				request.getSize(), request.getSort());
-		return this.articleService.listArticleHeader(service, param)
-			.map(ArticleHeaderList::toProtoMessage);
+		return this.articleService.listArticleHeader(service, param).map(ArticleHeaderList::toProtoMessage);
 	}
 
 	@Override
@@ -52,8 +50,7 @@ public class ArticleGrpc extends ReactorArticleServiceGrpc.ArticleServiceImplBas
 		var articleRequest = new ArticleRequest(request.getBoardId(), request.getTitle(), request.getContent(),
 				Writer.fromProtoMessage(request.getWriter()));
 
-		return this.articleService.writeArticle(request.getService(), articleRequest)
-			.map(Article::toProtoMessage);
+		return this.articleService.writeArticle(request.getService(), articleRequest).map(Article::toProtoMessage);
 	}
 
 	@Override
