@@ -1,0 +1,10 @@
+block
+Benchmark                                  Mode  Cnt    Score     Error  Units
+MongoDriverBenchmark.incReactive           avgt   40  314.014 ± 439.864  ms/op
+MongoDriverBenchmark.incSync               avgt   40  179.775 ± 106.838  ms/op
+MongoDriverBenchmark.listAllArticlesSync   avgt   40    0.925 ±   0.010  ms/op
+MongoDriverBenchmark.listArticlesReactive  avgt   40    0.994 ±   0.024  ms/op
+MongoDriverBenchmark.reactiveDriver        avgt   40  395.126 ± 273.918  ms/op
+MongoDriverBenchmark.syncDriver            avgt   40  200.255 ± 146.556  ms/op
+MongoDriverBenchmark.viewArticleReactive   avgt   40    1.004 ±   0.011  ms/op
+MongoDriverBenchmark.viewArticleSync       avgt   40    0.965 ±   0.009  ms/op
