@@ -8,6 +8,7 @@ import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.article.ArticleContentEntity;
 import org.jenie.spring.helloworld.exception.AssertHelper;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,7 +31,8 @@ public class ReactiveArticleContentRepository extends ReactiveMongoDBRepository 
 			AssertHelper.hasText(content.getContent(), "content is required");
 		})
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey, ReadPreference.primary(), WriteConcern.MAJORITY))
-			.flatMap((t) -> t.insert(content));
+			.flatMap((t) -> t.insert(content))
+			.publishOn(Schedulers.parallel());
 	}
 
 	public Mono<ArticleContentEntity> modifyArticleContent(String dbKey, String articleId, String content) {
@@ -44,14 +46,16 @@ public class ReactiveArticleContentRepository extends ReactiveMongoDBRepository 
 				var update = Update.update("content", content);
 				var option = FindAndModifyOptions.options().returnNew(true);
 				return t.findAndModify(query, update, option, ArticleContentEntity.class);
-			});
+			})
+			.publishOn(Schedulers.parallel());
 	}
 
 	public Mono<ArticleContentEntity> findArticleContentById(String dbKey, String id) {
 		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be provided"))
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
 			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))),
-					ArticleContentEntity.class));
+					ArticleContentEntity.class))
+			.publishOn(Schedulers.parallel());
 	}
 
 }

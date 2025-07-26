@@ -50,7 +50,7 @@ public class ReactiveBoardService {
 		public @NonNull CompletableFuture<? extends BoardEntity> asyncLoad(@NonNull BoardKey boardKey,
 				@NonNull Executor executor) {
 			return this.boardRepository.findBoardById(boardKey.dbKey(), boardKey.id())
-				.subscribeOn(Schedulers.boundedElastic())
+				.publishOn(Schedulers.parallel())
 				.toFuture();
 		}
 
