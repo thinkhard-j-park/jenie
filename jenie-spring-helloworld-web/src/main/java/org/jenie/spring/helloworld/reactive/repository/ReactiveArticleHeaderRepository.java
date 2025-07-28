@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -53,8 +52,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 			return this.mongoTemplateRouter.mongoTemplate(dbKey, readPreference, null);
 		}))
 			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))),
-					ArticleHeaderEntity.class))
-			.publishOn(Schedulers.parallel());
+					ArticleHeaderEntity.class));
 	}
 
 	public Mono<Writer> findArticleWriterById(String dbKey, String id) {
@@ -65,8 +63,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 				query.fields().include("writer");
 				return t.findOne(query, ArticleHeaderEntity.class);
 			})
-			.map(ArticleHeaderEntity::getWriter)
-			.publishOn(Schedulers.parallel());
+			.map(ArticleHeaderEntity::getWriter);
 	}
 
 	public Flux<ArticleHeaderEntity> listArticleHeader(String dbKey, ListArticleHeaderRequestParam param) {
@@ -85,8 +82,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 		var sort = Sort.by(sortOrder.getDirection(), sortOrder.getField());
 		var query = Query.query(criteria).with(sort).limit(param.getSize() + 1);
 		return this.mongoTemplateRouter.mongoTemplate(dbKey)
-			.flatMapMany((t) -> t.find(query, ArticleHeaderEntity.class))
-			.publishOn(Schedulers.parallel());
+			.flatMapMany((t) -> t.find(query, ArticleHeaderEntity.class));
 	}
 
 	public Mono<ArticleHeaderEntity> insert(String dbKey, ArticleHeaderEntity header) {
@@ -95,8 +91,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 			.flatMap((t) -> {
 				header.setActionDateTime(new ActionDateTime());
 				return t.insert(header);
-			})
-			.publishOn(Schedulers.parallel());
+			});
 	}
 
 	private Mono<ArticleHeaderEntity> validateHeader(ArticleHeaderEntity header) {
@@ -122,8 +117,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 				update.set("actionDateTime.updatedAt", ZonedDateTime.now());
 				var option = FindAndModifyOptions.options().returnNew(true);
 				return t.findAndModify(query, update, option, ArticleHeaderEntity.class);
-			})
-			.publishOn(Schedulers.parallel());
+			});
 	}
 
 	public Mono<ArticleHeaderEntity> incViewCount(String dbKey, String id, Number number) {
@@ -135,8 +129,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 				update.inc("reaction.viewCount", number);
 				var option = FindAndModifyOptions.options().returnNew(true);
 				return t.findAndModify(query, update, option, ArticleHeaderEntity.class);
-			})
-			.publishOn(Schedulers.parallel());
+			});
 	}
 
 	public Mono<ArticleHeaderEntity> deleteArticle(String dbKey, String id) {
@@ -149,8 +142,7 @@ public class ReactiveArticleHeaderRepository extends ReactiveMongoDBRepository {
 				update.set("actionDateTime.deletedAt", ZonedDateTime.now());
 				var option = FindAndModifyOptions.options().returnNew(true);
 				return t.findAndModify(query, update, option, ArticleHeaderEntity.class);
-			})
-			.publishOn(Schedulers.parallel());
+			});
 	}
 
 }

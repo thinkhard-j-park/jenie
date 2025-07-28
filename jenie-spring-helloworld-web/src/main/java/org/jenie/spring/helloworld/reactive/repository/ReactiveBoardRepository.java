@@ -8,7 +8,6 @@ import org.jenie.spring.helloworld.exception.AssertHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -27,8 +26,7 @@ public class ReactiveBoardRepository extends ReactiveMongoDBRepository {
 	public Mono<BoardEntity> findBoardById(String dbKey, String id) {
 		return Mono.fromRunnable(() -> AssertHelper.validObjectId(id, "id should be valid"))
 			.then(this.mongoTemplateRouter.mongoTemplate(dbKey))
-			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class))
-			.publishOn(Schedulers.parallel());
+			.flatMap((t) -> t.findOne(Query.query(Criteria.where("_id").is(new ObjectId(id))), BoardEntity.class));
 	}
 
 }
