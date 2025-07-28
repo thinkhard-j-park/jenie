@@ -1,0 +1,24 @@
+동시 실행 쿼리 2
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  275.879 ± 36.567  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  258.931 ± 34.797  ms/op
+
+동시 실행 쿼리 4
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  277.485 ± 39.247  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  266.798 ± 36.079  ms/op
+
+동시 실행 쿼리 8
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  295.507 ± 55.416  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  335.874 ± 46.101  ms/op
+
+동시 실행 쿼리 16
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  376.207 ± 51.160  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  394.106 ± 50.213  ms/op
+
+
+
+
+

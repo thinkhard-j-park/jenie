@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.mongodb.client.MongoClients;
 import org.bson.types.ObjectId;
@@ -34,25 +35,25 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-@Fork(2)
-@Threads(8)
+@Fork(10)
+@Threads(2)
 @Warmup(iterations = 10, time = 1)
-@Measurement(iterations = 20, time = 1)
+@Measurement(iterations = 100, time = 1)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class MongoDriverBenchmark {
 
 	@Benchmark
 	public void syncDriver(BenchmarkState state) {
-		listAllArticlesSync(state);
+		listArticlesSync(state);
 		viewArticleSync(state);
 		incSync(state);
 	}
 
-	@Benchmark
-	public List<ArticleHeaderEntity> listAllArticlesSync(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+//	@Benchmark
+	public List<ArticleHeaderEntity> listArticlesSync(BenchmarkState state) {
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode()).and("_id").lt(id);
 		var sortOrder = SortOrder.TIME_DESC;
@@ -62,18 +63,18 @@ public class MongoDriverBenchmark {
 		return state.mongoTemplate.find(query, ArticleHeaderEntity.class);
 	}
 
-	@Benchmark
+//	@Benchmark
 	public ArticleContentEntity viewArticleSync(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		return state.mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), ArticleContentEntity.class);
 	}
 
-	@Benchmark
+//	@Benchmark
 	public ArticleHeaderEntity incSync(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		var query = Query.query(Criteria.where("_id").is(id));
 		var update = new Update();
@@ -90,10 +91,10 @@ public class MongoDriverBenchmark {
 		incReactive(state);
 	}
 
-	@Benchmark
+//	@Benchmark
 	public List<ArticleHeaderEntity> listArticlesReactive(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode()).and("_id").lt(id);
 		var sortOrder = SortOrder.TIME_DESC;
@@ -103,20 +104,20 @@ public class MongoDriverBenchmark {
 		return state.reactiveMongoTemplate.find(query, ArticleHeaderEntity.class).collectList().block();
 	}
 
-	@Benchmark
+//	@Benchmark
 	public ArticleContentEntity viewArticleReactive(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		return state.reactiveMongoTemplate
 			.findOne(Query.query(Criteria.where("_id").is(id)), ArticleContentEntity.class)
 			.block();
 	}
 
-	@Benchmark
+//	@Benchmark
 	public ArticleHeaderEntity incReactive(BenchmarkState state) {
-		int randomIndex = state.random.nextInt(state.ids.size());
-		var id = new ObjectId(state.ids.get(randomIndex));
+		int inx = state.counter.incrementAndGet() % state.ids.size();
+		var id = new ObjectId(state.ids.get(inx));
 
 		var query = Query.query(Criteria.where("_id").is(id));
 		var update = new Update();
@@ -129,13 +130,15 @@ public class MongoDriverBenchmark {
 	@State(Scope.Benchmark)
 	public static class BenchmarkState {
 
-		Random random = new Random();
+		private final Random random = new Random();
 
 		List<String> ids;
 
 		private MongoTemplate mongoTemplate;
 
 		private ReactiveMongoTemplate reactiveMongoTemplate;
+
+		private AtomicInteger counter;
 
 		@Setup(Level.Trial)
 		public void initialize() throws IOException {
@@ -149,6 +152,8 @@ public class MongoDriverBenchmark {
 			com.mongodb.reactivestreams.client.MongoClient reactiveClient = com.mongodb.reactivestreams.client.MongoClients
 				.create(connectionString);
 			this.reactiveMongoTemplate = new ReactiveMongoTemplate(reactiveClient, dbName);
+
+			this.counter = new AtomicInteger(this.random.nextInt(this.ids.size()));
 		}
 
 	}
