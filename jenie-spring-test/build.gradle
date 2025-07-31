@@ -22,6 +22,7 @@ dependencies {
 	// jenie
 	implementation(project(':jenie-spring-helloworld-common'))
 	implementation(project(":jenie-spring-data-mongodb"))
+	implementation(project(':jenie-spring-helloworld-web'))
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

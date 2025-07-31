@@ -36,7 +36,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 @Fork(10)
-@Threads(2)
+@Threads(1)
 @Warmup(iterations = 10, time = 1)
 @Measurement(iterations = 100, time = 1)
 @BenchmarkMode(Mode.AverageTime)
@@ -50,9 +50,8 @@ public class MongoDriverBenchmark {
 		incSync(state);
 	}
 
-//	@Benchmark
 	public List<ArticleHeaderEntity> listArticlesSync(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode()).and("_id").lt(id);
@@ -63,17 +62,15 @@ public class MongoDriverBenchmark {
 		return state.mongoTemplate.find(query, ArticleHeaderEntity.class);
 	}
 
-//	@Benchmark
 	public ArticleContentEntity viewArticleSync(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		return state.mongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)), ArticleContentEntity.class);
 	}
 
-//	@Benchmark
 	public ArticleHeaderEntity incSync(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		var query = Query.query(Criteria.where("_id").is(id));
@@ -91,9 +88,8 @@ public class MongoDriverBenchmark {
 		incReactive(state);
 	}
 
-//	@Benchmark
 	public List<ArticleHeaderEntity> listArticlesReactive(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		var criteria = Criteria.where("state").is(ArticleState.Normal.getCode()).and("_id").lt(id);
@@ -104,9 +100,8 @@ public class MongoDriverBenchmark {
 		return state.reactiveMongoTemplate.find(query, ArticleHeaderEntity.class).collectList().block();
 	}
 
-//	@Benchmark
 	public ArticleContentEntity viewArticleReactive(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		return state.reactiveMongoTemplate
@@ -114,9 +109,8 @@ public class MongoDriverBenchmark {
 			.block();
 	}
 
-//	@Benchmark
 	public ArticleHeaderEntity incReactive(BenchmarkState state) {
-		int inx = state.counter.incrementAndGet() % state.ids.size();
+		int inx = state.random.nextInt(state.ids.size());
 		var id = new ObjectId(state.ids.get(inx));
 
 		var query = Query.query(Criteria.where("_id").is(id));

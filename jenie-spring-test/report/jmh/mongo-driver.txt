@@ -1,10 +1,24 @@
-block
-Benchmark                                  Mode  Cnt    Score     Error  Units
-MongoDriverBenchmark.incReactive           avgt   40  314.014 ± 439.864  ms/op
-MongoDriverBenchmark.incSync               avgt   40  179.775 ± 106.838  ms/op
-MongoDriverBenchmark.listAllArticlesSync   avgt   40    0.925 ±   0.010  ms/op
-MongoDriverBenchmark.listArticlesReactive  avgt   40    0.994 ±   0.024  ms/op
-MongoDriverBenchmark.reactiveDriver        avgt   40  395.126 ± 273.918  ms/op
-MongoDriverBenchmark.syncDriver            avgt   40  200.255 ± 146.556  ms/op
-MongoDriverBenchmark.viewArticleReactive   avgt   40    1.004 ±   0.011  ms/op
-MongoDriverBenchmark.viewArticleSync       avgt   40    0.965 ±   0.009  ms/op
+1 concurrent queries
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  214.727 ± 33.328  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  220.528 ± 33.023  ms/op
+
+2 concurrent queries
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  248.380 ± 36.164  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  266.764 ± 33.194  ms/op
+
+4 concurrent queries
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  277.806 ± 39.128  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  299.692 ± 42.240  ms/op
+
+8 concurrent queries
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  374.752 ± 49.064  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  352.291 ± 47.128  ms/op
+
+16 concurrent queries
+Benchmark                            Mode   Cnt    Score    Error  Units
+MongoDriverBenchmark.reactiveDriver  avgt  1000  434.232 ± 55.957  ms/op
+MongoDriverBenchmark.syncDriver      avgt  1000  402.215 ± 49.865  ms/op
