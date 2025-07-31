@@ -3,6 +3,7 @@ package org.jenie.spring.data.mongodb.connector;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.jenie.spring.data.mongodb.domain.DBConn;
@@ -46,13 +47,11 @@ public class ReactiveMongoDBConnectorRegistry {
 			return dbConnTemplate.findOne(query, DBConn.class);
 		})
 			.filter((dbConn) -> dbConn != null && StringUtils.hasText(dbConn.getId()))
-			.collectList()
-			.flatMap((dbConns) -> {
-				if (dbConns.size() != 1) {
-					return Mono.error(new DBConnNotFoundException("DBConn must be unique: " + key));
-				}
-				return Mono.just(dbConns.getFirst());
-			})
+			.single()
+			.onErrorMap(NoSuchElementException.class,
+					(noSuchElementException) -> new DBConnNotFoundException("DBConn not found: " + key))
+			.onErrorMap(IndexOutOfBoundsException.class,
+					(indexOutOfBoundsException) -> new DBConnNotFoundException("DBConn must be unique: " + key))
 			.switchIfEmpty(Mono.error(new DBConnNotFoundException("DBConn not found: " + key)));
 	}
 

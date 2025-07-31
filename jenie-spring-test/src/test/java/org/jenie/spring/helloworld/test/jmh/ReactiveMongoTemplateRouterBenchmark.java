@@ -35,7 +35,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@Fork(4)
+@Fork(10)
 @Threads(16)
 @Warmup(iterations = 10, time = 1)
 @Measurement(iterations = 10, time = 1)
