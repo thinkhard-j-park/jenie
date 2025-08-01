@@ -6,6 +6,8 @@ performant than the reactive driver as concurrency escalates.**
 This section compares the performance of the synchronous (`syncDriver`) and `reactiveDriver` under varying loads of
 concurrent queries. All scores are in milliseconds (ms).
 
+- One query consists of three MongoDB operations: two `find` operations and one `findAndModify`.
+
 | Concurrent Queries | `reactiveDriver` (ms/op) | `syncDriver` (ms/op) | Winner       |
 |--------------------|--------------------------|----------------------|--------------|
 | **1**              | 214.727                  | 220.528              | **Reactive** |
