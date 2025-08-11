@@ -92,6 +92,8 @@ This project uses MongoDB as its main database.
 - [Armeria gRPC Reactive Performance Report](./jenie-spring-test/report/perf/grpc/armeria-grpc-reactive.md)
 - [Spring gRPC Performance Report](./jenie-spring-test/report/perf/grpc/spring-grpc.md)
 - [Spring gRPC Reactive Performance Report](./jenie-spring-test/report/perf/grpc/spring-grpc-reactive.md)
+- Note: It may be misleading that `jenie-armeria-grpc-reactive` seems to have a more stable response time, but other
+  apps also show stable response metrics under the same load.
 
 ## Coding Style, Formatting
 
