@@ -9,10 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.MongoConfigurationSupport;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+import org.springframework.lang.NonNull;
 import org.springframework.util.ObjectUtils;
 
 @Configuration(proxyBeanMethods = false)
-public abstract class ReactiveMongoDBConfig extends MongoConfigurationSupport {
+public class ReactiveMongoDBConfig extends MongoConfigurationSupport {
 
 	@Bean
 	public ReactiveMongoDBConnectorRegistry mongoDBConnectorRegistry(MongoDBSetting setting,
@@ -29,6 +30,11 @@ public abstract class ReactiveMongoDBConfig extends MongoConfigurationSupport {
 		}
 
 		return router;
+	}
+
+	@Override
+	protected @NonNull String getDatabaseName() {
+		return "dbconn";
 	}
 
 	@Override

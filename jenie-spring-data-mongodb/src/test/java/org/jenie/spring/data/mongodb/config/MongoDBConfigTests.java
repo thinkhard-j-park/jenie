@@ -36,12 +36,7 @@ class MongoDBConfigTests {
 
 	@BeforeEach
 	void setUp() {
-		this.mongoDBConfig = new MongoDBConfig() {
-			@Override
-			protected String getDatabaseName() {
-				return "dbconn";
-			}
-		};
+		this.mongoDBConfig = new MongoDBConfig();
 	}
 
 	@Test
