@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(HelloworldTestProperties.class)
 @Import(MongoDBAutoConfig.class)
 @ComponentScan(basePackages = { "org.jenie.spring.helloworld.repository" })

@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.grpc.server.GlobalServerInterceptor;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ServerConfig {
 
 	@ConditionalOnProperty(name = { "helloworld.enable-access-log" }, havingValue = "true")
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	public static class AccessLogConfig {
 
 		@Bean

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @ExcludeCodeCoverageGenerated
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(MongoTemplateRouterConfig.class)
 public class MongoKeyBasedTransactionalConfig {
 

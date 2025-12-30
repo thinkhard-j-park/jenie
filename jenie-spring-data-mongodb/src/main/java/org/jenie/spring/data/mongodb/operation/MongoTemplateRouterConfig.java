@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 @ExcludeCodeCoverageGenerated
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(MongoDBConfig.class)
 public class MongoTemplateRouterConfig {
 

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 @ConditionalOnReactive
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableReactiveMongoRepositories(basePackages = "org.jenie.spring.helloworld.reactive.repository")
 public class ReactiveAppConfig {
 

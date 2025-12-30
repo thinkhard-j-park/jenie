@@ -19,7 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ArmeriaSeverConfig implements ArmeriaAccessLogCustomizer {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArmeriaSeverConfig.class);
@@ -62,7 +62,7 @@ public class ArmeriaSeverConfig implements ArmeriaAccessLogCustomizer {
 		};
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(name = { "helloworld.use-blocking-task-executor", "helloworld.use-virtual-thread" },
 			havingValue = "true")
 	public static class VirtualThreadConfig {

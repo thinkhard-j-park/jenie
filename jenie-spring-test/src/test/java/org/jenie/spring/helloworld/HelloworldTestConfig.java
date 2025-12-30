@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @EnableConfigurationProperties(HelloworldTestProperties.class)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class HelloworldTestConfig {
 
 	@Bean

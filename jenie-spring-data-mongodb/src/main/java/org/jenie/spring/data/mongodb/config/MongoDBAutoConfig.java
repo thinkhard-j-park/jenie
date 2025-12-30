@@ -26,7 +26,7 @@ public class MongoDBAutoConfig {
 
 	private static final String PROPERTY_VALUE_TRUE = "true";
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = PROPERTY_ENABLED, havingValue = PROPERTY_VALUE_TRUE)
 	@ConditionalOnClass(MongoClient.class)
 	@Import({ MongoDBConfig.class, MongoTemplateRouterConfig.class, MongoKeyBasedTransactionalConfig.class })
@@ -34,7 +34,7 @@ public class MongoDBAutoConfig {
 
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = PROPERTY_ENABLED, havingValue = PROPERTY_VALUE_TRUE)
 	@ConditionalOnClass(com.mongodb.reactivestreams.client.MongoClient.class)
 	@Import({ ReactiveMongoDBConfig.class, ReactiveMongoTemplateRouterConfig.class,

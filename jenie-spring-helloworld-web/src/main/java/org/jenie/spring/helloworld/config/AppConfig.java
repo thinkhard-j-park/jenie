@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @ExcludeCodeCoverageGenerated
 @ConditionalOnImperative
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableMongoRepositories(basePackages = "org.jenie.spring.helloworld.repository")
 public class AppConfig {
 

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(ReactiveMongoDBConfig.class)
 public class ReactiveMongoTemplateRouterConfig {
 

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.util.ObjectUtils;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public abstract class ReactiveMongoDBConfig extends MongoConfigurationSupport {
 
 	@Bean
