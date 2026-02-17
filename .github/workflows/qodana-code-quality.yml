@@ -67,5 +67,5 @@ jobs:
             --config,qodana.yaml
           artifact-name: ${{ matrix.project }}
         env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_585012182 }}
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
