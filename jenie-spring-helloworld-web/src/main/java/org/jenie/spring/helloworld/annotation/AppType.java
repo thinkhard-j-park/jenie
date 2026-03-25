@@ -2,11 +2,10 @@ package org.jenie.spring.helloworld.annotation;
 
 import java.util.Objects;
 
-import jakarta.annotation.Nonnull;
-
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.lang.NonNull;
 
 public final class AppType {
 
@@ -26,7 +25,7 @@ public final class AppType {
 	public static class ImperativeCondition implements Condition {
 
 		@Override
-		public boolean matches(@Nonnull ConditionContext context, @Nonnull AnnotatedTypeMetadata metadata) {
+		public boolean matches(@NonNull ConditionContext context, @NonNull AnnotatedTypeMetadata metadata) {
 			return isClassPresent("com.mongodb.client.MongoClient", context);
 		}
 
@@ -35,7 +34,7 @@ public final class AppType {
 	public static class ReactiveCondition implements Condition {
 
 		@Override
-		public boolean matches(@Nonnull ConditionContext context, @Nonnull AnnotatedTypeMetadata metadata) {
+		public boolean matches(@NonNull ConditionContext context, @NonNull AnnotatedTypeMetadata metadata) {
 			return isClassPresent("com.mongodb.reactivestreams.client.MongoClient", context);
 		}
 

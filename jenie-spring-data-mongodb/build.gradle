@@ -12,7 +12,7 @@ dependencies {
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-aspectj'
 
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'

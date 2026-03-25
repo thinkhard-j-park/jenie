@@ -1,12 +1,12 @@
 plugins {
-	id "me.champeau.jmh" version "${jmhPluginVersion}"
+	id "me.champeau.jmh"
 }
 
 version = "${jenieSpringTestVersion}"
 
 dependencies {
 	// spring
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
@@ -43,4 +43,5 @@ bootJar {
 
 test {
 	exclude '**/helloworld/**'
+	failOnNoDiscoveredTests = false
 }

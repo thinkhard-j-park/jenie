@@ -10,6 +10,7 @@ dependencies {
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	optionalImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	optionalImplementation("io.projectreactor.netty:reactor-netty-http")
+	optionalImplementation("org.springframework.boot:spring-boot-reactor-netty")
 	optionalImplementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	optionalImplementation 'com.linecorp.armeria:armeria'
 	implementation("org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}")

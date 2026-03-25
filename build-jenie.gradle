@@ -1,5 +1,5 @@
-def protobufProjects = ['jenie-spring-helloworld-common']
-def bootProjects = [
+List<String> protobufProjects = ['jenie-spring-helloworld-common']
+List<String> bootProjects = [
 		'jenie-spring-data-mongodb',
 		'jenie-spring-data-mongodb-reactive',
 		'jenie-spring-helloworld-web',
@@ -11,7 +11,7 @@ def bootProjects = [
 		'jenie-spring-helloworld-armeria-grpc-reactive',
 		'jenie-spring-test'
 ]
-def svcProjects = [
+List<String> svcProjects = [
 		'jenie-spring-helloworld-rest',
 		'jenie-spring-helloworld-rest-reactive',
 		'jenie-spring-helloworld-grpc',
@@ -19,14 +19,14 @@ def svcProjects = [
 		'jenie-spring-helloworld-armeria-grpc',
 		'jenie-spring-helloworld-armeria-grpc-reactive'
 ]
-def testProjects = ['jenie-spring-test']
+List<String> testProjects = ['jenie-spring-test']
 
 ext {
-	protobufProjs = subprojects.findAll { it.name in protobufProjects }
-	libProjs = subprojects.findAll { it.name !in svcProjects }
-	bootProjs = subprojects.findAll { it.name in bootProjects }
-	svcProjs = subprojects.findAll { it.name in svcProjects }
-	mainProjs = subprojects.findAll { it.name !in testProjects }
-	testProjs = subprojects.findAll { it.name in testProjects }
-	jacocoProjs = subprojects.findAll { it.name !in testProjects }
+	protobufProjs = subprojects.findAll { Project p -> p.name in protobufProjects }
+	libProjs = subprojects.findAll { Project p -> p.name !in svcProjects }
+	bootProjs = subprojects.findAll { Project p -> p.name in bootProjects }
+	svcProjs = subprojects.findAll { Project p -> p.name in svcProjects }
+	mainProjs = subprojects.findAll { Project p -> p.name !in testProjects }
+	testProjs = subprojects.findAll { Project p -> p.name in testProjects }
+	jacocoProjs = subprojects.findAll { Project p -> p.name !in testProjects }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 import reactor.netty.http.server.ConnectionInformation;
 import reactor.netty.http.server.logging.AccessLog;
 
-import org.springframework.boot.web.embedded.netty.NettyServerCustomizer;
+import org.springframework.boot.reactor.netty.NettyServerCustomizer;
 
 public interface ReactorNettyAccessLogCustomizer {
 

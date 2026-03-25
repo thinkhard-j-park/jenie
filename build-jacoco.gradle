@@ -1,4 +1,6 @@
-configure(jacocoProjs) {
+List<Project> jacocoProjects = jacocoProjs as List<Project>
+
+configure(jacocoProjects) { Project project ->
 	apply plugin: 'jacoco'
 
 	jacoco {

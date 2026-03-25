@@ -5,8 +5,8 @@ import com.linecorp.armeria.common.annotation.Nullable;
 import com.linecorp.armeria.common.grpc.GrpcExceptionHandlerFunction;
 import io.grpc.Metadata;
 import io.grpc.Status;
-import jakarta.annotation.Nonnull;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,8 +27,8 @@ public class GrpcExceptionHandler implements GrpcExceptionHandlerFunction {
 	}
 
 	@Override
-	public @Nullable Status apply(@Nonnull RequestContext ctx, @Nonnull Status status, @Nonnull Throwable cause,
-			@Nonnull Metadata metadata) {
+	public @Nullable Status apply(@NonNull RequestContext ctx, @NonNull Status status, @NonNull Throwable cause,
+			@NonNull Metadata metadata) {
 		if (cause instanceof AbstractException abstractException) {
 			return handleGrpcException(abstractException, metadata);
 		}

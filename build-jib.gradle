@@ -1,10 +1,12 @@
-configure(svcProjs) {
+List<Project> serviceProjects = svcProjs as List<Project>
+
+configure(serviceProjects) { Project project ->
 	apply plugin: 'com.google.cloud.tools.jib'
 
 	publishing {
 		publications {
-			gpr(MavenPublication) {
-				from components.java
+			register("gpr", MavenPublication) {
+				from(components.findByName("java") as SoftwareComponent)
 				artifact tasks.named("bootJar")
 			}
 		}

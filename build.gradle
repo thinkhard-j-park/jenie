@@ -11,7 +11,7 @@ apply from: 'build-jenie.gradle'
 
 description = "Jenie, Java Genie!"
 
-configure(allprojects) { project ->
+configure(allprojects) { Project project ->
 	apply plugin: 'java'
 	apply plugin: 'idea'
 	apply plugin: 'maven-publish'
@@ -22,7 +22,7 @@ configure(allprojects) { project ->
 
 	java {
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(21)
+			languageVersion = JavaLanguageVersion.of(25)
 		}
 	}
 
@@ -42,8 +42,8 @@ configure(allprojects) { project ->
 		maven {
 			url = uri("${repoUrl}")
 			credentials {
-				username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+				username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR")
+				password = project.findProperty("gpr.key")?.toString() ?: System.getenv("GITHUB_TOKEN")
 			}
 		}
 	}
@@ -53,8 +53,8 @@ configure(libProjs) {
 	apply plugin: 'java-library'
 	publishing {
 		publications {
-			gpr(MavenPublication) {
-				from components.java
+			register("gpr", MavenPublication) {
+				from(components.findByName("java") as SoftwareComponent)
 			}
 		}
 		repositories {
@@ -62,8 +62,8 @@ configure(libProjs) {
 				name = "GitHubPackages"
 				url = "${repoUrl}"
 				credentials {
-					username = System.getenv("GITHUB_ACTOR")
-					password = System.getenv("GITHUB_TOKEN")
+					username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR") ?: ''
+					password = project.findProperty("gpr.key")?.toString() ?: System.getenv("GITHUB_TOKEN") ?: ''
 				}
 			}
 		}
