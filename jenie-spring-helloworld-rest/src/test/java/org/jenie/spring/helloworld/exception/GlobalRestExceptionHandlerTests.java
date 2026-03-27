@@ -3,10 +3,10 @@ package org.jenie.spring.helloworld.exception;
 import java.net.URI;
 
 import org.jenie.spring.helloworld.dto.ErrorCode;
+import org.jenie.spring.helloworld.exception.CommonErrors.IllegalDataException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.http.HttpMethod;
@@ -18,16 +18,12 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.HandlerMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class GlobalRestExceptionHandlerTests {
 
 	@InjectMocks
 	private GlobalRestExceptionHandler globalExceptionHandler;
-
-	@Mock
-	private AbstractException abstractException;
 
 	@Test
 	void handleControllerExceptionTest() {
@@ -41,12 +37,11 @@ class GlobalRestExceptionHandlerTests {
 		httpServletRequest.setMethod("GET");
 		var request = new ServletWebRequest(httpServletRequest);
 
-		given(this.abstractException.getErrorCode()).willReturn(ErrorCode.ILLEGAL_DATA);
-		given(this.abstractException.getMessage()).willReturn("id is required");
+		AbstractException abstractException = new IllegalDataException(ErrorCode.ILLEGAL_DATA, "id is required");
 
 		// when
 		ResponseEntity<ProblemDetail> responseEntity = this.globalExceptionHandler
-			.handleControllerException(this.abstractException, request);
+			.handleControllerException(abstractException, request);
 
 		// then
 		assertThat(responseEntity).isNotNull();

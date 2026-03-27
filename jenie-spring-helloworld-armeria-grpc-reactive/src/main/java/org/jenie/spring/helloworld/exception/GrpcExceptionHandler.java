@@ -5,8 +5,8 @@ import com.linecorp.armeria.common.annotation.Nullable;
 import com.linecorp.armeria.common.grpc.GrpcExceptionHandlerFunction;
 import io.grpc.Metadata;
 import io.grpc.Status;
+import org.jspecify.annotations.NonNull;
 
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component

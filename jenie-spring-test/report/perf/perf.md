@@ -1,5 +1,7 @@
 # Performance Test Environment
 
+> All performance test results in this report are based on **JDK 21 (Eclipse Temurin)**.
+
 ## Configuration Diagram
 
 ![img.png](perf-env.png)

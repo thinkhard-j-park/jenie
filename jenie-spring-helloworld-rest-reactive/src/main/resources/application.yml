@@ -13,5 +13,6 @@ mongodb:
   setting:
     enabled: true
     app-name: jenie-spring-helloworld-rest-reactive
+    type: reactive
 logging:
   config: classpath:logback-spring.xml

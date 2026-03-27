@@ -2,12 +2,11 @@ version = "${jenieSpringHelloworldArmeriaGrpcReactiveVersion}"
 dependencies {
 	implementation platform("com.linecorp.armeria:armeria-bom:${armeriaVersion}")
 	implementation 'com.linecorp.armeria:armeria-spring-boot4-webflux-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'com.linecorp.armeria:armeria-grpc'
 	implementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-
-	implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
 
 	implementation(project(":jenie-spring-helloworld-web"))
 }
@@ -15,6 +14,9 @@ dependencies {
 jib {
 	from {
 		image = 'eclipse-temurin:25'
+	}
+	container {
+		jvmFlags = ['--enable-native-access=ALL-UNNAMED']
 	}
 	to {
 		image = 'ghcr.io/thinkhard-j-park/jenie-spring-helloworld-armeria-grpc-reactive'

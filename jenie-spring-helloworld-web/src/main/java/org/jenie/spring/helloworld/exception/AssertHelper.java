@@ -3,8 +3,8 @@ package org.jenie.spring.helloworld.exception;
 import org.bson.types.ObjectId;
 import org.jenie.spring.helloworld.dto.ErrorCode;
 import org.jenie.spring.util.ExcludeCodeCoverageGenerated;
+import org.jspecify.annotations.Nullable;
 
-import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 public final class AssertHelper {

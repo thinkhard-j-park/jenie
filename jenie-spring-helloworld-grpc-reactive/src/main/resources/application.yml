@@ -9,6 +9,7 @@ mongodb:
   setting:
     enabled: true
     app-name: jenie-spring-helloworld-grpc-reactive
+    type: reactive
 
 logging:
   config: classpath:logback-spring.xml

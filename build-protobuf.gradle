@@ -11,12 +11,14 @@ configure(protobufProjects) { Project project ->
 	}
 
 	dependencies {
-		implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-		implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-		implementation "io.grpc:grpc-stub:${grpcVersion}"
+		implementation platform("io.grpc:grpc-bom:${grpcVersion}")
+		implementation "io.grpc:grpc-protobuf"
+		implementation "io.grpc:grpc-stub"
+		implementation platform("com.google.protobuf:protobuf-bom:${protobufVersion}")
+		implementation "com.google.protobuf:protobuf-java-util"
 		compileOnly "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
 
-		optionalImplementation 'org.springframework:spring-webflux'
+		optionalImplementation "io.projectreactor:reactor-core:${projectReactorVersion}"
 		optionalImplementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 	}
 	protobuf {

@@ -8,7 +8,7 @@ import org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration;
 @SpringBootApplication(exclude = { MongoAutoConfiguration.class, DataMongoAutoConfiguration.class })
 public class JenieSpringHelloworldGrpcApplication {
 
-	public static void main(String[] args) {
+	static void main(String[] args) {
 		SpringApplication.run(JenieSpringHelloworldGrpcApplication.class, args);
 	}
 

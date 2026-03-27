@@ -16,8 +16,11 @@ dependencies {
 	implementation("org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}")
 
 	// spring-grpc
-	optionalImplementation "io.grpc:grpc-netty-shaded:${grpcNettyShadedVersion}"
-	optionalImplementation "com.google.protobuf:protobuf-java:${protobufJavaVersion}"
+	optionalImplementation platform("io.grpc:grpc-bom:${grpcVersion}")
+	optionalImplementation "io.grpc:grpc-netty-shaded"
+	optionalImplementation platform("com.google.protobuf:protobuf-bom:${protobufVersion}")
+	optionalImplementation "com.google.protobuf:protobuf-java"
+	optionalImplementation platform("io.netty:netty-bom:${nettyBomVersion}")
 
 	// others
 	implementation 'com.github.ben-manes.caffeine:caffeine'
