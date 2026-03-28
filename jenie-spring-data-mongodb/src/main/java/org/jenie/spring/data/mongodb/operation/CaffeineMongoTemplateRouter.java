@@ -11,6 +11,7 @@ import com.mongodb.WriteConcern;
 import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
 import org.jenie.spring.data.mongodb.connector.MongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 public class CaffeineMongoTemplateRouter implements MongoTemplateRouter {

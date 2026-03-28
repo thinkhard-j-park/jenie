@@ -4,16 +4,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
-import org.springframework.boot.jackson.JsonComponentModule;
-import org.springframework.boot.jackson.JsonMixinModule;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,22 +19,15 @@ public abstract class RestOperation {
 
 	protected RestClient restClient;
 
-	protected ObjectMapper objectMapper = new ObjectMapper();
+	protected ObjectMapper objectMapper;
 
 	public RestOperation(RestClient restClient) {
 		this.restClient = restClient;
-		this.configureObjectMapper(this.objectMapper);
+		this.objectMapper = createObjectMapper();
 	}
 
-	protected void configureObjectMapper(ObjectMapper objectMapper) {
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-		objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-
-		objectMapper.registerModule(new Jdk8Module());
-		objectMapper.registerModule(new ParameterNamesModule());
-		objectMapper.registerModule(new JsonComponentModule());
-		objectMapper.registerModule(new JsonMixinModule());
-		objectMapper.registerModule(new JavaTimeModule());
+	protected ObjectMapper createObjectMapper() {
+		return JsonMapper.builder().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY).build();
 	}
 
 	protected <T> T doGet(String path, Map<String, Object> uriVariables,

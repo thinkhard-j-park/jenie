@@ -3,13 +3,13 @@ package org.jenie.spring.data.mongodb.config;
 import org.jenie.spring.data.mongodb.connector.MongoDBSetting;
 import org.jenie.spring.data.mongodb.connector.ReactiveMongoDBConnector;
 import org.jenie.spring.data.mongodb.connector.ReactiveMongoDBConnectorRegistry;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.MongoConfigurationSupport;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
-import org.springframework.lang.NonNull;
 import org.springframework.util.ObjectUtils;
 
 @Configuration(proxyBeanMethods = false)

@@ -8,8 +8,8 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.jenie.spring.helloworld.annotation.ConditionalOnImperative;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.repository.BoardRepository;
+import org.jspecify.annotations.Nullable;
 
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @ConditionalOnImperative

@@ -28,6 +28,7 @@ public class MongoDBAutoConfig {
 
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = PROPERTY_ENABLED, havingValue = PROPERTY_VALUE_TRUE)
+	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = "type", havingValue = "sync", matchIfMissing = true)
 	@ConditionalOnClass(MongoClient.class)
 	@Import({ MongoDBConfig.class, MongoTemplateRouterConfig.class, MongoKeyBasedTransactionalConfig.class })
 	static class MongoDBAutoConfigEnabler {
@@ -36,6 +37,7 @@ public class MongoDBAutoConfig {
 
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = PROPERTY_ENABLED, havingValue = PROPERTY_VALUE_TRUE)
+	@ConditionalOnProperty(prefix = MONGODB_SETTING_PREFIX, name = "type", havingValue = "reactive")
 	@ConditionalOnClass(com.mongodb.reactivestreams.client.MongoClient.class)
 	@Import({ ReactiveMongoDBConfig.class, ReactiveMongoTemplateRouterConfig.class,
 			ReactiveMongoKeyBasedTransactionalConfig.class })

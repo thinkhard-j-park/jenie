@@ -2,7 +2,9 @@ package org.jenie.spring.helloworld.exception;
 
 import org.jenie.spring.helloworld.dto.ErrorCode;
 
-public abstract class AbstractException extends RuntimeException {
+public abstract sealed class AbstractException extends RuntimeException
+		permits CommonErrors.IllegalDataException, ArticleErrors.ArticleNotFoundException,
+		ArticleErrors.ArticleModifyException, ArticleErrors.ArticleDeleteException, BoardErrors.BoardNotFoundException {
 
 	private final ErrorCode errorCode;
 

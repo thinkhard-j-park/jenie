@@ -10,11 +10,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import org.jenie.spring.helloworld.annotation.ConditionalOnReactive;
 import org.jenie.spring.helloworld.entity.board.BoardEntity;
 import org.jenie.spring.helloworld.reactive.repository.ReactiveBoardRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 @ConditionalOnReactive

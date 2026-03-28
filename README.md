@@ -46,6 +46,8 @@ This project uses MongoDB as its main database.
 
 ### Performance Test Summary
 
+> All performance test results below are based on **JDK 21 (Eclipse Temurin)**.
+
 - The following is a consolidated summary of performance test results, evaluating various server implementations,
   network protocols, and configuration options.
 - The comprehensive details of the testing methodology and environment are documented in

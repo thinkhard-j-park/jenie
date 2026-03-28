@@ -13,6 +13,7 @@ import com.mongodb.WriteConcern;
 import org.jenie.spring.data.mongodb.connector.MongoDBCluster;
 import org.jenie.spring.data.mongodb.connector.ReactiveMongoDBConnectorRegistry;
 import org.jenie.spring.data.mongodb.domain.DBConn;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
@@ -21,7 +22,6 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
-import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplateRouter {

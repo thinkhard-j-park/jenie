@@ -11,7 +11,7 @@ apply from: 'build-jenie.gradle'
 
 description = "Jenie, Java Genie!"
 
-configure(allprojects) { project ->
+configure(allprojects) { Project project ->
 	apply plugin: 'java'
 	apply plugin: 'idea'
 	apply plugin: 'maven-publish'
@@ -22,8 +22,13 @@ configure(allprojects) { project ->
 
 	java {
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(21)
+			languageVersion = JavaLanguageVersion.of(25)
 		}
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		options.release = 25
+		options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
 	}
 
 	idea {
@@ -39,11 +44,12 @@ configure(allprojects) { project ->
 
 	repositories {
 		mavenCentral()
+		maven { url 'https://repo.spring.io/milestone' }
 		maven {
 			url = uri("${repoUrl}")
 			credentials {
-				username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-				password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+				username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR")
+				password = project.findProperty("gpr.key")?.toString() ?: System.getenv("GITHUB_TOKEN")
 			}
 		}
 	}
@@ -53,8 +59,8 @@ configure(libProjs) {
 	apply plugin: 'java-library'
 	publishing {
 		publications {
-			gpr(MavenPublication) {
-				from components.java
+			register("gpr", MavenPublication) {
+				from(components.findByName("java") as SoftwareComponent)
 			}
 		}
 		repositories {
@@ -62,8 +68,8 @@ configure(libProjs) {
 				name = "GitHubPackages"
 				url = "${repoUrl}"
 				credentials {
-					username = System.getenv("GITHUB_ACTOR")
-					password = System.getenv("GITHUB_TOKEN")
+					username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR") ?: ''
+					password = project.findProperty("gpr.key")?.toString() ?: System.getenv("GITHUB_TOKEN") ?: ''
 				}
 			}
 		}
@@ -73,8 +79,19 @@ configure(libProjs) {
 configure(bootProjs) {
 	apply plugin: 'org.springframework.boot'
 
+	configurations.all {
+		resolutionStrategy {
+			force "com.google.protobuf:protobuf-java:${protobufVersion}"
+		}
+	}
+
 	dependencies {
 		implementation platform(SpringBootPlugin.BOM_COORDINATES)
+		implementation platform("com.google.protobuf:protobuf-bom:${protobufVersion}")
+	}
+
+	bootRun {
+		jvmArgs '--enable-native-access=ALL-UNNAMED'
 	}
 }
 

@@ -11,3 +11,4 @@ mongodb:
   setting:
     enabled: true
     app-name: jenie-spring-helloworld-armeria-grpc-reactive
+    type: reactive

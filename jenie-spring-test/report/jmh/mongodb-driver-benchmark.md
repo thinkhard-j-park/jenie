@@ -1,5 +1,7 @@
 # MongoDB Driver Benchmark
 
+> Benchmark results below are based on **JDK 21 (Eclipse Temurin)**.
+
 > **The benchmark reveals a critical performance crossover, showing the synchronous driver becomes decisively more
 performant than the reactive driver as concurrency escalates.**
 

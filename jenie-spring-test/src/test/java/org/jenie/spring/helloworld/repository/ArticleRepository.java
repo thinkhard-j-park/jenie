@@ -2,7 +2,6 @@ package org.jenie.spring.helloworld.repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mongodb.bulk.BulkWriteResult;
 import org.bson.Document;
@@ -35,7 +34,7 @@ public class ArticleRepository extends MongoDBRepository {
 			doc.put("actionDateTime.createdAt", Date.from(articleHeader.actionDateTime().getCreatedAt().toInstant()));
 			return doc;
 
-		}).collect(Collectors.toList());
+		}).toList();
 
 		var template = this.mongoTemplateRouter.mongoTemplate(dbKey);
 		var bulkWriteResult = template.bulkOps(BulkOperations.BulkMode.ORDERED, "article-header")
@@ -47,7 +46,7 @@ public class ArticleRepository extends MongoDBRepository {
 	}
 
 	public BulkWriteResult bulkWriteArticle(String dbKey, List<Article> articleList) {
-		var articleHeaderList = articleList.stream().map(Article::header).collect(Collectors.toList());
+		var articleHeaderList = articleList.stream().map(Article::header).toList();
 		this.bulkWriteArticleHeader(dbKey, articleHeaderList);
 
 		List<Document> articleContentList = articleList.stream().map((article) -> {
@@ -55,7 +54,7 @@ public class ArticleRepository extends MongoDBRepository {
 			doc.put("_id", new ObjectId(article.header().id()));
 			doc.put("content", article.content());
 			return doc;
-		}).collect(Collectors.toList());
+		}).toList();
 
 		var template = this.mongoTemplateRouter.mongoTemplate(dbKey);
 		var bulkWriteArticleContent = template.bulkOps(BulkOperations.BulkMode.ORDERED, "article-content")

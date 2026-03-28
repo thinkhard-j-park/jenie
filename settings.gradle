@@ -2,15 +2,16 @@ pluginManagement {
 	repositories {
 		mavenCentral()
 		gradlePluginPortal()
-		maven { url 'https://repo.spring.io/milestone' }
-		maven { url 'https://repo.spring.io/snapshot' }
+		maven { url = uri('https://repo.spring.io/milestone') }
+		maven { url = uri('https://repo.spring.io/snapshot') }
 	}
 
 	plugins {
-		id 'org.springframework.boot' version "${springBootVersion}" apply false
-		id 'io.spring.javaformat' version "${springJavaFormatVersion}" apply false
-		id 'com.google.cloud.tools.jib' version "${jibPluginVersion}" apply false
-		id 'com.google.protobuf' version "${protobufPluginVersion}" apply false
+		id 'org.springframework.boot' version (springBootVersion as String) apply false
+		id 'io.spring.javaformat' version (springJavaFormatVersion as String) apply false
+		id 'com.google.cloud.tools.jib' version (jibPluginVersion as String) apply false
+		id 'com.google.protobuf' version (protobufPluginVersion as String) apply false
+		id 'me.champeau.jmh' version (jmhPluginVersion as String) apply false
 	}
 }
 

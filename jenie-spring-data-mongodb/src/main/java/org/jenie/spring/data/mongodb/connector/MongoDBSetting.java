@@ -13,6 +13,8 @@ public class MongoDBSetting {
 
 	private boolean enabled = false;
 
+	private String type = "sync";
+
 	private String appName;
 
 	private String routerType;
@@ -51,12 +53,21 @@ public class MongoDBSetting {
 		this.routerType = routerType;
 	}
 
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		//@formatter:off
 		return "MongoDBSetting{" +
-				"enabled=" + this.enabled +
-				", appName='" + this.appName + '\'' +
+				"appName='" + this.appName + '\'' +
+				", enabled=" + this.enabled +
+				", type='" + this.type + '\'' +
 				", routerType='" + this.routerType + '\'' +
 				", cluster=" + this.cluster +
 				'}';

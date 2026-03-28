@@ -1,4 +1,6 @@
-configure(protobufProjs) {
+List<Project> protobufProjects = protobufProjs as List<Project>
+
+configure(protobufProjects) { Project project ->
 	apply plugin: 'idea'
 	apply plugin: 'com.google.protobuf'
 
@@ -9,32 +11,30 @@ configure(protobufProjs) {
 	}
 
 	dependencies {
-		implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-		implementation "io.grpc:grpc-protobuf:${grpcVersion}"
-		implementation "io.grpc:grpc-stub:${grpcVersion}"
+		implementation platform("io.grpc:grpc-bom:${grpcVersion}")
+		implementation "io.grpc:grpc-protobuf"
+		implementation "io.grpc:grpc-stub"
+		implementation platform("com.google.protobuf:protobuf-bom:${protobufVersion}")
+		implementation "com.google.protobuf:protobuf-java-util"
 		compileOnly "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
 
-		optionalImplementation 'org.springframework:spring-webflux'
+		optionalImplementation "io.projectreactor:reactor-core:${projectReactorVersion}"
 		optionalImplementation "com.salesforce.servicelibs:reactor-grpc-stub:${reactiveGrpcVersion}"
 	}
 	protobuf {
 		protoc {
 			artifact = "com.google.protobuf:protoc:${protobufVersion}"
 		}
-		plugins {
-			grpc {
-				artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
-			}
-			reactor {
-				artifact = "com.salesforce.servicelibs:reactor-grpc:${reactiveGrpcVersion}"
-			}
+		delegate.plugins {
+			maybeCreate("grpc").artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+			maybeCreate("reactor").artifact = "com.salesforce.servicelibs:reactor-grpc:${reactiveGrpcVersion}"
 		}
 		generateProtoTasks {
-			ofSourceSet("main")*.plugins {
-				grpc {}
-				reactor {}
+			ofSourceSet("main").configureEach { task ->
+				task.plugins.maybeCreate("grpc")
+				task.plugins.maybeCreate("reactor")
 			}
-			all().configureEach { task ->
+			delegate.all().configureEach { task ->
 				// If true, will generate a descriptor_set.desc file under
 				// task.outputBaseDir. Default is false.
 				// See --descriptor_set_out in protoc documentation about what it is.
@@ -53,7 +53,5 @@ configure(protobufProjs) {
 				task.descriptorSetOptions.includeImports = true
 			}
 		}
-
 	}
 }
-
