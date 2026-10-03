@@ -1,13 +1,13 @@
 package org.jenie.spring.data.mongodb.transaction;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.jenie.spring.data.mongodb.operation.ReactiveMongoTemplateRouter;
+import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -32,8 +32,8 @@ public class ReactiveMongoKeyBasedTransactionAspect extends AbstractMongoKeyBase
 		var returnType = ((MethodSignature) pjp.getSignature()).getMethod().getReturnType();
 		if (Mono.class.isAssignableFrom(returnType)) {
 			return this.mongoTemplateRouter.transactionManager(dbKey)
-				.flatMap(
-						(txManager) -> createTransactionalMono(pjp, txManager, definition, mongoKeyBasedTransactional));
+				.flatMap((txManager) -> createTransactionalFlux(pjp, txManager, definition, mongoKeyBasedTransactional)
+					.singleOrEmpty());
 		}
 		else if (Flux.class.isAssignableFrom(returnType)) {
 			return this.mongoTemplateRouter.transactionManager(dbKey)
@@ -47,41 +47,36 @@ public class ReactiveMongoKeyBasedTransactionAspect extends AbstractMongoKeyBase
 
 	}
 
-	private Mono<?> createTransactionalMono(ProceedingJoinPoint pjp, ReactiveTransactionManager txManager,
-			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
-		var txOp = TransactionalOperator.create(txManager, definition);
-		try {
-			return txOp.transactional((Mono<?>) pjp.proceed())
-				.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Mono::error, Mono::empty));
-		}
-		catch (Throwable err) {
-			return Mono.error(new RuntimeException(err));
-		}
-	}
-
 	private Flux<?> createTransactionalFlux(ProceedingJoinPoint pjp, ReactiveTransactionManager txManager,
 			DefaultTransactionDefinition definition, MongoKeyBasedTransactional transactionConfig) {
 		var txOp = TransactionalOperator.create(txManager, definition);
-		try {
-			return txOp.transactional((Flux<?>) pjp.proceed())
-				.onErrorResume((error) -> handleTransactionError(error, transactionConfig, Flux::error, Flux::empty));
-		}
-		catch (Throwable err) {
-			return Flux.error(new RuntimeException(err));
-		}
-	}
+		return Flux.defer(() -> {
+			// Keep the saved error local to each subscription, including retries.
+			var noRollbackError = new AtomicReference<Throwable>();
+			var source = Flux.defer(() -> {
+				try {
+					return (Publisher<?>) pjp.proceed();
+				}
+				catch (Throwable error) {
+					return Flux.error(error);
+				}
+			}).onErrorResume((error) -> {
+				if (isNoRollbackError(error, transactionConfig.noRollbackFor())) {
+					// Complete inside the transaction so the operator commits instead of
+					// rolling back.
+					noRollbackError.set(error);
+					return Flux.empty();
+				}
+				return Flux.error(error);
+			});
 
-	private <T> T handleTransactionError(Throwable error, MongoKeyBasedTransactional transactionConfig,
-			Function<Throwable, T> errorHandler, Supplier<T> emptyHandler) {
-		if (isNoRollbackError(error, transactionConfig.noRollbackFor())) {
-			return emptyHandler.get();
-		}
-
-		if (isRollbackError(error, transactionConfig.rollbackFor())) {
-			return errorHandler.apply(error);
-		}
-
-		return errorHandler.apply(error);
+			// Restore the original error only after a successful commit. Transaction
+			// failures and cancellation remain under TransactionalOperator's control.
+			return txOp.transactional(source).concatWith(Mono.defer(() -> {
+				var error = noRollbackError.get();
+				return (error != null) ? Mono.error(error) : Mono.empty();
+			}));
+		});
 	}
 
 }
