@@ -1,6 +1,5 @@
 package org.jenie.spring.data.mongodb.operation;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.mongodb.ReadPreference;
@@ -59,14 +58,13 @@ public class ReactiveSimpleMongoTemplateRouter implements ReactiveMongoTemplateR
 
 			var cluster = connector.getCluster();
 			var template = new ReactiveMongoTemplate(factory, connector.getMappingMongoConverter());
-			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
-				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
-				if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
-					replicaTagSets.addAll(taggableReadPreference.getTagSetList());
-				}
-				readPreference.withTagSetList(replicaTagSets);
+			var configuredReadPreference = readPreference;
+			if (readPreference instanceof TaggableReadPreference taggableReadPreference
+					&& taggableReadPreference.getTagSetList().isEmpty()) {
+				configuredReadPreference = readPreference
+					.withTagSetList(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
 			}
-			template.setReadPreference(readPreference);
+			template.setReadPreference(configuredReadPreference);
 			template.setWriteConcern(writeConcern);
 			return template;
 		}).cache());

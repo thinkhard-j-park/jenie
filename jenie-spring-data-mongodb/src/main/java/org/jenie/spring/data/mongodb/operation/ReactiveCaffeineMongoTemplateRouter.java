@@ -1,6 +1,5 @@
 package org.jenie.spring.data.mongodb.operation;
 
-import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -158,8 +157,7 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 				var template = new ReactiveMongoTemplate(factory, converter);
 
 				if (key.readPreference() != null) {
-					configureReadPreference(key.readPreference(), cluster);
-					template.setReadPreference(key.readPreference());
+					template.setReadPreference(configureReadPreference(key.readPreference(), cluster));
 				}
 
 				template.setWriteConcern(writeConcern);
@@ -167,18 +165,12 @@ public class ReactiveCaffeineMongoTemplateRouter implements ReactiveMongoTemplat
 			});
 		}
 
-		private void configureReadPreference(ReadPreference readPreference, MongoDBCluster cluster) {
-			if (readPreference == null) {
-				return;
+		private ReadPreference configureReadPreference(ReadPreference readPreference, MongoDBCluster cluster) {
+			if (readPreference instanceof TaggableReadPreference taggableReadPreference
+					&& taggableReadPreference.getTagSetList().isEmpty()) {
+				return readPreference.withTagSetList(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
 			}
-
-			if (!"primary".equalsIgnoreCase(readPreference.getName())) {
-				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
-				if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
-					replicaTagSets.addAll(taggableReadPreference.getTagSetList());
-				}
-				readPreference.withTagSetList(replicaTagSets);
-			}
+			return readPreference;
 		}
 
 	}

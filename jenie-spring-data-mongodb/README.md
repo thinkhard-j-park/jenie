@@ -62,6 +62,9 @@ information
 ### MongoTemplateRouter
 
 - Retrieves a template to access the database based on keys.
+- Explicit tag sets in the requested read preference override the cluster's `tag-set` configuration. Cluster tags are
+  applied only when the requested tag set list is empty. An explicit empty tag set (`[{}]`) also overrides cluster tags.
+- The `primary` read preference is used without tag sets.
 
 ```java
 

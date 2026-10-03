@@ -1,7 +1,5 @@
 package org.jenie.spring.data.mongodb.operation;
 
-import java.util.ArrayList;
-
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -146,14 +144,12 @@ public class CaffeineMongoTemplateRouter implements MongoTemplateRouter {
 			var writeConcern = (key.writeConcern() == null) ? cluster.writeConcern() : key.writeConcern();
 
 			var template = new MongoTemplate(factory, connector.getMappingMongoConverter());
-			if (key.readPreference() != null && !"primary".equalsIgnoreCase(key.readPreference().getName())) {
-				var replicaTagSets = new ArrayList<>(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
-				if (key.readPreference() instanceof TaggableReadPreference taggableReadPreference) {
-					replicaTagSets.addAll(taggableReadPreference.getTagSetList());
-				}
-				key.readPreference().withTagSetList(replicaTagSets);
+			var readPreference = key.readPreference();
+			if (readPreference instanceof TaggableReadPreference taggableReadPreference
+					&& taggableReadPreference.getTagSetList().isEmpty()) {
+				readPreference = readPreference.withTagSetList(MongoDBCluster.replicaTagSets(cluster.getTagSet()));
 			}
-			template.setReadPreference(key.readPreference());
+			template.setReadPreference(readPreference);
 			template.setWriteConcern(writeConcern);
 
 			return template;

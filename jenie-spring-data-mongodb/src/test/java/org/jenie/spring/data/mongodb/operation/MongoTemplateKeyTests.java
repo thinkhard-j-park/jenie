@@ -66,4 +66,23 @@ public class MongoTemplateKeyTests {
 		assertThat(key4).isNotEqualTo(key5);
 	}
 
+	@Test
+	void distinguishExplicitEmptyTagSetInMongoTemplateKey() {
+		var withoutTags = new MongoTemplateKey("k1", ReadPreference.secondaryPreferred(), null);
+		var withEmptyTag = new MongoTemplateKey("k1", ReadPreference.secondaryPreferred(List.of(new TagSet())), null);
+		assertThat(withEmptyTag).isNotEqualTo(withoutTags);
+	}
+
+	@Test
+	void distinguishReadPreferenceWithFallbackTagSetInMongoTemplateKey() {
+		// With secondaryPreferred, [{"dc":"us"}] selects the primary when no eligible
+		// US secondary exists. [{"dc":"us"}, {}] can select another eligible secondary
+		// first, so these requests must not share a cached template.
+		var tag = new TagSet(new Tag("dc", "us"));
+		var withTag = new MongoTemplateKey("k1", ReadPreference.secondaryPreferred(List.of(tag)), null);
+		var withFallback = new MongoTemplateKey("k1", ReadPreference.secondaryPreferred(List.of(tag, new TagSet())),
+				null);
+		assertThat(withFallback).isNotEqualTo(withTag);
+	}
+
 }

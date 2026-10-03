@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.mongodb.ReadPreference;
-import com.mongodb.Tag;
-import com.mongodb.TagSet;
 import com.mongodb.TaggableReadPreference;
 import com.mongodb.WriteConcern;
 
@@ -20,12 +18,12 @@ public record MongoTemplateKey(String dbKey, ReadPreference readPreference, Writ
 		sb.append("|");
 		if (readPreference != null) {
 			sb.append(readPreference.getName());
-			if (readPreference instanceof TaggableReadPreference taggableReadPreference) {
-				for (TagSet tagSet : taggableReadPreference.getTagSetList()) {
-					for (Tag tag : tagSet) {
-						sb.append(tag.getName()).append(tag.getValue());
-					}
-				}
+			if (readPreference instanceof TaggableReadPreference taggableReadPreference
+					&& !taggableReadPreference.getTagSetList().isEmpty()) {
+				// Preserve tag set boundaries, order, and empty fallback entries in the
+				// key.
+				// [{"dc":"us"}, {}] has a different fallback policy from [{"dc":"us"}].
+				sb.append(taggableReadPreference.toDocument().get("tags"));
 			}
 		}
 
